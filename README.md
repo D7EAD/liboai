@@ -1,2 +1,3 @@
-# liboai
-A C++17 library to access and interface with the entire OpenAI API.  
+<p align="center"><img src="/images/_logo.png"></p>
+<hr>
+<code>liboai</code> is an <b>unofficial</b> C++17 library for the OpenAI API. It allows developers to access all endpoints through a simple collection of methods and classes. Add more...
