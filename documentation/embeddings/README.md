@@ -1,7 +1,7 @@
 <h1>Embeddings</h1>
 <p>The <code>Embeddings</code> class is defined in <code>embeddings.h</code> at <code>liboai::Embeddings</code>, and its interface can ideally be accessed through a <code>liboai::OpenAI</code> object.
 
-This class and its associated <code>liboai::OpenAI</code> interface allow access to the <a href="https://beta.openai.com/docs/api-reference/embeddings">Edits</a> endpoint of the OpenAI API; this endpoint's functionality can be found below.</p>
+This class and its associated <code>liboai::OpenAI</code> interface allow access to the <a href="https://beta.openai.com/docs/api-reference/embeddings">Embeddings</a> endpoint of the OpenAI API; this endpoint's functionality can be found below.</p>
 - Creates an embedding vector representing the input text.
 
 <br>
