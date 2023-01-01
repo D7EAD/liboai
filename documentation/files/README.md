@@ -16,7 +16,7 @@ Response list() const &;
 ```
 
 <h3>Upload File.</h3>
-<p>Upload a file that contains document(s) to be used across various endpoints/features. Currently, the size of all the files uploaded by one organization can be up to 1 GB. Please contact us if you need to increase the storage limit. Returns a <code>liboai::Response</code> containing response data.</p>
+<p>Upload a file that contains document(s) to be used across various endpoints/features. Currently, the size of all the files uploaded by one organization can be up to 1 GB. Returns a <code>liboai::Response</code> containing response data.</p>
 
 ```cpp
 Response create(
@@ -25,7 +25,33 @@ Response create(
 ) const &;
 ```
 
-<p>All function parameters marked <code>optional</code> are not required and resolved on OpenAI's end if not supplied.</p>
+<h3>Delete a File.</h3>
+<p>Deletes a file. Returns a <code>liboai::Response</code> containing response data.</p>
+
+```cpp
+Response remove(
+  const std::string& file_id
+) const &;
+```
+
+<h3>Retrieve File.</h3>
+<p>Returns information about a specific file. Returns a <code>liboai::Response</code> containing response data.</p>
+
+```cpp
+Response retrieve(
+  const std::string& file_id
+) const &;
+```
+
+<h3>Retrieve File Content (Download).</h3>
+<p>Returns the contents of the specified file and downloads it to the provided path. Returns a <code>bool</code> indicating failure or success.</p>
+
+```cpp
+bool download(
+  const std::string& file_id,
+  const std::string& save_to
+) const &;		
+```
 
 <br>
 <h2>Example Usage</h2>
