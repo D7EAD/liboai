@@ -8,7 +8,7 @@ This class and its associated <code>liboai::OpenAI</code> interface allow access
 <h2>Methods</h2>
 <p>This document covers the method(s) located in <code>edits.h</code>. You can find their function signature(s) below.</p>
 
-<h3>Create an Embedding.</h3>
+<h3>Create an Embedding</h3>
 <p>Creates an embedding vector representing the input text. Returns a <code>liboai::Response</code> containing response data.</p>
 
 ```cpp
