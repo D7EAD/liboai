@@ -3,7 +3,7 @@
 using namespace liboai;
 
 int main() {
-OpenAI oai;
+  OpenAI oai;
   if (oai.auth.SetKeyEnv("OPENAI_API_KEY")) {
     try {
       Response response = oai.Image->create(
