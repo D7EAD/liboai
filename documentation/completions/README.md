@@ -8,7 +8,7 @@ This class and its associated <code>liboai::OpenAI</code> interface allow access
 <h2>Methods</h2>
 <p>This document covers the method(s) located in <code>completions.h</code>. You can find their function signature(s) below.</p>
 
-<h3>Create a Completion.</h3>
+<h3>Create a Completion</h3>
 <p>Creates a completion for the provided prompt and parameters. Returns a <code>liboai::Response</code> containing response data.</p>
 
 ```cpp
