@@ -8,7 +8,7 @@ This class and its associated <code>liboai::OpenAI</code> interface allow access
 <h2>Methods</h2>
 <p>This document covers the method(s) located in <code>fine_tunes.h</code>. You can find their function signature(s) below.</p>
 
-<h3>Create a Fine-Tune.</h3>
+<h3>Create a Fine-Tune</h3>
 <p>Creates a job that fine-tunes a specified model from a given dataset. Returns a <code>liboai::Response</code> containing response data.</p>
 
 ```cpp
@@ -28,14 +28,14 @@ Response create(
 ) const &;	
 ```
 
-<h3>List Fine-Tunes.</h3>
+<h3>List Fine-Tunes</h3>
 <p>List your organization's fine-tuning jobs. Returns a <code>liboai::Response</code> containing response data.</p>
 
 ```cpp
 Response list() const &;
 ```
 
-<h3>Retrieve Fine-Tune.</h3>
+<h3>Retrieve Fine-Tune</h3>
 <p>Gets info about the fine-tune job. Returns a <code>liboai::Response</code> containing response data.</p>
   
 ```cpp
@@ -44,7 +44,7 @@ Response retrieve(
 ) const &;
 ```
 
-<h3>Cancel Fine-Tune.</h3>
+<h3>Cancel Fine-Tune</h3>
 <p>Immediately cancel a fine-tune job. Returns a <code>liboai::Response</code> containing response data.</p>
   
 ```cpp
@@ -53,7 +53,7 @@ Response cancel(
 ) const &;			
 ```
 
-<h3>List Fine-Tune Events.</h3>
+<h3>List Fine-Tune Events</h3>
 <p>Get fine-grained status updates for a fine-tune job. Returns a <code>liboai::Response</code> containing response data.</p>
   
 ```cpp
