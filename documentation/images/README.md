@@ -1,7 +1,7 @@
 <h1>Images</h1>
 <p>The <code>Images</code> class is defined in <code>images.h</code> at <code>liboai::Images</code>, and its interface can ideally be accessed through a <code>liboai::OpenAI</code> object.
 
-This class and its associated <code>liboai::OpenAI</code> interface allow access to the <a href="https://beta.openai.com/docs/api-reference/images">Edits</a> endpoint of the OpenAI API; this endpoint's functionality can be found below.</p>
+This class and its associated <code>liboai::OpenAI</code> interface allow access to the <a href="https://beta.openai.com/docs/api-reference/images">Images</a> endpoint of the OpenAI API; this endpoint's functionality can be found below.</p>
 - Given a prompt and/or an input image, the model will generate a new image.
 
 <br>
