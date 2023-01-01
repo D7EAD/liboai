@@ -55,4 +55,4 @@ bool download(
 
 <br>
 <h2>Example Usage</h2>
-<p>For example usage of the above function(s), please refer to the <a href="/examples">examples</a> folder.
+<p>For example usage of the above function(s), please refer to the <a href="./examples">examples</a> folder.
