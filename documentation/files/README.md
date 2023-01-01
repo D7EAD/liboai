@@ -15,6 +15,16 @@ This class and its associated <code>liboai::OpenAI</code> interface allow access
 Response list() const &;
 ```
 
+<h3>Upload File.</h3>
+<p>Upload a file that contains document(s) to be used across various endpoints/features. Currently, the size of all the files uploaded by one organization can be up to 1 GB. Please contact us if you need to increase the storage limit. Returns a <code>liboai::Response</code> containing response data.</p>
+
+```cpp
+Response create(
+  const std::filesystem::path& file,
+  const std::string& purpose
+) const &;
+```
+
 <p>All function parameters marked <code>optional</code> are not required and resolved on OpenAI's end if not supplied.</p>
 
 <br>
