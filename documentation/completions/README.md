@@ -1,5 +1,4 @@
 <h1>Completions</h1>
-<h2>Introduction</h2>
 <p>The <code>Completions</code> class is defined in <code>completions.h</code> at <code>liboai::Completions</code>, and its interface can ideally be accessed through a <code>liboai::OpenAI</code> object.
 
 This class and its associated <code>liboai::OpenAI</code> interface allow access to the <a href="https://beta.openai.com/docs/api-reference/completions">Completions</a> endpoint of the OpenAI API; this endpoint's functionality can be found below.</p>
