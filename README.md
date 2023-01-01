@@ -55,7 +55,7 @@ int main() {
 <p>Keep in mind the above C++ example is a minimal example and is not an exception-safe snippet. Please see <a href="/documentation">the documentation</a> for more detailed and exception-safe code snippets.</p>
 
 <h1>Dependencies</h1>
-<p>To make the library work the way it does, it relies on two major dependencies. These dependencies can be found listed below.<p>
+<p>For the library to work the way it does, it relies on two major dependencies. These dependencies can be found listed below.<p>
 
 - <a href="https://github.com/nlohmann/json">nlohmann-json</a>
 - <a href="https://github.com/libcpr/cpr">cpr</a>
