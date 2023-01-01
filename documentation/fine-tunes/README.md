@@ -63,7 +63,7 @@ Response list_events(
 ) const &;
 ```
 
-<p>All function parameters marked <code>optional</code> are not required and resolved on OpenAI's end if not supplied.</p>
+<p>All function parameters marked <code>optional</code> are not required and are resolved on OpenAI's end if not supplied.</p>
 
 <br>
 <h2>Example Usage</h2>
