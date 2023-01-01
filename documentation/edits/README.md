@@ -8,7 +8,7 @@ This class and its associated <code>liboai::OpenAI</code> interface allow access
 <h2>Methods</h2>
 <p>This document covers the method(s) located in <code>edits.h</code>. You can find their function signature(s) below.</p>
 
-<h3>Create an Edit.</h3>
+<h3>Create an Edit</h3>
 <p>Creates a new edit for the provided input, instruction, and parameters. Returns a <code>liboai::Response</code> containing response data.</p>
 
 ```cpp
