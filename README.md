@@ -9,7 +9,7 @@
 <p><code>liboai</code> is a simple, <b>unofficial</b> C++17 library for the OpenAI API. It allows developers to access OpenAI endpoints through a simple collection of methods and classes.
 
 It can most efficiently be thought of as a <b>spiritual port</b> of OpenAI's Python library, simply called <code>openai</code>, due to its similar structure--with few exceptions. See below for just how similar in style <code>liboai</code> and its Python alternative are when generating an image using DALL-E.</p>
-<details closed>
+<details open>
 <summary>DALL-E Generation in Python.</summary>
 <br>
 
@@ -27,7 +27,7 @@ print(response["data"][0]["url"])
 ```
 </details>
 
-<details closed>
+<details open>
 <summary>DALL-E Generation in C++.</summary>
 <br>
 
