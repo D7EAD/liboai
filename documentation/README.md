@@ -1,8 +1,8 @@
 <h1>Documentation</h1>
-<p>Both above and below, you can find resources and documentation for each component of the library. 
+<p>Both above and below, you can find resources and documentation for each component of the library.</p>
 
 <h3>Basic Usage</h3>
-In order to understand how to use each component of the library, it would be ideal to first understand the basic structure of the library as a whole. When using <code>liboai</code> in a project, you <b>should</b> only include one header file, <code>liboai.h</code>. This header provides an interface to all other components of the library such as <code>Image</code>, <code>Completion</code>, etc.
+<p>In order to understand how to use each component of the library, it would be ideal to first understand the basic structure of the library as a whole. When using <code>liboai</code> in a project, you <b>should</b> only include one header file, <code>liboai.h</code>. This header provides an interface to all other components of the library such as <code>Image</code>, <code>Completion</code>, etc.
 
 See below for both a correct and incorrect example.</p>
 <table>
