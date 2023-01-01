@@ -9,7 +9,7 @@ This class and its associated <code>liboai::OpenAI</code> interface allow access
 <p>This document covers the method(s) located in <code>completions.h</code>. You can find their function signature(s) below.</p>
 
 <h3>Create a Completion.</h3>
-<p>Given a prompt, the model will return one or more predicted completions, and can also return the probabilities of alternative tokens at each position. Returns a <code>liboai::Response</code> containing response data.</p>
+<p>Creates a completion for the provided prompt and parameters. Returns a <code>liboai::Response</code> containing response data.</p>
 
 ```cpp
 Response create(
