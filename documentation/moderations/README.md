@@ -9,7 +9,7 @@ This class and its associated <code>liboai::OpenAI</code> interface allow access
 <p>This document covers the method(s) located in <code>moderations.h</code>. You can find their function signature(s) below.</p>
 
 <h3>Create a Moderation</h3>
-<p>Classifies if text violates OpenAI's Content Policy Returns a <code>liboai::Response</code> containing response data.</p>
+<p>Classifies if text violates OpenAI's Content Policy. Returns a <code>liboai::Response</code> containing response data.</p>
 
 ```cpp
 Response create(
