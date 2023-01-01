@@ -8,14 +8,14 @@ This class and its associated <code>liboai::OpenAI</code> interface allow access
 <h2>Methods</h2>
 <p>This document covers the method(s) located in <code>files.h</code>. You can find their function signature(s) below.</p>
 
-<h3>List Files.</h3>
+<h3>List Files</h3>
 <p>Gets a list of files that belong to the user's organization. Returns a <code>liboai::Response</code> containing response data.</p>
 
 ```cpp
 Response list() const &;
 ```
 
-<h3>Upload File.</h3>
+<h3>Upload File</h3>
 <p>Upload a file that contains document(s) to be used across various endpoints/features. Currently, the size of all the files uploaded by one organization can be up to 1 GB. Returns a <code>liboai::Response</code> containing response data.</p>
 
 ```cpp
@@ -25,7 +25,7 @@ Response create(
 ) const &;
 ```
 
-<h3>Delete a File.</h3>
+<h3>Delete a File</h3>
 <p>Deletes a file. Returns a <code>liboai::Response</code> containing response data.</p>
 
 ```cpp
@@ -34,7 +34,7 @@ Response remove(
 ) const &;
 ```
 
-<h3>Retrieve File.</h3>
+<h3>Retrieve File</h3>
 <p>Returns information about a specific file. Returns a <code>liboai::Response</code> containing response data.</p>
 
 ```cpp
@@ -43,7 +43,7 @@ Response retrieve(
 ) const &;
 ```
 
-<h3>Retrieve File Content (Download).</h3>
+<h3>Retrieve File Content (Download)</h3>
 <p>Returns the contents of the specified file and downloads it to the provided path. Returns a <code>bool</code> indicating failure or success.</p>
 
 ```cpp
