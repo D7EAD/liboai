@@ -1,7 +1,5 @@
 <p align="center">
   <img src="/images/_logo.png">
-  <br>
-  <img src="https://img.shields.io/github/license/D7EAD/liboai.js.svg">     <img src="https://img.shields.io/github/release/D7EAD/liboai.js.svg">
 </p>
 
 <hr>
@@ -69,4 +67,3 @@ int main() {
 <p>Artificial intelligence is an exciting and quickly-changing field. 
 
 If you'd like to partake in further placing the power of AI in the hands of everyday people, please consider contributing by either submitting new code and features via a **Pull Request** or by suggesting new features and reporting any existing bugs via **Issues**.<p>
-<p><img src="https://img.shields.io/github/issues/D7EAD/liboai.js.svg">     <img src="https://img.shields.io/github/issues-pr/D7EAD/liboai.js.svg"></p>
