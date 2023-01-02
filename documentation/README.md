@@ -41,7 +41,9 @@ int main() {
 <br>
 <p>Once we have properly included the necessary header file to use the library--and assuming symbols are linked properly--we can make use of the class in <code>liboai.h</code> to get started. At some point in our source code, we will have to choose when to define a <code>liboai::OpenAI</code> object to access component interfaces. Each component interface stored in this object offers methods associated with it, so, for instance, interface <code>Image</code> will have a method <code>create(...)</code> to generate an image from text. Each method returns a <code>liboai::Response</code> containing response information. However, before we start using these methods, we must first set our authorization information--otherwise it will not work!
 
-<code>liboai::OpenAI</code> also houses another important member, the authorization member, which is used to set authorization information (such as the API key and organization IDs) before we call the API methods. See below for both a correct and incorrect control flow when generating an image.</p>
+<code>liboai::OpenAI</code> also houses another important member, the authorization member, which is used to set authorization information (such as the API key and organization IDs) before we call the API methods. For more information on additional members found in <code>liboai::Authorization</code>, refer to the <a href="./authorization">authorization</a> folder above.
+
+See below for both a correct and incorrect control flow when generating an image.</p>
 <table>
 <tr>
 <th>Correct</th>
