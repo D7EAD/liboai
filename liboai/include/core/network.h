@@ -78,7 +78,7 @@ namespace liboai {
 				return res;
 			}
 	
-			template <class ..._Params>
+			template <class... _Params>
 			inline cpr::Response Request(
 				const Method& http_method,
 				const std::string& endpoint,

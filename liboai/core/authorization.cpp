@@ -1,6 +1,6 @@
 #include "../include/core/authorization.h"
 
-bool liboai::Authorization::SetKey(const std::string& key) {
+bool liboai::Authorization::SetKey(const std::string& key) noexcept {
 	if (!key.empty()) {
 		this->key_ = key;
 		if (this->auth_headers_.count("Authorization") > 0) {
@@ -12,7 +12,7 @@ bool liboai::Authorization::SetKey(const std::string& key) {
 	return false;
 }
 
-bool liboai::Authorization::SetKey(std::string&& key) {
+bool liboai::Authorization::SetKey(std::string&& key) noexcept {
 	if (!key.empty()) {
 		this->key_ = std::move(key);
 		if (this->auth_headers_.count("Authorization") > 0) {
@@ -24,7 +24,7 @@ bool liboai::Authorization::SetKey(std::string&& key) {
 	return false;
 }
 
-bool liboai::Authorization::SetKeyFile(const std::filesystem::path& path) {
+bool liboai::Authorization::SetKeyFile(const std::filesystem::path& path) noexcept {
 	if (std::filesystem::exists(path) && std::filesystem::is_regular_file(path) && std::filesystem::file_size(path) > 0) {
 		std::ifstream file(path);
 		if (file.is_open()) {
@@ -39,7 +39,7 @@ bool liboai::Authorization::SetKeyFile(const std::filesystem::path& path) {
 	return false;
 }
 
-bool liboai::Authorization::SetKeyEnv(const std::string& var) {
+bool liboai::Authorization::SetKeyEnv(const std::string& var) noexcept {
 	if (!var.empty()) {
 		const char* key = std::getenv(var.c_str());
 		if (key != nullptr) {
@@ -55,7 +55,7 @@ bool liboai::Authorization::SetKeyEnv(const std::string& var) {
 	return false;
 }
 
-bool liboai::Authorization::SetOrganization(const std::string& org) {
+bool liboai::Authorization::SetOrganization(const std::string& org) noexcept {
 	if (!org.empty()) {
 		this->org_ = org;
 		if (this->auth_headers_.count("OpenAI-Organization") > 0) {
@@ -67,7 +67,7 @@ bool liboai::Authorization::SetOrganization(const std::string& org) {
 	return false;
 }
 
-bool liboai::Authorization::SetOrganization(std::string&& org) {
+bool liboai::Authorization::SetOrganization(std::string&& org) noexcept {
 	if (!org.empty()) {
 		this->org_ = std::move(org);
 		if (this->auth_headers_.count("OpenAI-Organization") > 0) {
@@ -79,7 +79,7 @@ bool liboai::Authorization::SetOrganization(std::string&& org) {
 	return false;
 }
 
-bool liboai::Authorization::SetOrganizationFile(const std::filesystem::path& path) {
+bool liboai::Authorization::SetOrganizationFile(const std::filesystem::path& path) noexcept {
 	if (std::filesystem::exists(path) && std::filesystem::is_regular_file(path) && std::filesystem::file_size(path) > 0) {
 		std::ifstream file(path);
 		if (file.is_open()) {
@@ -94,7 +94,7 @@ bool liboai::Authorization::SetOrganizationFile(const std::filesystem::path& pat
 	return false;
 }
 
-bool liboai::Authorization::SetOrganizationEnv(const std::string& var) {
+bool liboai::Authorization::SetOrganizationEnv(const std::string& var) noexcept {
 	if (!var.empty()) {
 		const char* org = std::getenv(var.c_str());
 		if (org != nullptr) {
@@ -110,18 +110,18 @@ bool liboai::Authorization::SetOrganizationEnv(const std::string& var) {
 	return false;
 }
 
-void liboai::Authorization::SetProxies(const std::initializer_list<std::pair<const std::string, std::string>>& hosts) {
+void liboai::Authorization::SetProxies(const std::initializer_list<std::pair<const std::string, std::string>>& hosts) noexcept {
 	this->proxies_ = cpr::Proxies(hosts);
 }
 
-void liboai::Authorization::SetProxies(std::initializer_list<std::pair<const std::string, std::string>>&& hosts) {
+void liboai::Authorization::SetProxies(std::initializer_list<std::pair<const std::string, std::string>>&& hosts) noexcept {
 	this->proxies_ = cpr::Proxies(std::move(hosts));
 }
 
-void liboai::Authorization::SetProxies(const std::map<std::string, std::string>& hosts) {	
+void liboai::Authorization::SetProxies(const std::map<std::string, std::string>& hosts) noexcept {
 	this->proxies_ = cpr::Proxies(hosts);
 }
 
-void liboai::Authorization::SetProxies(std::map<std::string, std::string>&& hosts) {
+void liboai::Authorization::SetProxies(std::map<std::string, std::string>&& hosts) noexcept {
 	this->proxies_ = cpr::Proxies(std::move(hosts));
 }

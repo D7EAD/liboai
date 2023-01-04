@@ -17,14 +17,16 @@ namespace liboai {
 			E_FAILURETOPARSE,
 			E_BADRESPONSE,
 			E_APIERROR,
-			E_RATELIMIT
+			E_RATELIMIT,
+			E_CONNECTIONERROR
 		};
 
-		constexpr const char* _etype_strs_[4] = {
+		constexpr const char* _etype_strs_[5] = {
 			"E_FAILURETOPARSE:0x00",
 			"E_BADRESPONSE:0x01",
 			"E_APIERROR:0x02",
-			"E_RATELIMIT:0x03"
+			"E_RATELIMIT:0x03",
+			"E_CONNECTIONERROR:0x04"
 		};
 
 		class OpenAIException : public std::exception {

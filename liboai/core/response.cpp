@@ -3,8 +3,15 @@
 void liboai::Response::CheckResponse() const noexcept(false) {
 	if (this->status_code == 429) {
 		throw liboai::exception::OpenAIRateLimited(
-			this->reason,
+			!this->reason.empty() ? this->reason : "Rate limited",
 			liboai::exception::EType::E_RATELIMIT,
+			"liboai::Response::CheckResponse()"
+		);
+	}
+	else if (this->status_code == 0) {
+		throw liboai::exception::OpenAIException(
+			"A connection error occurred",
+			liboai::exception::EType::E_CONNECTIONERROR,
 			"liboai::Response::CheckResponse()"
 		);
 	}
@@ -27,7 +34,7 @@ void liboai::Response::CheckResponse() const noexcept(false) {
 		}
 		else {
 			throw liboai::exception::OpenAIException(
-				this->reason,
+				!this->reason.empty() ? this->reason : "An unknown error occurred",
 				liboai::exception::EType::E_BADRESPONSE,
 				"liboai::Response::CheckResponse()"
 			);
