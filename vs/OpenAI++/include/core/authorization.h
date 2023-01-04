@@ -38,7 +38,7 @@ namespace liboai {
 				@return A reference to the singleton instance of this class
 				to be used in all component classes.
 			*/
-			static Authorization& Authorizer() {
+			static Authorization& Authorizer() noexcept {
 				static Authorization instance;
 				return instance;
 			}
@@ -49,7 +49,7 @@ namespace liboai {
 				@param key : The authorization key to use in component calls.
 				@returns True if the key was set successfully, false otherwise.
 			*/
-			LIBOAI_EXPORT bool SetKey(const std::string& key);
+			LIBOAI_EXPORT bool SetKey(const std::string& key) noexcept;
 			
 			/*
 				@brief Sets the authorization key for the OpenAI API
@@ -57,7 +57,7 @@ namespace liboai {
 				@param key : The authorization key to use in component calls.
 				@returns True if the key was set successfully, false otherwise.
 			*/
-			LIBOAI_EXPORT bool SetKey(std::string&& key);
+			LIBOAI_EXPORT bool SetKey(std::string&& key) noexcept;
 
 			/*
 				@brief Sets the authorization key for the OpenAI API
@@ -65,7 +65,7 @@ namespace liboai {
 				@param path : The path to the file containing the authorization key.
 				@returns True if the key was set successfully, false otherwise.
 			*/
-			LIBOAI_EXPORT bool SetKeyFile(const std::filesystem::path& path);
+			LIBOAI_EXPORT bool SetKeyFile(const std::filesystem::path& path) noexcept;
 
 			/*
 				@brief Sets the authorization key for the OpenAI API
@@ -75,7 +75,7 @@ namespace liboai {
 					retrieve the authorization key from.
 				@returns True if the key was set successfully, false otherwise.
 			*/
-			LIBOAI_EXPORT bool SetKeyEnv(const std::string& var);
+			LIBOAI_EXPORT bool SetKeyEnv(const std::string& var) noexcept;
 			
 			/*
 				@brief Sets the organization identifier as the passed
@@ -84,7 +84,7 @@ namespace liboai {
 					component calls.
 				@returns True if the ID was set successfully, false otherwise.
 			*/
-			LIBOAI_EXPORT bool SetOrganization(const std::string& org);
+			LIBOAI_EXPORT bool SetOrganization(const std::string& org) noexcept;
 
 			/*
 				@brief Sets the organization identifier as the passed
@@ -93,7 +93,7 @@ namespace liboai {
 					component calls.
 				@returns True if the ID was set successfully, false otherwise.
 			*/
-			LIBOAI_EXPORT bool SetOrganization(std::string&& org);
+			LIBOAI_EXPORT bool SetOrganization(std::string&& org) noexcept;
 
 			/*
 				@brief Sets the organization identifier as the first
@@ -103,7 +103,7 @@ namespace liboai {
 					organization identifier.
 				@returns True if the ID was set successfully, false otherwise.
 			*/
-			LIBOAI_EXPORT bool SetOrganizationFile(const std::filesystem::path& path);
+			LIBOAI_EXPORT bool SetOrganizationFile(const std::filesystem::path& path) noexcept;
 
 			/*
 				@brief Sets the organization identifier as the value
@@ -113,57 +113,57 @@ namespace liboai {
 					retrieve the organization identifier from.
 				@returns True if the ID was set successfully, false otherwise.
 			*/
-			LIBOAI_EXPORT bool SetOrganizationEnv(const std::string& var);
+			LIBOAI_EXPORT bool SetOrganizationEnv(const std::string& var) noexcept;
 			
 			/*
 				@brief Sets proxies to use for component calls.
 				@param hosts : The hosts to use as proxies in 
 				paired { "protocol", "host" } format.
 			*/
-			LIBOAI_EXPORT void SetProxies(const std::initializer_list<std::pair<const std::string, std::string>>& hosts);
+			LIBOAI_EXPORT void SetProxies(const std::initializer_list<std::pair<const std::string, std::string>>& hosts) noexcept;
 			
 			/*
 				@brief Sets proxies to use for component calls.
 				@param hosts : The hosts to use as proxies in
 				paired { "protocol", "host" } format.
 			*/
-			LIBOAI_EXPORT void SetProxies(std::initializer_list<std::pair<const std::string, std::string>>&& hosts);
+			LIBOAI_EXPORT void SetProxies(std::initializer_list<std::pair<const std::string, std::string>>&& hosts) noexcept;
 
 			/*
 				@brief Sets proxies to use for component calls.
 				@param hosts : The hosts to use as proxies in
 				paired { "protocol", "host" } format.
 			*/
-			LIBOAI_EXPORT void SetProxies(const std::map<std::string, std::string>& hosts);
+			LIBOAI_EXPORT void SetProxies(const std::map<std::string, std::string>& hosts) noexcept;
 			
 			/*
 				@brief Sets proxies to use for component calls.
 				@param hosts : The hosts to use as proxies in
 				paired { "protocol", "host" } format.
 			*/
-			LIBOAI_EXPORT void SetProxies(std::map<std::string, std::string>&& hosts);
+			LIBOAI_EXPORT void SetProxies(std::map<std::string, std::string>&& hosts) noexcept;
 
 			/*			
 				@brief Returns currently the set authorization key.
 			*/
-			constexpr const std::string& GetKey() const { return this->key_; }
+			constexpr const std::string& GetKey() const noexcept { return this->key_; }
 
 			/*
 				@brief Returns the currently set organization identifier.
 			*/
-			constexpr const std::string& GetOrganization() const { return this->org_; }
+			constexpr const std::string& GetOrganization() const noexcept { return this->org_; }
 			
 			/*
 				@returns The currently set proxies.
 			*/
-			cpr::Proxies GetProxies() { return this->proxies_; }
+			cpr::Proxies GetProxies() noexcept { return this->proxies_; }
 			
 			/*
 				@returns An authorization header with the
 					currently set authorization information for use
 					in component calls.
 			*/
-			constexpr const cpr::Header& GetAuthorizationHeaders() const { return this->auth_headers_; }
+			constexpr const cpr::Header& GetAuthorizationHeaders() const noexcept { return this->auth_headers_; }
 
 		private: // member variables
 			std::string key_, org_;
