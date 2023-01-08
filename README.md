@@ -67,3 +67,10 @@ int main() {
 <p>Artificial intelligence is an exciting and quickly-changing field. 
 
 If you'd like to partake in further placing the power of AI in the hands of everyday people, please consider contributing by either submitting new code and features via a **Pull Request**. If you have any issues using the library, or just want to suggest new features, feel free to contact me directly using the info on my <a href="https://github.com/D7EAD">profile</a> or open an **Issue**.
+
+<h1>To-do</h1>
+<ul>
+  <li><p>Hide dependencies in implementation.</p></li>
+  <li><p>Add async support.</p></li>
+  <li><p>Consolidate rvalue/const lvalue ref setters via <code>std::string_view</code>.</p></li>
+</ul>
