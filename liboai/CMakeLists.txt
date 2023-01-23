@@ -35,5 +35,11 @@ include/components/images.h
 include/components/models.h
 include/components/moderations.h
 DESTINATION include/components)
+install(FILES
+include/core/authorization.h
+include/core/exception.h
+include/core/network.h
+include/core/response.h
+DESTINATION include/core)
 
 set_property(DIRECTORY PROPERTY VS_STARTUP_PROJECT oai)
