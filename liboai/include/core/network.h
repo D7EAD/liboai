@@ -13,7 +13,11 @@
 		information to successfully complete the request.
 */
 
+#ifdef __linux__
+#define LIBOAI_EXPORT
+#else
 #define LIBOAI_EXPORT __declspec(dllexport)
+#endif
 
 #include <optional>
 #include <cpr/cpr.h>
