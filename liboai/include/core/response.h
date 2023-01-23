@@ -15,7 +15,11 @@
 		into a usable format for the user to access via this class.
 */
 
+#ifdef __linux__
+#define LIBOAI_EXPORT
+#else
 #define LIBOAI_EXPORT __declspec(dllexport)
+#endif
 
 #include <iostream>
 #include <nlohmann/json.hpp>
