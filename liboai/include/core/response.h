@@ -28,7 +28,7 @@
 #include "exception.h"
 
 namespace liboai {
-	class JsonConstructor {
+	class JsonConstructor final {
 		public:
 			JsonConstructor() {}
 			JsonConstructor(const JsonConstructor& other) noexcept : _json(other._json) {}
