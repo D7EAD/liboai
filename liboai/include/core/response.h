@@ -16,70 +16,54 @@
 */
 
 #ifdef __linux__
-#define LIBOAI_EXPORT
+	#define LIBOAI_EXPORT
 #else
-#define LIBOAI_EXPORT __declspec(dllexport)
+	#define LIBOAI_EXPORT __declspec(dllexport)
 #endif
 
 #include <iostream>
+#include <optional>
 #include <nlohmann/json.hpp>
 #include <cpr/cpr.h>
 #include "exception.h"
 
 namespace liboai {
+	class JsonConstructor {
+		public:
+			JsonConstructor() {}
+			JsonConstructor(const JsonConstructor& other) noexcept : _json(other._json) {}
+			JsonConstructor(JsonConstructor&& old) noexcept : _json(std::move(old._json)) {}
+
+			template <class _Ty>
+			void push_back(std::string_view key, const _Ty& value) {
+				this->_json[key.data()] = value;
+			}
+
+			template <class _Ty>
+			void push_back(std::string_view key, std::optional<_Ty>&& value) {
+				if (value) {
+					this->_json[key.data()] = std::forward<_Ty>(value.value());
+				}
+			}
+
+			std::string dump() const {
+				return this->_json.dump(4);
+			}
+
+		private:
+			nlohmann::json _json;
+	};
+
 	class Response final {
 		public:
-			Response() = delete;
-			Response(const Response&) = delete;
-			Response(Response&&) = delete;
+			Response() = default;
+			Response(const liboai::Response& other) noexcept;
+			Response(liboai::Response&& old) noexcept;
+			Response(const cpr::Response& toParse) noexcept(false);
+			Response(cpr::Response&& toParse) noexcept(false);
 			
-			Response(const cpr::Response& toParse) noexcept(false)
-				: status_code(toParse.status_code), elapsed(toParse.elapsed), status_line(toParse.status_line),
-				content(toParse.text), url(toParse.url.str()), reason(toParse.reason) 
-			{
-				try {
-					if (!this->content.empty()) {
-						this->raw_json = nlohmann::json::parse(this->content);
-					}
-					else {
-						this->raw_json = nlohmann::json();
-					}
-				}
-				catch (const nlohmann::json::parse_error& e) {
-					throw liboai::exception::OpenAIException(
-						e.what(),
-						liboai::exception::EType::E_FAILURETOPARSE,
-						"liboai::Response::Response(const cpr::Response&)"
-					);
-				}
-				
-				// check the response for errors -- nothrow on success
-				this->CheckResponse();
-			}
-			
-			Response(cpr::Response&& toParse) noexcept(false)
-				: status_code(toParse.status_code), elapsed(toParse.elapsed), status_line(std::move(toParse.status_line)),
-				content(std::move(toParse.text)), url(toParse.url.str()), reason(std::move(toParse.reason))
-			{
-				try {
-					if (!this->content.empty()) {
-						this->raw_json = nlohmann::json::parse(this->content);
-					}
-					else {
-						this->raw_json = nlohmann::json();
-					}
-				}
-				catch (nlohmann::json::parse_error& e) {
-					throw liboai::exception::OpenAIException(
-						e.what(),
-						liboai::exception::EType::E_FAILURETOPARSE,
-						"liboai::Response::Response(cpr::Response&&)"
-					);
-				}
-
-				// check the response for errors -- nothrow on success
-				this->CheckResponse();
-			}
+			Response& operator=(const liboai::Response& other) noexcept;
+			Response& operator=(liboai::Response&& old) noexcept;
 			
 			/*
 				@brief Transparent operator[] wrapper to nlohmann::json to
@@ -94,12 +78,12 @@ namespace liboai {
 				@brief std::ostream operator<< overload to allow for
 					pretty printing of the Response object.
 			*/
-			friend std::ostream& operator<<(std::ostream& os, const Response& r);
+			LIBOAI_EXPORT friend std::ostream& operator<<(std::ostream& os, const Response& r);
 			
 		public:
-			long status_code; double elapsed;
-			std::string status_line, content, url, reason;
-			nlohmann::json raw_json;
+			long status_code = 0; double elapsed = 0.0;
+			std::string status_line{}, content{}, url{}, reason{};
+			nlohmann::json raw_json{};
 
 		private:
 			/*
@@ -108,4 +92,5 @@ namespace liboai {
 			*/
 			LIBOAI_EXPORT void CheckResponse() const noexcept(false);
 	};
+	using FutureResponse = std::future<liboai::Response>;
 }

@@ -14,12 +14,13 @@
 */
 
 #ifdef __linux__
-#define LIBOAI_EXPORT
+	#define LIBOAI_EXPORT
 #else
-#define LIBOAI_EXPORT __declspec(dllexport)
+	#define LIBOAI_EXPORT __declspec(dllexport)
 #endif
 
 #include <optional>
+#include <future>
 #include <cpr/cpr.h>
 
 namespace liboai {
@@ -38,6 +39,31 @@ namespace liboai {
 			Network(Network&&) = delete;
 			Network(const Network&) = delete;
 		
+			/*
+				@brief Function to download a file at 'from'
+					to file path 'to.' Useful for downloading
+					images from the OpenAI API given a URL to
+					'from.'
+
+					This function is not to be confused with
+					liboai::File::download(...) which is used
+					to download .jsonl files from the OpenAI API.
+
+				@param *to     The path and filename to download the file to.
+				@param *from   Where to download the file data from
+					(such as a URL).
+
+				@returns Bool indicating success or failure.
+			*/
+			static inline bool Download(const std::string& to, const std::string& from) noexcept(false) {
+				std::ofstream file(to, std::ios::binary);
+				cpr::Response res;
+				res = cpr::Download(file, cpr::Url{ from });
+
+				return res.status_code == 200;
+			}
+
+		protected:
 			enum class Method : uint8_t {
 				HTTP_GET,     // GET
 				HTTP_POST,    // POST
@@ -52,7 +78,7 @@ namespace liboai {
 				const std::string& content_type,
 				std::optional<cpr::Header> headers = std::nullopt,
 				_Params&&... parameters
-			) const noexcept {
+			) const {
 				cpr::Header _headers = { { "Content-Type", content_type } };
 				if (headers) {
 					if (headers.value().size() != 0) {
@@ -80,67 +106,6 @@ namespace liboai {
 				}			
 
 				return res;
-			}
-	
-			template <class... _Params>
-			inline cpr::Response Request(
-				const Method& http_method,
-				const std::string& endpoint,
-				const std::string& content_type,
-				std::optional<cpr::Header> headers = std::nullopt,
-				const _Params&... parameters
-			) const noexcept {
-				cpr::Header _headers = { { "Content-Type", content_type } };
-				if (headers) {
-					if (headers.value().size() != 0) {
-						for (auto& i : headers.value()) {
-							_headers.insert(std::move(i));
-						}
-					}
-				}
-				
-				cpr::Response res;
-				if constexpr (sizeof...(parameters) > 0) {
-					res = Network::MethodSchema<cpr::Timeout&&, cpr::Header&&, const _Params&...>::_method[static_cast<uint8_t>(http_method)](
-						cpr::Url { this->root_ + endpoint },
-						cpr::Timeout{ 30000 },
-						std::move(_headers),
-						parameters...
-					);
-				}
-				else {
-					res = Network::MethodSchema<cpr::Timeout&&, cpr::Header&&>::_method[static_cast<uint8_t>(http_method)](
-						cpr::Url{ this->root_ + endpoint },
-						cpr::Timeout{ 30000 },
-						std::move(_headers)
-					);
-				}
-
-				return res;
-			}
-
-			/*
-				@brief Function to download a file at 'from'
-					to file path 'to.' Useful for downloading
-					images from the OpenAI API given a URL to
-					'from.'
-					
-					This function is not to be confused with
-					liboai::File::download(...) which is used
-					to download jsonl files from the OpenAI API.
-
-				@param *to     The path and filename to download the file to.
-				@param *from   Where to download the file data from
-					(such as a URL).
-
-				@returns Bool indicating success or failure.
-			*/
-			static inline bool Download(const std::string& to, const std::string& from) noexcept(false) {
-				std::ofstream file(to, std::ios::binary);
-				cpr::Response res;
-				res = cpr::Download(file, cpr::Url{ from });
-
-				return res.status_code == 200;
 			}
 
 		private:

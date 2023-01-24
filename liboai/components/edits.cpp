@@ -1,24 +1,46 @@
 #include "../include/components/edits.h"
 
-liboai::Response liboai::Edits::create(const std::string& model_id, const std::optional<std::string>& input, const std::optional<std::string>& instruction, const std::optional<uint16_t>& n, const std::optional<float>& temperature, const std::optional<float>& top_p) const& {
-	nlohmann::json json_data = {
-		{ "model", model_id }
-	};
-	if (input.has_value()) { json_data["input"] = input.value(); }
-	if (instruction.has_value()) { json_data["instruction"] = instruction.value(); }
-	if (n.has_value()) { json_data["n"] = n.value(); }
-	if (temperature.has_value()) { json_data["temperature"] = temperature.value(); }
-	if (top_p.has_value()) { json_data["top_p"] = top_p.value(); }
+liboai::Response liboai::Edits::create(const std::string& model_id, std::optional<std::string> input, std::optional<std::string> instruction, std::optional<uint16_t> n, std::optional<float> temperature, std::optional<float> top_p) const & noexcept(false) {
+	liboai::JsonConstructor jcon;
+	jcon.push_back("model", model_id);
+	jcon.push_back("input", std::move(input));
+	jcon.push_back("instruction", std::move(instruction));
+	jcon.push_back("n", std::move(n));
+	jcon.push_back("temperature", std::move(temperature));
+	jcon.push_back("top_p", std::move(top_p));
 
 	cpr::Response res;
 	res = this->Request(
 		Method::HTTP_POST, "/edits", "application/json",
 		this->auth_.GetAuthorizationHeaders(),
 		cpr::Body {
-			json_data.dump()
+			jcon.dump()
 		},
 		this->auth_.GetProxies()
 	);
 
-	return Response(std::move(res));
+	return liboai::Response(std::move(res));
+}
+
+LIBOAI_EXPORT liboai::FutureResponse liboai::Edits::create_async(const std::string& model_id, std::optional<std::string> input, std::optional<std::string> instruction, std::optional<uint16_t> n, std::optional<float> temperature, std::optional<float> top_p) const & noexcept(false) {
+	liboai::JsonConstructor jcon;
+	jcon.push_back("model", model_id);
+	jcon.push_back("input", std::move(input));
+	jcon.push_back("instruction", std::move(instruction));
+	jcon.push_back("n", std::move(n));
+	jcon.push_back("temperature", std::move(temperature));
+	jcon.push_back("top_p", std::move(top_p));
+
+	return std::async(
+		std::launch::async, [&, jcon]() -> liboai::Response {
+			return this->Request(
+				Method::HTTP_POST, "/edits", "application/json",
+				this->auth_.GetAuthorizationHeaders(),
+				cpr::Body {
+					jcon.dump()
+				},
+				this->auth_.GetProxies()
+			);
+		}
+	);
 }

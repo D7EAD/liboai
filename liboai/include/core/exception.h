@@ -36,10 +36,8 @@ namespace liboai {
 					: data_(rhs.data_), error_type_(rhs.error_type_), locale_(rhs.locale_) { this->fmt_str_ = (this->locale_ + ": " + this->data_ + " (" + this->GetETypeString(this->error_type_) + ")"); }
 				OpenAIException(OpenAIException&& rhs) noexcept
 					: data_(std::move(rhs.data_)), error_type_(rhs.error_type_), locale_(std::move(rhs.locale_)) { this->fmt_str_ = (this->locale_ + ": " + this->data_ + " (" + this->GetETypeString(this->error_type_) + ")"); }
-				OpenAIException(const std::string& msg, const EType& type, const std::string& where) noexcept
-					: data_(msg), error_type_(type), locale_(where) { this->fmt_str_ = (this->locale_ + ": " + this->data_ + " (" + this->GetETypeString(this->error_type_) + ")"); }
-				OpenAIException(std::string&& msg, const EType& type, std::string&& where) noexcept
-					: data_(std::move(msg)), error_type_(type), locale_(std::move(where)) { this->fmt_str_ = (this->locale_ + ": " + this->data_ + " (" + this->GetETypeString(this->error_type_) + ")"); }
+				OpenAIException(std::string_view data, EType error_type, std::string_view locale) noexcept
+					: data_(data), error_type_(error_type), locale_(locale) { this->fmt_str_ = (this->locale_ + ": " + this->data_ + " (" + this->GetETypeString(this->error_type_) + ")"); }
 
 				const char* what() const noexcept override {
 					return this->fmt_str_.c_str();
@@ -61,10 +59,8 @@ namespace liboai {
 					: data_(rhs.data_), error_type_(rhs.error_type_), locale_(rhs.locale_) { this->fmt_str_ = (this->locale_ + ": " + this->data_ + " (" + this->GetETypeString(this->error_type_) + ")"); }
 				OpenAIRateLimited(OpenAIRateLimited&& rhs) noexcept
 					: data_(std::move(rhs.data_)), error_type_(rhs.error_type_), locale_(std::move(rhs.locale_)) { this->fmt_str_ = (this->locale_ + ": " + this->data_ + " (" + this->GetETypeString(this->error_type_) + ")"); }
-				OpenAIRateLimited(const std::string& msg, const EType& type, const std::string& where) noexcept
-					: data_(msg), error_type_(type), locale_(where) { this->fmt_str_ = (this->locale_ + ": " + this->data_ + " (" + this->GetETypeString(this->error_type_) + ")"); }
-				OpenAIRateLimited(std::string&& msg, const EType& type, std::string&& where) noexcept
-					: data_(std::move(msg)), error_type_(type), locale_(std::move(where)) { this->fmt_str_ = (this->locale_ + ": " + this->data_ + " (" + this->GetETypeString(this->error_type_) + ")"); }
+				OpenAIRateLimited(std::string_view data, EType error_type, std::string_view locale) noexcept
+					: data_(data), error_type_(error_type), locale_(locale) { this->fmt_str_ = (this->locale_ + ": " + this->data_ + " (" + this->GetETypeString(this->error_type_) + ")"); }
 
 				const char* what() const noexcept override {
 					return this->fmt_str_.c_str();
