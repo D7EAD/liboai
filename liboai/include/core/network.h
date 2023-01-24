@@ -24,16 +24,7 @@
 #include <cpr/cpr.h>
 
 namespace liboai {
-	class Network {
-		private:
-			template <class... T> struct MethodSchema {
-				inline static std::function<cpr::Response(cpr::Url&&, T...)> _method[3] = {
-					cpr::Get    <cpr::Url&&, T...>,
-					cpr::Post   <cpr::Url&&, T...>,
-					cpr::Delete <cpr::Url&&, T...>
-				};
-			};
-			
+	class Network {			
 		public:
 			Network() noexcept = default;
 			Network(Network&&) = delete;
@@ -109,6 +100,13 @@ namespace liboai {
 			}
 
 		private:
+			template <class... T> struct MethodSchema {
+				inline static std::function<cpr::Response(cpr::Url&&, T...)> _method[3] = {
+					cpr::Get    <cpr::Url&&, T...>,
+					cpr::Post   <cpr::Url&&, T...>,
+					cpr::Delete <cpr::Url&&, T...>
+				};
+			};
 			const std::string root_ = "https://api.openai.com/v1";
 	};
 }
