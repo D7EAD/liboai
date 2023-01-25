@@ -12,7 +12,6 @@ int main() {
         "A cute baby sea otter wearing a beret"
       );
 
-      // print some response data
       std::cout << response["data"][0]["url"].get<std::string>() << std::endl;
     }
     catch (std::exception& e) {
