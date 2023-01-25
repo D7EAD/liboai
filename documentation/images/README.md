@@ -12,41 +12,82 @@ This class and its associated <code>liboai::OpenAI</code> interface allow access
 <p>Creates an image given a prompt. Returns a <code>liboai::Response</code> containing response data.</p>
 
 ```cpp
-Response create(
+liboai::Response create(
   const std::string& prompt,
-  const std::optional<uint8_t>& n = std::nullopt,
-  const std::optional<std::string>& size = std::nullopt,
-  const std::optional<std::string>& response_format = std::nullopt,
-  const std::optional<std::string>& user = std::nullopt
-) const &;
+  std::optional<uint8_t> n = std::nullopt,
+  std::optional<std::string> size = std::nullopt,
+  std::optional<std::string> response_format = std::nullopt,
+  std::optional<std::string> user = std::nullopt
+) const & noexcept(false);
+```
+
+<h3>Create an Image (async)</h3>
+<p>Asynchronously creates an image given a prompt. Returns a <code>liboai::FutureResponse</code> containing future response data.</p>
+
+```cpp
+liboai::FutureResponse create_async(
+  const std::string& prompt,
+  std::optional<uint8_t> n = std::nullopt,
+  std::optional<std::string> size = std::nullopt,
+  std::optional<std::string> response_format = std::nullopt,
+  std::optional<std::string> user = std::nullopt
+) const & noexcept(false);
 ```
 
 <h3>Create Image Edit</h3>
 <p>Creates an edited or extended image given an original image and a prompt. Returns a <code>liboai::Response</code> containing response data.</p>
 
 ```cpp
-Response create_edit(
+liboai::Response create_edit(
   const std::filesystem::path& image,
   const std::string& prompt,
-  const std::optional<std::filesystem::path>& mask = std::nullopt,
-  const std::optional<uint8_t>& n = std::nullopt,
-  const std::optional<std::string>& size = std::nullopt,
-  const std::optional<std::string>& response_format = std::nullopt,
-  const std::optional<std::string>& user = std::nullopt
-) const &;
+  std::optional<std::filesystem::path> mask = std::nullopt,
+  std::optional<uint8_t> n = std::nullopt,
+  std::optional<std::string> size = std::nullopt,
+  std::optional<std::string> response_format = std::nullopt,
+  std::optional<std::string> user = std::nullopt
+) const & noexcept(false);
+```
+
+<h3>Create Image Edit (async)</h3>
+<p>Asynchronously creates an edited or extended image given an original image and a prompt. Returns a <code>liboai::FutureResponse</code> containing future response data.</p>
+
+```cpp
+liboai::FutureResponse create_edit_async(
+  const std::filesystem::path& image,
+  const std::string& prompt,
+  std::optional<std::filesystem::path> mask = std::nullopt,
+  std::optional<uint8_t> n = std::nullopt,
+  std::optional<std::string> size = std::nullopt,
+  std::optional<std::string> response_format = std::nullopt,
+  std::optional<std::string> user = std::nullopt
+) const & noexcept(false);
 ```
 
 <h3>Create Image Variation</h3>
 <p>Creates a variation of a given image. Returns a <code>liboai::Response</code> containing response data.</p>
 
 ```cpp
-Response create_variation(
+liboai::Response create_variation(
   const std::filesystem::path& image,
-  const std::optional<uint8_t>& n = std::nullopt,
-  const std::optional<std::string>& size = std::nullopt,
-  const std::optional<std::string>& response_format = std::nullopt,
-  const std::optional<std::string>& user = std::nullopt
-) const &;
+  std::optional<uint8_t> n = std::nullopt,
+  std::optional<std::string> size = std::nullopt,
+  std::optional<std::string> response_format = std::nullopt,
+  std::optional<std::string> user = std::nullopt
+) const & noexcept(false);
+```
+
+<h3>Create Image Variation (async)</h3>
+<p>Asynchronously creates a variation of a given image. Returns a <code>liboai::FutureResponse</code> containing future response data.</p>
+
+```cpp
+liboai::FutureResponse create_variation_async(
+  const std::filesystem::path& image,
+  std::optional<uint8_t> n = std::nullopt,
+  std::optional<std::string> size = std::nullopt,
+  std::optional<std::string> response_format = std::nullopt,
+  std::optional<std::string> user = std::nullopt
+) const & noexcept(false);
 ```
 
 <p>All function parameters marked <code>optional</code> are not required and are resolved on OpenAI's end if not supplied.</p>

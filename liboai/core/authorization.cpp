@@ -1,20 +1,8 @@
 #include "../include/core/authorization.h"
 
-bool liboai::Authorization::SetKey(const std::string& key) noexcept {
+bool liboai::Authorization::SetKey(std::string_view key) noexcept {
 	if (!key.empty()) {
 		this->key_ = key;
-		if (this->auth_headers_.count("Authorization") > 0) {
-			this->auth_headers_.erase("Authorization");
-		}
-		this->auth_headers_["Authorization"] = ("Bearer " + this->key_);
-		return true;
-	}
-	return false;
-}
-
-bool liboai::Authorization::SetKey(std::string&& key) noexcept {
-	if (!key.empty()) {
-		this->key_ = std::move(key);
 		if (this->auth_headers_.count("Authorization") > 0) {
 			this->auth_headers_.erase("Authorization");
 		}
@@ -39,9 +27,9 @@ bool liboai::Authorization::SetKeyFile(const std::filesystem::path& path) noexce
 	return false;
 }
 
-bool liboai::Authorization::SetKeyEnv(const std::string& var) noexcept {
+bool liboai::Authorization::SetKeyEnv(std::string_view var) noexcept {
 	if (!var.empty()) {
-		const char* key = std::getenv(var.c_str());
+		const char* key = std::getenv(var.data());
 		if (key != nullptr) {
 			this->key_ = key;
 			if (this->auth_headers_.count("Authorization") > 0) {
@@ -55,19 +43,7 @@ bool liboai::Authorization::SetKeyEnv(const std::string& var) noexcept {
 	return false;
 }
 
-bool liboai::Authorization::SetOrganization(const std::string& org) noexcept {
-	if (!org.empty()) {
-		this->org_ = org;
-		if (this->auth_headers_.count("OpenAI-Organization") > 0) {
-			this->auth_headers_.erase("OpenAI-Organization");
-		}
-		this->auth_headers_["OpenAI-Organization"] = this->org_;
-		return true;
-	}
-	return false;
-}
-
-bool liboai::Authorization::SetOrganization(std::string&& org) noexcept {
+bool liboai::Authorization::SetOrganization(std::string_view org) noexcept {
 	if (!org.empty()) {
 		this->org_ = std::move(org);
 		if (this->auth_headers_.count("OpenAI-Organization") > 0) {
@@ -94,9 +70,9 @@ bool liboai::Authorization::SetOrganizationFile(const std::filesystem::path& pat
 	return false;
 }
 
-bool liboai::Authorization::SetOrganizationEnv(const std::string& var) noexcept {
+bool liboai::Authorization::SetOrganizationEnv(std::string_view var) noexcept {
 	if (!var.empty()) {
-		const char* org = std::getenv(var.c_str());
+		const char* org = std::getenv(var.data());
 		if (org != nullptr) {
 			this->org_ = org;
 			if (this->auth_headers_.count("OpenAI-Organization") > 0) {

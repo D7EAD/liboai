@@ -19,7 +19,7 @@
 #include "network.h"
 
 namespace liboai {
-	class Authorization {
+	class Authorization final {
 		public: // cons/des, operator deletions
 			Authorization() = default;
 			~Authorization() = default;
@@ -36,7 +36,7 @@ namespace liboai {
 			/*
 				@brief Singleton paradigm access method.
 				@return A reference to the singleton instance of this class
-				to be used in all component classes.
+					to be used in all component classes.
 			*/
 			static Authorization& Authorizer() noexcept {
 				static Authorization instance;
@@ -49,15 +49,7 @@ namespace liboai {
 				@param key : The authorization key to use in component calls.
 				@returns True if the key was set successfully, false otherwise.
 			*/
-			LIBOAI_EXPORT bool SetKey(const std::string& key) noexcept;
-			
-			/*
-				@brief Sets the authorization key for the OpenAI API
-					as the passed string.
-				@param key : The authorization key to use in component calls.
-				@returns True if the key was set successfully, false otherwise.
-			*/
-			LIBOAI_EXPORT bool SetKey(std::string&& key) noexcept;
+			LIBOAI_EXPORT bool SetKey(std::string_view key) noexcept;
 
 			/*
 				@brief Sets the authorization key for the OpenAI API
@@ -75,7 +67,7 @@ namespace liboai {
 					retrieve the authorization key from.
 				@returns True if the key was set successfully, false otherwise.
 			*/
-			LIBOAI_EXPORT bool SetKeyEnv(const std::string& var) noexcept;
+			LIBOAI_EXPORT bool SetKeyEnv(std::string_view var) noexcept;
 			
 			/*
 				@brief Sets the organization identifier as the passed
@@ -84,16 +76,7 @@ namespace liboai {
 					component calls.
 				@returns True if the ID was set successfully, false otherwise.
 			*/
-			LIBOAI_EXPORT bool SetOrganization(const std::string& org) noexcept;
-
-			/*
-				@brief Sets the organization identifier as the passed
-					string for use in component calls.
-				@param org : The organization identifier to use in
-					component calls.
-				@returns True if the ID was set successfully, false otherwise.
-			*/
-			LIBOAI_EXPORT bool SetOrganization(std::string&& org) noexcept;
+			LIBOAI_EXPORT bool SetOrganization(std::string_view org) noexcept;
 
 			/*
 				@brief Sets the organization identifier as the first
@@ -113,33 +96,33 @@ namespace liboai {
 					retrieve the organization identifier from.
 				@returns True if the ID was set successfully, false otherwise.
 			*/
-			LIBOAI_EXPORT bool SetOrganizationEnv(const std::string& var) noexcept;
+			LIBOAI_EXPORT bool SetOrganizationEnv(std::string_view var) noexcept;
 			
 			/*
 				@brief Sets proxies to use for component calls.
 				@param hosts : The hosts to use as proxies in 
-				paired { "protocol", "host" } format.
+					paired { "protocol", "host" } format.
 			*/
 			LIBOAI_EXPORT void SetProxies(const std::initializer_list<std::pair<const std::string, std::string>>& hosts) noexcept;
 			
 			/*
 				@brief Sets proxies to use for component calls.
 				@param hosts : The hosts to use as proxies in
-				paired { "protocol", "host" } format.
+					paired { "protocol", "host" } format.
 			*/
 			LIBOAI_EXPORT void SetProxies(std::initializer_list<std::pair<const std::string, std::string>>&& hosts) noexcept;
 
 			/*
 				@brief Sets proxies to use for component calls.
 				@param hosts : The hosts to use as proxies in
-				paired { "protocol", "host" } format.
+					paired { "protocol", "host" } format.
 			*/
 			LIBOAI_EXPORT void SetProxies(const std::map<std::string, std::string>& hosts) noexcept;
 			
 			/*
 				@brief Sets proxies to use for component calls.
 				@param hosts : The hosts to use as proxies in
-				paired { "protocol", "host" } format.
+					paired { "protocol", "host" } format.
 			*/
 			LIBOAI_EXPORT void SetProxies(std::map<std::string, std::string>&& hosts) noexcept;
 
@@ -156,7 +139,7 @@ namespace liboai {
 			/*
 				@returns The currently set proxies.
 			*/
-			cpr::Proxies GetProxies() noexcept { return this->proxies_; }
+			cpr::Proxies GetProxies() const noexcept { return this->proxies_; }
 			
 			/*
 				@returns An authorization header with the

@@ -12,10 +12,20 @@ This class and its associated <code>liboai::OpenAI</code> interface allow access
 <p>Classifies if text violates OpenAI's Content Policy. Returns a <code>liboai::Response</code> containing response data.</p>
 
 ```cpp
-Response create(
+liboai::Response create(
   const std::string& input,
-  const std::optional<std::string>& model = std::nullopt
-) const &;
+  std::optional<std::string> model = std::nullopt
+) const & noexcept(false);
+```
+
+<h3>Create a Moderation (async)</h3>
+<p>Asynchronously classifies if text violates OpenAI's Content Policy. Returns a <code>liboai::FutureResponse</code> containing future response data.</p>
+
+```cpp
+liboai::FutureResponse create_async(
+  const std::string& input,
+  std::optional<std::string> model = std::nullopt
+) const & noexcept(false);
 ```
 
 <p>All function parameters marked <code>optional</code> are not required and are resolved on OpenAI's end if not supplied.</p>

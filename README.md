@@ -50,7 +50,20 @@ int main() {
 
 </details>
 
-<p>Keep in mind the above C++ example is a minimal example and is not an exception-safe snippet. Please see <a href="/documentation">the documentation</a> for more detailed and exception-safe code snippets.</p>
+<p>Running the above will print out the URL to the resulting generated image, which may or may not look similar to the one found below.</p>
+<table>
+<tr>
+<th>Example Image</th>
+</tr>
+<td>
+
+<img src="/images/snake.png">
+
+</td>
+</tr>
+</table>
+
+<p><i>Keep in mind the above C++ example is a minimal example and is not an exception-safe snippet. Please see <a href="/documentation">the documentation</a> for more detailed and exception-safe code snippets.</p></p>
 
 <h1>Dependencies</h1>
 <p>For the library to work the way it does, it relies on two major dependencies. These dependencies can be found listed below.<p>
@@ -67,9 +80,3 @@ int main() {
 <p>Artificial intelligence is an exciting and quickly-changing field. 
 
 If you'd like to partake in further placing the power of AI in the hands of everyday people, please consider contributing by either submitting new code and features via a **Pull Request**. If you have any issues using the library, or just want to suggest new features, feel free to contact me directly using the info on my <a href="https://github.com/D7EAD">profile</a> or open an **Issue**.
-
-<h1>To-do</h1>
-<ul>
-  <li><p>Add async support.</p></li>
-  <li><p>Consolidate rvalue/const lvalue ref setters via <code>std::string_view</code>.</p></li>
-</ul>
