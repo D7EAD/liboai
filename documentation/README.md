@@ -169,7 +169,6 @@ int main() {
 <tr>
 <th>Downloading a Generated Image</th>
 </tr>
-<tr>
 <td>
 
 ```cpp
