@@ -23,7 +23,7 @@ int main() {
       auto response = fut.get();
 
       // print some response data
-      std::cout << response["choices"][0]["text"] << std::endl;
+      std::cout << response["choices"][0]["text"].get<std::string>() << std::endl;
     }
     catch (std::exception& e) {
       std::cout << e.what() << std::endl;
