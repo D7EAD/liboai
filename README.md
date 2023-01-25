@@ -50,7 +50,7 @@ int main() {
 
 </details>
 
-<p>Running the above will print out the URL to the resulting generated image, which may or may not look similar to the one found below.
+<p>Running the above will print out the URL to the resulting generated image, which may or may not look similar to the one found below.</p>
 <table>
 <tr>
 <th>Example Image</th>
