@@ -164,7 +164,7 @@ int main() {
 </table>
 
 <br>
-<p>What if we want to do more than just print the URL of the image? Why not download it right when it's done? Thankfully, <code>liboai</code> has a convenient function for that, <code>Network::Download(...)</code>. See below for an example of downloading a freshly generated image.
+<p>What if we want to do more than just print the URL of the image? Why not download it right when it's done? Thankfully, <code>liboai</code> has a convenient function for that, <code>Network::Download(...)</code> (and <code>Network::DownloadAsync(...)</code>). See below for an example of downloading a freshly generated image.
 <table>
 <tr>
 <th>Downloading a Generated Image</th>
