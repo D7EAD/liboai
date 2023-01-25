@@ -54,6 +54,34 @@ namespace liboai {
 				return res.status_code == 200;
 			}
 
+			/*
+				@brief Function to asynchronously download a
+					file at 'from' to file path 'to.' Useful
+					for downloading images from the OpenAI API
+					given a URL to 'from.'
+
+					This function is not to be confused with
+					liboai::File::download(...) which is used
+					to download .jsonl files from the OpenAI API.
+
+				@param *to     The path and filename to download the file to.
+				@param *from   Where to download the file data from
+					(such as a URL).
+
+				@returns Future bool indicating success or failure.
+			*/
+			static inline std::future<bool> DownloadAsync(const std::string& to, const std::string& from) noexcept(false) {
+				return std::async(
+					std::launch::async, [&]() -> bool {
+						std::ofstream file(to, std::ios::binary);
+						cpr::Response res;
+						res = cpr::Download(file, cpr::Url{ from });
+
+						return res.status_code == 200;
+					}
+				);
+			}			
+
 		protected:
 			enum class Method : uint8_t {
 				HTTP_GET,     // GET
