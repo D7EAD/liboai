@@ -14,7 +14,7 @@ This class and its associated <code>liboai::OpenAI</code> interface allow access
 ```cpp
 liboai::Response create(
   const std::string& input,
-  const std::optional<std::string>& model = std::nullopt
+  std::optional<std::string> model = std::nullopt
 ) const & noexcept(false);
 ```
 
@@ -24,7 +24,7 @@ liboai::Response create(
 ```cpp
 liboai::FutureResponse create_async(
   const std::string& input,
-  const std::optional<std::string>& model = std::nullopt
+  std::optional<std::string> model = std::nullopt
 ) const & noexcept(false);
 ```
 
