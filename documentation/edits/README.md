@@ -12,14 +12,28 @@ This class and its associated <code>liboai::OpenAI</code> interface allow access
 <p>Creates a new edit for the provided input, instruction, and parameters. Returns a <code>liboai::Response</code> containing response data.</p>
 
 ```cpp
-Response create(
+liboai::Response create(
   const std::string& model_id,
-  const std::optional<std::string>& input = std::nullopt,
-  const std::optional<std::string>& instruction = std::nullopt,
-  const std::optional<uint16_t>& n = std::nullopt,
-  const std::optional<float>& temperature = std::nullopt,
-  const std::optional<float>& top_p = std::nullopt
-) const &;
+  std::optional<std::string> input = std::nullopt,
+  std::optional<std::string> instruction = std::nullopt,
+  std::optional<uint16_t> n = std::nullopt,
+  std::optional<float> temperature = std::nullopt,
+  std::optional<float> top_p = std::nullopt
+) const & noexcept(false);
+```
+
+<h3>Create an Edit (async)</h3>
+<p>Asynchronously creates a new edit for the provided input, instruction, and parameters. Returns a <code>liboai::FutureResponse</code> containing future response data.</p>
+
+```cpp
+liboai::FutureResponse create_async(
+  const std::string& model_id,
+  std::optional<std::string> input = std::nullopt,
+  std::optional<std::string> instruction = std::nullopt,
+  std::optional<uint16_t> n = std::nullopt,
+  std::optional<float> temperature = std::nullopt,
+  std::optional<float> top_p = std::nullopt
+) const & noexcept(false);
 ```
 
 <p>All function parameters marked <code>optional</code> are not required and are resolved on OpenAI's end if not supplied.</p>
