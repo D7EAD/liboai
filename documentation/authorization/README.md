@@ -11,73 +11,73 @@ All authorization information should be set prior to the calling of any componen
 <p>Returns a reference to the <code>liboai::Authorization</code> singleton shared among all components.</p>
 
 ```cpp
-static Authorization& Authorizer();
+static Authorization& Authorizer() noexcept;
 ```
 
 <h3>Set API Key</h3>
 <p>Sets the API key to use in subsequent component calls.</p>
 
 ```cpp
-bool SetKey(std::string_view key);
+bool SetKey(std::string_view key) noexcept;
 ```
 
 <h3>Set API Key (File)</h3>
 <p>Sets the API key to use in subsequent component calls from data found in file at path.</p>
 
 ```cpp
-bool SetKeyFile(const std::filesystem::path& path);
+bool SetKeyFile(const std::filesystem::path& path) noexcept;
 ```
 
 <h3>Set API Key (Environment Variable)</h3>
 <p>Sets the API key to use in subsequent component calls from an environment variable.</p>
 
 ```cpp
-bool SetKeyEnv(std::string_view var);
+bool SetKeyEnv(std::string_view var) noexcept;
 ```
  
 <h3>Set Organization ID</h3>
 <p>Sets the organization ID to send in subsequent component calls.</p>
 
 ```cpp
-bool SetOrganization(std::string_view org);
+bool SetOrganization(std::string_view org) noexcept;
 ```
 
 <h3>Set Organization ID (File)</h3>
 <p>Sets the organization ID to send in subsequent component calls from data found in file at path.</p>
 
 ```cpp
-bool SetOrganizationFile(const std::filesystem::path& path);
+bool SetOrganizationFile(const std::filesystem::path& path) noexcept;
 ```
 
 <h3>Set Organization ID (Environment Variable)</h3>
 <p>Sets the organization ID to send in subsequent component calls from an environment variable.</p>
 
 ```cpp
-bool SetOrganizationEnv(std::string_view var);
+bool SetOrganizationEnv(std::string_view var) noexcept;
 ```
 
 <h3>Set Proxies</h3>
 <p>Sets the proxy, or proxies, to use in subsequent component calls.</p>
 
 ```cpp
-void SetProxies(const std::initializer_list<std::pair<const std::string, std::string>>& hosts);
-void SetProxies(std::initializer_list<std::pair<const std::string, std::string>>&& hosts);
-void SetProxies(const std::map<std::string, std::string>& hosts);
-void SetProxies(std::map<std::string, std::string>&& hosts);
+void SetProxies(const std::initializer_list<std::pair<const std::string, std::string>>& hosts) noexcept;
+void SetProxies(std::initializer_list<std::pair<const std::string, std::string>>&& hosts) noexcept;
+void SetProxies(const std::map<std::string, std::string>& hosts) noexcept;
+void SetProxies(std::map<std::string, std::string>&& hosts) noexcept;
 ```
 
 <h3>Get Key</h3>
 <p>Returns the currently set API key.</p>
 
 ```cpp
-constexpr const std::string& GetKey() const;
+constexpr const std::string& GetKey() const noexcept;
 ```
 
 <h3>Get Organization ID</h3>
 <p>Returns the currently set organization ID.</p>
 
 ```cpp
-constexpr const std::string& GetOrganization() const;
+constexpr const std::string& GetOrganization() const noexcept;
 ```
 
 
@@ -92,7 +92,7 @@ cpr::Proxies GetProxies() const noexcept;
 <p>Returns the currently set authorization headers based on set information.</p>
 
 ```cpp
-constexpr const cpr::Header& GetAuthorizationHeaders() const;
+constexpr const cpr::Header& GetAuthorizationHeaders() const noexcept;
 ```
 
 <br>
