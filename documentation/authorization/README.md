@@ -18,8 +18,7 @@ static Authorization& Authorizer();
 <p>Sets the API key to use in subsequent component calls.</p>
 
 ```cpp
-bool SetKey(const std::string& key);
-bool SetKey(std::string&& key);
+bool SetKey(std::string_view key);
 ```
 
 <h3>Set API Key (File)</h3>
@@ -33,15 +32,14 @@ bool SetKeyFile(const std::filesystem::path& path);
 <p>Sets the API key to use in subsequent component calls from an environment variable.</p>
 
 ```cpp
-bool SetKeyEnv(const std::string& var);
+bool SetKeyEnv(std::string_view var);
 ```
-
+ 
 <h3>Set Organization ID</h3>
 <p>Sets the organization ID to send in subsequent component calls.</p>
 
 ```cpp
-bool SetOrganization(const std::string& org);
-bool SetOrganization(std::string&& org);
+bool SetOrganization(std::string_view org);
 ```
 
 <h3>Set Organization ID (File)</h3>
@@ -55,7 +53,7 @@ bool SetOrganizationFile(const std::filesystem::path& path);
 <p>Sets the organization ID to send in subsequent component calls from an environment variable.</p>
 
 ```cpp
-bool SetOrganizationEnv(const std::string& var);
+bool SetOrganizationEnv(std::string_view var);
 ```
 
 <h3>Set Proxies</h3>
@@ -87,7 +85,7 @@ constexpr const std::string& GetOrganization() const;
 <p>Returns the currently set proxies.</p>
 
 ```cpp
-cpr::Proxies GetProxies();
+cpr::Proxies GetProxies() const noexcept;
 ```
 
 <h3>Get Authorization Headers</h3>
