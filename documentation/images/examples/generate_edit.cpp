@@ -6,7 +6,6 @@ int main() {
   OpenAI oai;
   if (oai.auth.SetKeyEnv("OPENAI_API_KEY")) {
     try {
-      // call async method; returns a future
       Response response = oai.Image->create_edit(
         "C:/some/folder/otter.png",
         "C:/some/folder/mask.png",
