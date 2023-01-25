@@ -20,7 +20,7 @@ int main() {
       auto response = fut.get();
 
       // print some response data
-      std::cout << response["choices"][0]["text"].get<std::string>() << std::endl;
+      std::cout << response["results"][0]["flagged"].get<bool>() << std::endl;
     }
     catch (std::exception& e) {
       std::cout << e.what() << std::endl;
