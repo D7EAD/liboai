@@ -50,7 +50,20 @@ int main() {
 
 </details>
 
-<p>Keep in mind the above C++ example is a minimal example and is not an exception-safe snippet. Please see <a href="/documentation">the documentation</a> for more detailed and exception-safe code snippets.</p>
+<p>Running will print out the URL to the resulting generated image which may look similar to the one found below.
+<table>
+<tr>
+<th>Example Image</th>
+</tr>
+<td>
+
+<img src="/images/snake.png">
+
+</td>
+</tr>
+</table>
+
+<p><i>Keep in mind the above C++ example is a minimal example and is not an exception-safe snippet. Please see <a href="/documentation">the documentation</a> for more detailed and exception-safe code snippets.</p></p>
 
 <h1>Dependencies</h1>
 <p>For the library to work the way it does, it relies on two major dependencies. These dependencies can be found listed below.<p>
