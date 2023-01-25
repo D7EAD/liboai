@@ -63,7 +63,7 @@ int main() {
 </tr>
 </table>
 
-<p><i>Keep in mind the above C++ example is a minimal example and is not an exception-safe snippet. Please see <a href="/documentation">the documentation</a> for more detailed and exception-safe code snippets.</p></p>
+<p><i>Keep in mind the above C++ example is a minimal example and is not an exception-safe snippet. Please see <a href="/documentation">the documentation</a> for more detailed and exception-safe code snippets.</i></p>
 
 <h1>Dependencies</h1>
 <p>For the library to work the way it does, it relies on two major dependencies. These dependencies can be found listed below.<p>
