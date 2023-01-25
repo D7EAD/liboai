@@ -4,7 +4,7 @@ using namespace liboai;
 
 int main() {
   OpenAI oai;
-    if (oai.auth.SetKeyEnv("OPENAI_API_KEY")) {
+  if (oai.auth.SetKeyEnv("OPENAI_API_KEY")) {
     try {
       // call async method; returns a future
       auto fut = oai.Image->create_variation_async(
