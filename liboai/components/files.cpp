@@ -11,7 +11,7 @@ liboai::Response liboai::Files::list() const & noexcept(false) {
 	return liboai::Response(std::move(res));
 }
 
-LIBOAI_EXPORT liboai::FutureResponse liboai::Files::list_async() const & noexcept(false) {
+liboai::FutureResponse liboai::Files::list_async() const & noexcept(false) {
 	return std::async(
 		std::launch::async, [&]() -> liboai::Response {
 			return this->Request(
@@ -40,7 +40,7 @@ liboai::Response liboai::Files::create(const std::filesystem::path& file, const 
 	return liboai::Response(std::move(res));
 }
 
-LIBOAI_EXPORT liboai::FutureResponse liboai::Files::create_async(const std::filesystem::path& file, const std::string& purpose) const & noexcept(false) {
+liboai::FutureResponse liboai::Files::create_async(const std::filesystem::path& file, const std::string& purpose) const & noexcept(false) {
 	cpr::Multipart form = {
 		{ "purpose", purpose },
 		{ "file", cpr::File{file.generic_string()} }
@@ -69,7 +69,7 @@ liboai::Response liboai::Files::remove(const std::string& file_id) const & noexc
 	return liboai::Response(std::move(res));
 }
 
-LIBOAI_EXPORT liboai::FutureResponse liboai::Files::remove_async(const std::string& file_id) const & noexcept(false) {
+liboai::FutureResponse liboai::Files::remove_async(const std::string& file_id) const & noexcept(false) {
 	return std::async(
 		std::launch::async, [&]() -> liboai::Response {
 			return this->Request(
@@ -92,7 +92,7 @@ liboai::Response liboai::Files::retrieve(const std::string& file_id) const & {
 	return liboai::Response(std::move(res));
 }
 
-LIBOAI_EXPORT liboai::FutureResponse liboai::Files::retrieve_async(const std::string& file_id) const & noexcept(false) {
+liboai::FutureResponse liboai::Files::retrieve_async(const std::string& file_id) const & noexcept(false) {
 	return std::async(
 		std::launch::async, [&]() -> liboai::Response {
 			return this->Request(
@@ -110,7 +110,7 @@ bool liboai::Files::download(const std::string& file_id, const std::string& save
 	);
 }
 
-LIBOAI_EXPORT std::future<bool> liboai::Files::download_async(const std::string& file_id, const std::string& save_to) const & noexcept(false) {
+std::future<bool> liboai::Files::download_async(const std::string& file_id, const std::string& save_to) const & noexcept(false) {
 	return std::async(
 		std::launch::async,
 		&liboai::Network::Download, save_to, ("https://api.openai.com/v1/files/" + file_id + "/content")

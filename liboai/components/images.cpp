@@ -21,7 +21,7 @@ liboai::Response liboai::Images::create(const std::string& prompt, std::optional
 	return liboai::Response(std::move(res));
 }
 
-LIBOAI_EXPORT liboai::FutureResponse liboai::Images::create_async(const std::string& prompt, std::optional<uint8_t> n, std::optional<std::string> size, std::optional<std::string> response_format, std::optional<std::string> user) const & noexcept(false) {
+liboai::FutureResponse liboai::Images::create_async(const std::string& prompt, std::optional<uint8_t> n, std::optional<std::string> size, std::optional<std::string> response_format, std::optional<std::string> user) const & noexcept(false) {
 	liboai::JsonConstructor jcon;
 	jcon.push_back("prompt", prompt);
 	jcon.push_back("n", std::move(n));
@@ -65,7 +65,7 @@ liboai::Response liboai::Images::create_edit(const std::filesystem::path& image,
 	return liboai::Response(std::move(res));
 }
 
-LIBOAI_EXPORT liboai::FutureResponse liboai::Images::create_edit_async(const std::filesystem::path& image, const std::string& prompt, std::optional<std::filesystem::path> mask, std::optional<uint8_t> n, std::optional<std::string> size, std::optional<std::string> response_format, std::optional<std::string> user) const & noexcept(false) {
+liboai::FutureResponse liboai::Images::create_edit_async(const std::filesystem::path& image, const std::string& prompt, std::optional<std::filesystem::path> mask, std::optional<uint8_t> n, std::optional<std::string> size, std::optional<std::string> response_format, std::optional<std::string> user) const & noexcept(false) {
 	cpr::Multipart form = {
 		{ "prompt", prompt },
 		{ "image", cpr::File{image.generic_string()} }
@@ -108,7 +108,7 @@ liboai::Response liboai::Images::create_variation(const std::filesystem::path& i
 	return liboai::Response(std::move(res));
 }
 
-LIBOAI_EXPORT liboai::FutureResponse liboai::Images::create_variation_async(const std::filesystem::path& image, std::optional<uint8_t> n, std::optional<std::string> size, std::optional<std::string> response_format, std::optional<std::string> user) const & noexcept(false) {
+liboai::FutureResponse liboai::Images::create_variation_async(const std::filesystem::path& image, std::optional<uint8_t> n, std::optional<std::string> size, std::optional<std::string> response_format, std::optional<std::string> user) const & noexcept(false) {
 	cpr::Multipart form = {
 		{ "image", cpr::File{image.generic_string()} }
 	};

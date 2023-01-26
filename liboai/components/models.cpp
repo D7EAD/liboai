@@ -11,7 +11,7 @@ liboai::Response liboai::Models::list() const & noexcept(false) {
 	return liboai::Response(std::move(res));
 }
 
-LIBOAI_EXPORT liboai::FutureResponse liboai::Models::list_async() const & noexcept(false) {
+liboai::FutureResponse liboai::Models::list_async() const & noexcept(false) {
 	return std::async(
 		std::launch::async, [&]() -> liboai::Response {
 			return this->Request(
@@ -34,7 +34,7 @@ liboai::Response liboai::Models::retrieve(const std::string& model) const & noex
 	return liboai::Response(std::move(res));
 }
 
-LIBOAI_EXPORT liboai::FutureResponse liboai::Models::retrieve_async(const std::string& model) const & noexcept(false) {
+liboai::FutureResponse liboai::Models::retrieve_async(const std::string& model) const & noexcept(false) {
 	return std::async(
 		std::launch::async, [&]() -> liboai::Response {
 			return this->Request(
@@ -57,7 +57,7 @@ liboai::Response liboai::Models::remove(const std::string& model) const & noexce
 	return liboai::Response(std::move(res));
 }
 
-LIBOAI_EXPORT liboai::FutureResponse liboai::Models::remove_async(const std::string& model) const & noexcept(false) {
+liboai::FutureResponse liboai::Models::remove_async(const std::string& model) const & noexcept(false) {
 	return std::async(
 		std::launch::async, [&]() -> liboai::Response {
 			return this->Request(

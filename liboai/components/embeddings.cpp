@@ -19,7 +19,7 @@ liboai::Response liboai::Embeddings::create(const std::string& model_id, std::op
 	return liboai::Response(std::move(res));
 }
 
-LIBOAI_EXPORT liboai::FutureResponse liboai::Embeddings::create_async(const std::string& model_id, std::optional<std::string> input, std::optional<std::string> user) const & noexcept(false) {
+liboai::FutureResponse liboai::Embeddings::create_async(const std::string& model_id, std::optional<std::string> input, std::optional<std::string> user) const & noexcept(false) {
 	liboai::JsonConstructor jcon;
 	jcon.push_back("model", model_id);
 	jcon.push_back("input", std::move(input));

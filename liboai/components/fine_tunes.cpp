@@ -28,7 +28,7 @@ liboai::Response liboai::FineTunes::create(const std::string& training_file, std
 	return liboai::Response(std::move(res));
 }
 
-LIBOAI_EXPORT liboai::FutureResponse liboai::FineTunes::create_async(const std::string& training_file, std::optional<std::string> validation_file, std::optional<std::string> model_id, std::optional<uint8_t> n_epochs, std::optional<uint16_t> batch_size, std::optional<float> learning_rate_multiplier, std::optional<float> prompt_loss_weight, std::optional<bool> compute_classification_metrics, std::optional<uint16_t> classification_n_classes, std::optional<std::string> classification_positive_class, std::optional<std::vector<float>> classification_betas, std::optional<std::string> suffix) const & noexcept(false) {
+liboai::FutureResponse liboai::FineTunes::create_async(const std::string& training_file, std::optional<std::string> validation_file, std::optional<std::string> model_id, std::optional<uint8_t> n_epochs, std::optional<uint16_t> batch_size, std::optional<float> learning_rate_multiplier, std::optional<float> prompt_loss_weight, std::optional<bool> compute_classification_metrics, std::optional<uint16_t> classification_n_classes, std::optional<std::string> classification_positive_class, std::optional<std::vector<float>> classification_betas, std::optional<std::string> suffix) const & noexcept(false) {
 	liboai::JsonConstructor jcon;
 	jcon.push_back("training_file", training_file);
 	jcon.push_back("validation_file", std::move(validation_file));
@@ -68,7 +68,7 @@ liboai::Response liboai::FineTunes::list() const& {
 	return liboai::Response(std::move(res));
 }
 
-LIBOAI_EXPORT liboai::FutureResponse liboai::FineTunes::list_async() const & noexcept(false) {
+liboai::FutureResponse liboai::FineTunes::list_async() const & noexcept(false) {
 	return std::async(
 		std::launch::async, [&]() -> liboai::Response {
 			return this->Request(
@@ -91,7 +91,7 @@ liboai::Response liboai::FineTunes::retrieve(const std::string& fine_tune_id) co
 	return liboai::Response(std::move(res));
 }
 
-LIBOAI_EXPORT liboai::FutureResponse liboai::FineTunes::retrieve_async(const std::string& fine_tune_id) const & noexcept(false) {
+liboai::FutureResponse liboai::FineTunes::retrieve_async(const std::string& fine_tune_id) const & noexcept(false) {
 	return std::async(
 		std::launch::async, [&]() -> liboai::Response {
 			return this->Request(
@@ -114,7 +114,7 @@ liboai::Response liboai::FineTunes::cancel(const std::string& fine_tune_id) cons
 	return liboai::Response(std::move(res));
 }
 
-LIBOAI_EXPORT liboai::FutureResponse liboai::FineTunes::cancel_async(const std::string& fine_tune_id) const & noexcept(false) {
+liboai::FutureResponse liboai::FineTunes::cancel_async(const std::string& fine_tune_id) const & noexcept(false) {
 	return std::async(
 		std::launch::async, [&]() -> liboai::Response {
 			return this->Request(
@@ -142,7 +142,7 @@ liboai::Response liboai::FineTunes::list_events(const std::string& fine_tune_id,
 	return liboai::Response(std::move(res));
 }
 
-LIBOAI_EXPORT liboai::FutureResponse liboai::FineTunes::list_events_async(const std::string& fine_tune_id, std::optional<std::function<bool(std::string, intptr_t)>> stream) const & noexcept(false) {
+liboai::FutureResponse liboai::FineTunes::list_events_async(const std::string& fine_tune_id, std::optional<std::function<bool(std::string, intptr_t)>> stream) const & noexcept(false) {
 	cpr::Parameters params;
 	stream.has_value() ? params.Add({ "stream", "true"}) : void();
 
