@@ -18,7 +18,7 @@ liboai::Response liboai::Moderations::create(const std::string& input, std::opti
 	return liboai::Response(std::move(res));
 }
 
-LIBOAI_EXPORT liboai::FutureResponse liboai::Moderations::create_async(const std::string& input, std::optional<std::string> model) const & noexcept(false) {
+liboai::FutureResponse liboai::Moderations::create_async(const std::string& input, std::optional<std::string> model) const & noexcept(false) {
 	liboai::JsonConstructor jcon;
 	jcon.push_back("input", input);
 	jcon.push_back("model", std::move(model));

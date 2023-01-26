@@ -33,7 +33,6 @@ namespace liboai {
 			*/
 			LIBOAI_EXPORT liboai::Response list() const & noexcept(false);
 
-
 			/*
 				@brief Asynchronously returns a list of files that belong to the
 					user's organization.

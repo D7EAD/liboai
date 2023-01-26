@@ -22,7 +22,7 @@ liboai::Response liboai::Edits::create(const std::string& model_id, std::optiona
 	return liboai::Response(std::move(res));
 }
 
-LIBOAI_EXPORT liboai::FutureResponse liboai::Edits::create_async(const std::string& model_id, std::optional<std::string> input, std::optional<std::string> instruction, std::optional<uint16_t> n, std::optional<float> temperature, std::optional<float> top_p) const & noexcept(false) {
+liboai::FutureResponse liboai::Edits::create_async(const std::string& model_id, std::optional<std::string> input, std::optional<std::string> instruction, std::optional<uint16_t> n, std::optional<float> temperature, std::optional<float> top_p) const & noexcept(false) {
 	liboai::JsonConstructor jcon;
 	jcon.push_back("model", model_id);
 	jcon.push_back("input", std::move(input));
