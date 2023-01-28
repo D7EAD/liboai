@@ -9,6 +9,7 @@ liboai::Response liboai::Completions::create(const std::string& model_id, std::o
 	jcon.push_back("temperature", std::move(temperature));
 	jcon.push_back("top_p", std::move(top_p));
 	jcon.push_back("n", std::move(n));
+	jcon.push_back("stream", stream);
 	jcon.push_back("logprobs", std::move(logprobs));
 	jcon.push_back("echo", std::move(echo));
 	jcon.push_back("stop", std::move(stop));
@@ -25,7 +26,7 @@ liboai::Response liboai::Completions::create(const std::string& model_id, std::o
 		cpr::Body {
 			jcon.dump()
 		},
-		stream.has_value() ? cpr::WriteCallback{stream.value()} : cpr::WriteCallback{},
+		stream ? cpr::WriteCallback{std::move(stream.value())} : cpr::WriteCallback{},
 		this->auth_.GetProxies()
 	);
 
@@ -41,6 +42,7 @@ liboai::FutureResponse liboai::Completions::create_async(const std::string& mode
 	jcon.push_back("temperature", std::move(temperature));
 	jcon.push_back("top_p", std::move(top_p));
 	jcon.push_back("n", std::move(n));
+	jcon.push_back("stream", stream);
 	jcon.push_back("logprobs", std::move(logprobs));
 	jcon.push_back("echo", std::move(echo));
 	jcon.push_back("stop", std::move(stop));
@@ -55,10 +57,10 @@ liboai::FutureResponse liboai::Completions::create_async(const std::string& mode
 			return this->Request(
 				Method::HTTP_POST, "/completions", "application/json",
 				this->auth_.GetAuthorizationHeaders(),
-				cpr::Body{
+				cpr::Body {
 					jcon.dump()
 				},
-				stream.has_value() ? cpr::WriteCallback{ stream.value() } : cpr::WriteCallback{},
+				stream ? cpr::WriteCallback{std::move(stream.value())} : cpr::WriteCallback{},
 				this->auth_.GetProxies()
 			);
 		}
