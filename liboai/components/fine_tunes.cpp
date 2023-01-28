@@ -48,7 +48,7 @@ liboai::FutureResponse liboai::FineTunes::create_async(const std::string& traini
 			return this->Request(
 				Method::HTTP_POST, "/fine-tunes", "application/json",
 				this->auth_.GetAuthorizationHeaders(),
-				cpr::Body{
+				cpr::Body {
 					jcon.dump()
 				},
 				this->auth_.GetProxies()
@@ -128,14 +128,14 @@ liboai::FutureResponse liboai::FineTunes::cancel_async(const std::string& fine_t
 
 liboai::Response liboai::FineTunes::list_events(const std::string& fine_tune_id, std::optional<std::function<bool(std::string, intptr_t)>> stream) const & noexcept(false) {
 	cpr::Parameters params;
-	stream.has_value() ? params.Add({ "stream", "true"}) : void();
+	stream ? params.Add({"stream", "true"}) : void();
 
 	cpr::Response res;
 	res = this->Request(
 		Method::HTTP_POST, "/fine-tunes/" + fine_tune_id + "/events", "application/json",
 		this->auth_.GetAuthorizationHeaders(),
 		std::move(params),
-		stream.has_value() ? cpr::WriteCallback{stream.value()} : cpr::WriteCallback{},
+		stream ? cpr::WriteCallback{std::move(stream.value())} : cpr::WriteCallback{},
 		this->auth_.GetProxies()
 	);
 
@@ -144,7 +144,7 @@ liboai::Response liboai::FineTunes::list_events(const std::string& fine_tune_id,
 
 liboai::FutureResponse liboai::FineTunes::list_events_async(const std::string& fine_tune_id, std::optional<std::function<bool(std::string, intptr_t)>> stream) const & noexcept(false) {
 	cpr::Parameters params;
-	stream.has_value() ? params.Add({ "stream", "true"}) : void();
+	stream ? params.Add({ "stream", "true"}) : void();
 
 	return std::async(
 		std::launch::async, [&, params]() -> liboai::Response {
@@ -152,7 +152,7 @@ liboai::FutureResponse liboai::FineTunes::list_events_async(const std::string& f
 				Method::HTTP_POST, "/fine-tunes/" + fine_tune_id + "/events", "application/json",
 				this->auth_.GetAuthorizationHeaders(),
 				std::move(params),
-				stream.has_value() ? cpr::WriteCallback{ stream.value() } : cpr::WriteCallback{},
+				stream ? cpr::WriteCallback{std::move(stream.value())} : cpr::WriteCallback{},
 				this->auth_.GetProxies()
 			);
 		}

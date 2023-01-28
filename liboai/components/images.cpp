@@ -48,11 +48,11 @@ liboai::Response liboai::Images::create_edit(const std::filesystem::path& image,
 		{ "prompt", prompt },
 		{ "image", cpr::File{image.generic_string()} }
 	};
-	if (mask.has_value()) { form.parts.push_back({ "mask", cpr::File{mask.value().generic_string()} }); }
-	if (n.has_value()) { form.parts.push_back({ "n", n.value() }); }
-	if (size.has_value()) { form.parts.push_back({ "size", size.value() }); }
-	if (response_format.has_value()) { form.parts.push_back({ "response_format", response_format.value() }); }
-	if (user.has_value()) { form.parts.push_back({ "user", user.value() }); }
+	if (mask) { form.parts.push_back({ "mask", cpr::File{mask.value().generic_string()} }); }
+	if (n) { form.parts.push_back({ "n", n.value() }); }
+	if (size) { form.parts.push_back({ "size", size.value() }); }
+	if (response_format) { form.parts.push_back({ "response_format", response_format.value() }); }
+	if (user) { form.parts.push_back({ "user", user.value() }); }
 	
 	cpr::Response res;
 	res = this->Request(
@@ -70,11 +70,11 @@ liboai::FutureResponse liboai::Images::create_edit_async(const std::filesystem::
 		{ "prompt", prompt },
 		{ "image", cpr::File{image.generic_string()} }
 	};
-	if (mask.has_value()) { form.parts.push_back({ "mask", cpr::File{mask.value().generic_string()} }); }
-	if (n.has_value()) { form.parts.push_back({ "n", n.value() }); }
-	if (size.has_value()) { form.parts.push_back({ "size", size.value() }); }
-	if (response_format.has_value()) { form.parts.push_back({ "response_format", response_format.value() }); }
-	if (user.has_value()) { form.parts.push_back({ "user", user.value() }); }
+	if (mask) { form.parts.push_back({ "mask", cpr::File{mask.value().generic_string()} }); }
+	if (n) { form.parts.push_back({ "n", n.value() }); }
+	if (size) { form.parts.push_back({ "size", size.value() }); }
+	if (response_format) { form.parts.push_back({ "response_format", response_format.value() }); }
+	if (user) { form.parts.push_back({ "user", user.value() }); }
 
 	return std::async(
 		std::launch::async, [&, form]() -> liboai::Response {
@@ -92,10 +92,10 @@ liboai::Response liboai::Images::create_variation(const std::filesystem::path& i
 	cpr::Multipart form = {
 		{ "image", cpr::File{image.generic_string()} }
 	};
-	if (n.has_value()) { form.parts.push_back({ "n", n.value() }); }
-	if (size.has_value()) { form.parts.push_back({ "size", size.value() }); }
-	if (response_format.has_value()) { form.parts.push_back({ "response_format", response_format.value() }); }
-	if (user.has_value()) { form.parts.push_back({ "user", user.value() }); }
+	if (n) { form.parts.push_back({ "n", n.value() }); }
+	if (size) { form.parts.push_back({ "size", size.value() }); }
+	if (response_format) { form.parts.push_back({ "response_format", response_format.value() }); }
+	if (user) { form.parts.push_back({ "user", user.value() }); }
 	
 	cpr::Response res;
 	res = this->Request(
@@ -112,10 +112,10 @@ liboai::FutureResponse liboai::Images::create_variation_async(const std::filesys
 	cpr::Multipart form = {
 		{ "image", cpr::File{image.generic_string()} }
 	};
-	if (n.has_value()) { form.parts.push_back({ "n", n.value() }); }
-	if (size.has_value()) { form.parts.push_back({ "size", size.value() }); }
-	if (response_format.has_value()) { form.parts.push_back({ "response_format", response_format.value() }); }
-	if (user.has_value()) { form.parts.push_back({ "user", user.value() }); }
+	if (n) { form.parts.push_back({ "n", n.value() }); }
+	if (size) { form.parts.push_back({ "size", size.value() }); }
+	if (response_format) { form.parts.push_back({ "response_format", response_format.value() }); }
+	if (user) { form.parts.push_back({ "user", user.value() }); }
 
 	return std::async(
 		std::launch::async, [&, form]() -> liboai::Response {

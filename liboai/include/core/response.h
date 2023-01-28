@@ -36,7 +36,14 @@ namespace liboai {
 
 			template <class _Ty>
 			void push_back(std::string_view key, const _Ty& value) {
-				this->_json[key.data()] = value;
+				if constexpr (std::is_same_v<_Ty, std::optional<std::function<bool(std::string, intptr_t)>>>) {
+					if (value) {
+						this->_json[key.data()] = true;
+					}
+				}
+				else {
+					this->_json[key.data()] = value;
+				}
 			}
 
 			template <class _Ty>
