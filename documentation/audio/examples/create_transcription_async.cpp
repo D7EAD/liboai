@@ -8,7 +8,7 @@ int main() {
     try {
       // call async method; returns a future
       auto fut = oai.Audio->transcribe_async(
-        "C:/Users/vypho/Desktop/bateman.mp3",
+        "C:/some/folder/file.mp3",
         "whisper-1"
       );
 
