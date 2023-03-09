@@ -44,11 +44,29 @@ liboai::FutureResponse liboai::Images::create_async(const std::string& prompt, s
 }
 
 liboai::Response liboai::Images::create_edit(const std::filesystem::path& image, const std::string& prompt, std::optional<std::filesystem::path> mask, std::optional<uint8_t> n, std::optional<std::string> size, std::optional<std::string> response_format, std::optional<std::string> user) const & noexcept(false) {
+	if (!this->Validate(image)) {
+		throw liboai::exception::OpenAIException(
+			"File path provided is non-existent, is not a file, or is empty.",
+			liboai::exception::EType::E_FILEERROR,
+			"liboai::Images::create_edit(...)"
+		);
+	}
+
 	cpr::Multipart form = {
 		{ "prompt", prompt },
 		{ "image", cpr::File{image.generic_string()} }
 	};
-	if (mask) { form.parts.push_back({ "mask", cpr::File{mask.value().generic_string()} }); }
+	
+	if (mask) {
+		if (!this->Validate(mask.value())) {
+			throw liboai::exception::OpenAIException(
+				"File path provided is non-existent, is not a file, or is empty.",
+				liboai::exception::EType::E_FILEERROR,
+				"liboai::Images::create_edit(...)"
+			);
+		}
+		form.parts.push_back({ "mask", cpr::File{mask.value().generic_string()} });
+	}
 	if (n) { form.parts.push_back({ "n", n.value() }); }
 	if (size) { form.parts.push_back({ "size", size.value() }); }
 	if (response_format) { form.parts.push_back({ "response_format", response_format.value() }); }
@@ -66,11 +84,29 @@ liboai::Response liboai::Images::create_edit(const std::filesystem::path& image,
 }
 
 liboai::FutureResponse liboai::Images::create_edit_async(const std::filesystem::path& image, const std::string& prompt, std::optional<std::filesystem::path> mask, std::optional<uint8_t> n, std::optional<std::string> size, std::optional<std::string> response_format, std::optional<std::string> user) const & noexcept(false) {
+	if (!this->Validate(image)) {
+		throw liboai::exception::OpenAIException(
+			"File path provided is non-existent, is not a file, or is empty.",
+			liboai::exception::EType::E_FILEERROR,
+			"liboai::Images::create_edit_async(...)"
+		);
+	}
+
 	cpr::Multipart form = {
 		{ "prompt", prompt },
 		{ "image", cpr::File{image.generic_string()} }
 	};
-	if (mask) { form.parts.push_back({ "mask", cpr::File{mask.value().generic_string()} }); }
+	
+	if (mask) {
+		if (!this->Validate(mask.value())) {
+			throw liboai::exception::OpenAIException(
+				"File path provided is non-existent, is not a file, or is empty.",
+				liboai::exception::EType::E_FILEERROR,
+				"liboai::Images::create_edit_async(...)"
+			);
+		}
+		form.parts.push_back({ "mask", cpr::File{mask.value().generic_string()} });
+	}
 	if (n) { form.parts.push_back({ "n", n.value() }); }
 	if (size) { form.parts.push_back({ "size", size.value() }); }
 	if (response_format) { form.parts.push_back({ "response_format", response_format.value() }); }
@@ -89,9 +125,18 @@ liboai::FutureResponse liboai::Images::create_edit_async(const std::filesystem::
 }
 
 liboai::Response liboai::Images::create_variation(const std::filesystem::path& image, std::optional<uint8_t> n, std::optional<std::string> size, std::optional<std::string> response_format, std::optional<std::string> user) const & noexcept(false) {
+	if (!this->Validate(image)) {
+		throw liboai::exception::OpenAIException(
+			"File path provided is non-existent, is not a file, or is empty.",
+			liboai::exception::EType::E_FILEERROR,
+			"liboai::Images::create_variation(...)"
+		);
+	}
+
 	cpr::Multipart form = {
 		{ "image", cpr::File{image.generic_string()} }
 	};
+	
 	if (n) { form.parts.push_back({ "n", n.value() }); }
 	if (size) { form.parts.push_back({ "size", size.value() }); }
 	if (response_format) { form.parts.push_back({ "response_format", response_format.value() }); }
@@ -109,9 +154,18 @@ liboai::Response liboai::Images::create_variation(const std::filesystem::path& i
 }
 
 liboai::FutureResponse liboai::Images::create_variation_async(const std::filesystem::path& image, std::optional<uint8_t> n, std::optional<std::string> size, std::optional<std::string> response_format, std::optional<std::string> user) const & noexcept(false) {
+	if (!this->Validate(image)) {
+		throw liboai::exception::OpenAIException(
+			"File path provided is non-existent, is not a file, or is empty.",
+			liboai::exception::EType::E_FILEERROR,
+			"liboai::Images::create_variation_async(...)"
+		);
+	}
+
 	cpr::Multipart form = {
 		{ "image", cpr::File{image.generic_string()} }
 	};
+	
 	if (n) { form.parts.push_back({ "n", n.value() }); }
 	if (size) { form.parts.push_back({ "size", size.value() }); }
 	if (response_format) { form.parts.push_back({ "response_format", response_format.value() }); }
