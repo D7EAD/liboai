@@ -57,6 +57,9 @@
     <ClCompile Include="core\response.cpp">
       <Filter>Source Files\Core</Filter>
     </ClCompile>
+    <ClCompile Include="components\audio.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\components\completions.h">
@@ -97,6 +100,9 @@
     </ClInclude>
     <ClInclude Include="liboai.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\components\audio.h">
+      <Filter>Header Files\Components</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
