@@ -6,6 +6,7 @@ find_package(nlohmann_json CONFIG REQUIRED)
 find_package(cpr CONFIG REQUIRED)
 
 add_library(oai
+components/audio.cpp
 components/completions.cpp
 components/edits.cpp
 components/embeddings.cpp
@@ -26,6 +27,7 @@ target_link_libraries(oai PRIVATE nlohmann_json::nlohmann_json)
 install(TARGETS oai DESTINATION lib)
 install(FILES liboai.h DESTINATION include)
 install(FILES
+include/components/audio.h
 include/components/completions.h
 include/components/edits.h
 include/components/embeddings.h
