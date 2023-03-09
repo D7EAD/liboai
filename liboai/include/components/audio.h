@@ -54,6 +54,34 @@ namespace liboai {
 			) const & noexcept(false);
 
 			/*
+				@brief Asynchronously transcribes audio into the input language.
+
+				@param *file           The audio file to transcribe.
+				@param *model          The model to use for transcription.
+									   Only 'whisper-1' is currently available.
+				@param prompt          An optional text to guide the model's style
+									   or continue a previous audio segment. The
+									   prompt should match the audio language.
+				@param response_format The format of the transcript output.
+				@param temperature     The sampling temperature, between 0 and 1.
+									   Higher values like 0.8 will make the output
+									   more random, while lower values like 0.2
+									   will make it more focused and deterministic.
+									   If set to 0, the model will use log probability
+									   to automatically increase the temperature until
+									   certain thresholds are hit.
+				@param language        The language of the audio file.
+			*/
+			LIBOAI_EXPORT liboai::FutureResponse transcribe_async(
+				const std::filesystem::path& file,
+				const std::string& model,
+				std::optional<std::string> prompt = std::nullopt,
+				std::optional<std::string> response_format = std::nullopt,
+				std::optional<float> temperature = std::nullopt,
+				std::optional<std::string> language = std::nullopt
+			) const& noexcept(false);
+
+			/*
 				@brief Translates audio into English.
 
 				@param *file           The audio file to translate.
@@ -77,6 +105,31 @@ namespace liboai {
 				std::optional<std::string> response_format = std::nullopt,
 				std::optional<float> temperature = std::nullopt
 			) const & noexcept(false);
+
+			/*
+				@brief Asynchronously translates audio into English.
+
+				@param *file           The audio file to translate.
+				@param *model          The model to use for translation.
+									   Only 'whisper-1' is currently available.
+				@param prompt          An optional text to guide the model's style
+									   or continue a previous audio segment.
+				@param response_format The format of the transcript output.
+				@param temperature     The sampling temperature, between 0 and 1.
+									   Higher values like 0.8 will make the output
+									   more random, while lower values like 0.2
+									   will make it more focused and deterministic.
+									   If set to 0, the model will use log probability
+									   to automatically increase the temperature until
+									   certain thresholds are hit.
+			*/
+			LIBOAI_EXPORT liboai::FutureResponse translate_async(
+				const std::filesystem::path& file,
+				const std::string& model,
+				std::optional<std::string> prompt = std::nullopt,
+				std::optional<std::string> response_format = std::nullopt,
+				std::optional<float> temperature = std::nullopt
+			) const& noexcept(false);
 
 		private:
 			Authorization& auth_ = Authorization::Authorizer();
