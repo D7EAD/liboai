@@ -127,6 +127,20 @@ namespace liboai {
 				return res;
 			}
 
+			/*
+				@brief Function to validate the existence and validity of
+					a file located at a provided file path. This is used
+					in functions that take a file path as a parameter
+					to ensure that the file exists and is valid.
+			*/
+			bool Validate(const std::filesystem::path& path) const {
+				// checks if the file exists, is a regular file, and is not empty
+				if (std::filesystem::exists(path) && std::filesystem::is_regular_file(path)) {
+					return std::filesystem::file_size(path) > 0;
+				}
+				return false;
+			}
+
 		private:
 			template <class... T> struct MethodSchema {
 				inline static std::function<cpr::Response(cpr::Url&&, T...)> _method[3] = {

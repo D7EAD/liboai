@@ -24,6 +24,14 @@ liboai::FutureResponse liboai::Files::list_async() const & noexcept(false) {
 }
 
 liboai::Response liboai::Files::create(const std::filesystem::path& file, const std::string& purpose) const & noexcept(false) {
+	if (!this->Validate(file)) {
+		throw liboai::exception::OpenAIException(
+			"File path provided is non-existent, is not a file, or is empty.",
+			liboai::exception::EType::E_FILEERROR,
+			"liboai::Files::create(...)"
+		);
+	}
+
 	cpr::Multipart form = {
 		{ "purpose", purpose },
 		{ "file", cpr::File{file.generic_string()} }
@@ -41,6 +49,14 @@ liboai::Response liboai::Files::create(const std::filesystem::path& file, const 
 }
 
 liboai::FutureResponse liboai::Files::create_async(const std::filesystem::path& file, const std::string& purpose) const & noexcept(false) {
+	if (!this->Validate(file)) {
+		throw liboai::exception::OpenAIException(
+			"File path provided is non-existent, is not a file, or is empty.",
+			liboai::exception::EType::E_FILEERROR,
+			"liboai::Files::create_async(...)"
+		);
+	}
+
 	cpr::Multipart form = {
 		{ "purpose", purpose },
 		{ "file", cpr::File{file.generic_string()} }
