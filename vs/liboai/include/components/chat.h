@@ -32,17 +32,18 @@ namespace liboai {
 
 					The general usage of this class is as follows:
 						1. Create a ChatCompletion::Conversation object.
-						2. Optinally set the system data to guide how the assistant responds.
-						3. Set the user data, which is the user's input - such as
-						   a question or a command.
-						4. Provide the ChatCompletion::Conversation object to
+						2. Set the user data, which is the user's input - such as
+						   a question or a command as well as optionally set the
+						   system data to guide how the assistant responds.
+						3. Provide the ChatCompletion::Conversation object to
 						   ChatCompletion::create.
-						5. Update the ChatCompletion::Conversation object with
+						4. Update the ChatCompletion::Conversation object with
 						   the response from the API - either the object or the
 						   response content can be used to update the object.
-						6. Retrieve the assistant's response from the
-						   ChatCompletion::Conversation object; repeat steps 3, 4, and 5
-						   until the conversation is complete.
+						5. Retrieve the assistant's response from the
+						   ChatCompletion::Conversation object.
+						6. Repeat steps 2, 3, 4 and 5 until the conversation is
+						   complete.
 					
 					After providing the object to ChatCompletion::create, the object will
 					be updated with the 'assistant' response - this response is the
