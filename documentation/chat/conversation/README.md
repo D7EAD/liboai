@@ -10,7 +10,7 @@
   <li><a href="https://github.com/D7EAD/liboai/tree/v2.3.0/documentation/chat/conversation#synopsis">Methods</a></li>
 </ul>
 
-The <code>Conversation</code> class is defined at <code>liboai::ChatCompletion::Conversation</code>, but can be accessed via the <code>using</code> alias, <code>Conversation</code>, located under <code>liboai::ChatCompletion</code>.
+The <code>Conversation</code> class is defined at <code>liboai::ChatCompletion::Conversation</code>, but can be accessed via the <code>using</code> alias, <code>Conversation</code>, located under <code>liboai::</code>.
 
 This class can most effectively be thought of as a container for any conversation(s) that one may wish to carry out with a given model using the <code>ChatCompletion</code> methods. It keeps track of the history of the conversation for subsequent calls to the methods, allows a developer to set <a href="https://platform.openai.com/docs/guides/chat/instructing-chat-models">system</a> directions, retrieve the last response, add user input, and so on.
 
