@@ -9,7 +9,7 @@ int main() {
   Conversation convo;
 
   // set system message to guide the chat model
-  convo.SetSystemData("You are helpful bot.")
+  convo.SetSystemData("You are helpful bot.");
 
   ...
 }
