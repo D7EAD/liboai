@@ -1,3 +1,7 @@
+#include "liboai.h"
+
+using namespace liboai;
+
 int main() {
   OpenAI oai;
 
