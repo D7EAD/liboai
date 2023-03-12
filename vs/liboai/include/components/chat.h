@@ -150,7 +150,7 @@ namespace liboai {
 					/*
 						@brief Returns the JSON object of the internal conversation.
 					*/
-					LIBOAI_EXPORT nlohmann::json GetJSON() const & noexcept;
+					LIBOAI_EXPORT const nlohmann::json& GetJSON() const & noexcept;
 					
 				private:
 					nlohmann::json _conversation;
