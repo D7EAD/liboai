@@ -165,6 +165,8 @@ int main() {
 </tr>
 </table>
 
+This may print something along the lines of the following:
+* "<i>As an AI language model, I do not have emotions, but I am always responsive and ready to assist. How can I help you today?</i>"
 
 <h3>Usage Pattern</h3>
 As you have hopefully noticed, there is a pattern that can be followed with <code>Conversation</code>. Generally, when we want to make use of the methods found within <code>liboai::ChatCompletion</code>, we should adhere to the following series of steps:
