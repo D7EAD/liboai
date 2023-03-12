@@ -29,6 +29,7 @@
 */
 
 #include "include/components/audio.h"
+#include "include/components/chat.h"
 #include "include/components/completions.h"
 #include "include/components/edits.h"
 #include "include/components/embeddings.h"
@@ -53,6 +54,12 @@ namespace liboai {
 					provides access to its OpenAI API endpoints.
 			*/
 			std::unique_ptr<liboai::Audio> Audio = std::make_unique<liboai::Audio>();
+
+			/*
+				@brief A pointer to the Chat component class that
+					provides access to its OpenAI API endpoints.
+			*/
+			std::unique_ptr<liboai::ChatCompletion> ChatCompletion = std::make_unique<liboai::ChatCompletion>();
 
 			/*
 				@brief A pointer to the Completions component class that
