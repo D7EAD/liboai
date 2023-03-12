@@ -296,7 +296,7 @@ bool Update(const Response& response) & noexcept(false);
 ```
 
 <h3>Get Raw JSON Conversation</h3>
-<p>Retrieves the raw JSON of the conversation. Returns a <code>std::string</code> containing the JSON of the conversation.</p>z 
+<p>Retrieves the raw JSON of the conversation. Returns a <code>std::string</code> containing the JSON of the conversation.</p> 
 
 ```cpp
 std::string GetRawConversation() const & noexcept;
