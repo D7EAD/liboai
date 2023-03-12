@@ -17,7 +17,7 @@ This class and its associated <code>liboai::OpenAI</code> interface allow access
 <p>This document covers the method(s) located in <code>chat.h</code>. You can find their function signature(s) below.</p>
 
 <h3>Create a Chat Completion</h3>
-<p>Creates a completion for the chat message. Returns a <code>liboai::Response</code> containing response data.</p>
+<p>Creates a completion for the ongoing conversation. Returns a <code>liboai::Response</code> containing response data.</p>
 
 ```cpp
 liboai::Response create(
@@ -37,7 +37,7 @@ liboai::Response create(
 ```
 
 <h3>Create a Chat Completion (async)</h3>
-<p>Asynchronously creates a completion for the chat message. Returns a <code>liboai::FutureResponse</code> containing future response data.</p>
+<p>Asynchronously creates a completion for the ongoing conversation. Returns a <code>liboai::FutureResponse</code> containing future response data.</p>
 
 ```cpp
 liboai::FutureResponse create_async(
