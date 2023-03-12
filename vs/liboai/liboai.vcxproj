@@ -154,6 +154,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="components\audio.cpp" />
+    <ClCompile Include="components\chat.cpp" />
     <ClCompile Include="components\completions.cpp" />
     <ClCompile Include="components\edits.cpp" />
     <ClCompile Include="components\embeddings.cpp" />
@@ -167,6 +168,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\components\audio.h" />
+    <ClInclude Include="include\components\chat.h" />
     <ClInclude Include="include\components\completions.h" />
     <ClInclude Include="include\components\edits.h" />
     <ClInclude Include="include\components\embeddings.h" />
