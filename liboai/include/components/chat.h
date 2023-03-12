@@ -125,8 +125,8 @@ namespace liboai {
 							from the OpenAI API.
 
 							@param *history      The JSON data to update the conversation with.
-												 This should be the 'messages' array of data returned
-												 from a call to ChatCompletion::create.
+									     This should be the 'messages' array of data returned
+									     from a call to ChatCompletion::create.
 					*/
 					LIBOAI_EXPORT bool Update(std::string_view history) & noexcept(false);
 
@@ -135,8 +135,8 @@ namespace liboai {
 							This method updates the conversation given a Response object.
 
 							@param *response     The Response to update the conversation with.
-												 This should be the Response returned from a call
-												 to ChatCompletion::create.
+								             This should be the Response returned from a call
+									     to ChatCompletion::create.
 					*/
 					LIBOAI_EXPORT bool Update(const Response& response) & noexcept(false);
 
@@ -160,38 +160,38 @@ namespace liboai {
 
 				@param *model            ID of the model to use. Currently,
 				                         only gpt-3.5-turbo and gpt-3.5-turbo-0301 
-								 	     are supported.
+							 are supported.
 				@param *conversation     A Conversation object containing the
-									     conversation data.
+							 conversation data.
 				@param temperature       What sampling temperature to use,
 				                         between 0 and 2. Higher values like 0.8 will
-									     make the output more random, while lower values
-									     like 0.2 will make it more focused and deterministic.
+							 make the output more random, while lower values
+							 like 0.2 will make it more focused and deterministic.
 				@param top_p             An alternative to sampling with temperature, called
 				                         nucleus sampling, where the model considers the results
-									     of the tokens with top_p probability mass. So 0.1 means
-									     only the tokens comprising the top 10% probability mass
-									     are considered.
+							 of the tokens with top_p probability mass. So 0.1 means
+							 only the tokens comprising the top 10% probability mass
+							 are considered.
 				@param n                 How many chat completion choices to generate for each
 				                         input message.
 				@param stream            If set, partial message deltas will be sent, like in
 				                         ChatGPT. Tokens will be sent as data-only server-sent
-									     vents as they become available, with the stream terminated
-									     by a data: [DONE] message.
-				@param stop               to 4 sequences where the API will stop generating further
+							 events as they become available, with the stream terminated
+							 by a data: [DONE] message.
+				@param stop              Up to 4 sequences where the API will stop generating further
 				                         tokens.
 				@param max_tokens        The maximum number of tokens allowed for the generated answer.
 				                         By default, the number of tokens the model can return will be
-									     (4096 - prompt tokens).
+						         (4096 - prompt tokens).
 				@param presence_penalty  Number between -2.0 and 2.0. Positive values penalize new tokens
 				                         based on whether they appear in the text so far, increasing the
-										 model's likelihood to talk about new topics.
+							 model's likelihood to talk about new topics.
 				@param frequency_penalty Number between -2.0 and 2.0. Positive values penalize new tokens
-										 based on their existing frequency in the text so far, decreasing
-										 the model's likelihood to repeat the same line verbatim.
+							 based on their existing frequency in the text so far, decreasing
+							 the model's likelihood to repeat the same line verbatim.
 				@param logit_bias        Modify the likelihood of specified tokens appearing in the completion.
 				@param user              The user ID to associate with the request. This is used to
-										 prevent abuse of the API.
+							 prevent abuse of the API.
 
 				@returns A liboai::Response object containing the
 					data in JSON format.
@@ -213,41 +213,40 @@ namespace liboai {
 
 			/*
 				@brief Asynchronously creates a completion for the chat message.
-
 				@param *model            ID of the model to use. Currently,
-										 only gpt-3.5-turbo and gpt-3.5-turbo-0301
-										 are supported.
+				                         only gpt-3.5-turbo and gpt-3.5-turbo-0301 
+							 are supported.
 				@param *conversation     A Conversation object containing the
-										 conversation data.
+							 conversation data.
 				@param temperature       What sampling temperature to use,
-										 between 0 and 2. Higher values like 0.8 will
-										 make the output more random, while lower values
-										 like 0.2 will make it more focused and deterministic.
+				                         between 0 and 2. Higher values like 0.8 will
+							 make the output more random, while lower values
+							 like 0.2 will make it more focused and deterministic.
 				@param top_p             An alternative to sampling with temperature, called
-										 nucleus sampling, where the model considers the results
-										 of the tokens with top_p probability mass. So 0.1 means
-										 only the tokens comprising the top 10% probability mass
-										 are considered.
+				                         nucleus sampling, where the model considers the results
+							 of the tokens with top_p probability mass. So 0.1 means
+							 only the tokens comprising the top 10% probability mass
+							 are considered.
 				@param n                 How many chat completion choices to generate for each
-										 input message.
+				                         input message.
 				@param stream            If set, partial message deltas will be sent, like in
-										 ChatGPT. Tokens will be sent as data-only server-sent
-										 vents as they become available, with the stream terminated
-										 by a data: [DONE] message.
-				@param stop               to 4 sequences where the API will stop generating further
-										 tokens.
+				                         ChatGPT. Tokens will be sent as data-only server-sent
+							 events as they become available, with the stream terminated
+							 by a data: [DONE] message.
+				@param stop              Up to 4 sequences where the API will stop generating further
+				                         tokens.
 				@param max_tokens        The maximum number of tokens allowed for the generated answer.
-										 By default, the number of tokens the model can return will be
-										 (4096 - prompt tokens).
+				                         By default, the number of tokens the model can return will be
+						         (4096 - prompt tokens).
 				@param presence_penalty  Number between -2.0 and 2.0. Positive values penalize new tokens
-										 based on whether they appear in the text so far, increasing the
-										 model's likelihood to talk about new topics.
+				                         based on whether they appear in the text so far, increasing the
+							 model's likelihood to talk about new topics.
 				@param frequency_penalty Number between -2.0 and 2.0. Positive values penalize new tokens
-										 based on their existing frequency in the text so far, decreasing
-										 the model's likelihood to repeat the same line verbatim.
+							 based on their existing frequency in the text so far, decreasing
+							 the model's likelihood to repeat the same line verbatim.
 				@param logit_bias        Modify the likelihood of specified tokens appearing in the completion.
 				@param user              The user ID to associate with the request. This is used to
-										 prevent abuse of the API.
+							 prevent abuse of the API.
 
 				@returns A liboai::Response future containing the
 					data in JSON format.
