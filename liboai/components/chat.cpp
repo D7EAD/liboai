@@ -188,7 +188,7 @@ std::string liboai::ChatCompletion::Conversation::GetRawConversation() const & n
 	return this->_conversation.dump(4);
 }
 
-nlohmann::json liboai::ChatCompletion::Conversation::GetJSON() const & noexcept {
+const nlohmann::json& liboai::ChatCompletion::Conversation::GetJSON() const & noexcept {
 	return this->_conversation;
 }
 
