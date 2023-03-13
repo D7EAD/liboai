@@ -41,6 +41,14 @@ liboai::ChatCompletion::Conversation::Conversation(std::initializer_list<std::st
 	}
 }
 
+liboai::ChatCompletion::Conversation::Conversation(const std::vector<std::string>& user_data) {
+	this->_conversation["messages"] = nlohmann::json::array();
+	
+	for (auto& data : user_data) {
+		this->AddUserData(data);
+	}
+}
+
 liboai::ChatCompletion::Conversation& liboai::ChatCompletion::Conversation::operator=(const Conversation& other) {
 	this->_conversation = other._conversation;
 	return *this;
