@@ -258,6 +258,14 @@ Conversation(std::initializer_list<std::string_view> user_data);
 explicit Conversation(const std::vector<std::string>& user_data);
 ```
 
+<h3>Assignment Operators</h3>
+<p>Operator overloads for assignment.</p>
+
+```cpp
+Conversation& operator=(const Conversation& other);
+Conversation& operator=(Conversation&& old) noexcept;
+```
+
 <h3>Set System Data</h3>
 <p>Sets the system parameter in the conversation that can be used to influence how the model may respond to input. This should always be called before setting user data, if used. Returns a <code>bool</code> indicating success.</p>
 
@@ -310,7 +318,7 @@ bool Update(const Response& response) & noexcept(false);
 ```
 
 <h3>Get Raw JSON Conversation</h3>
-<p>Retrieves the raw JSON of the conversation. Returns a <code>std::string</code> containing the JSON of the conversation.</p> 
+<p>Retrieves the raw JSON of the conversation; the same functionality can be achieved using the <code>operator<<(...)</code> overload. Returns a <code>std::string</code> containing the JSON of the conversation.</p> 
 
 ```cpp
 std::string GetRawConversation() const & noexcept;
