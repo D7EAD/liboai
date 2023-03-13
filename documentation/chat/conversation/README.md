@@ -252,6 +252,7 @@ Conversation(std::string_view system_data);
 Conversation(std::string_view system_data, std::string_view user_data);
 Conversation(std::string_view system_data, std::initializer_list<std::string_view> user_data);
 Conversation(std::initializer_list<std::string_view> user_data);
+explicit Conversation(const std::vector<std::string>& user_data);
 ```
 
 <h3>Set System Data</h3>
