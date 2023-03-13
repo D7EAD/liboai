@@ -7,6 +7,7 @@ find_package(cpr CONFIG REQUIRED)
 
 add_library(oai
 components/audio.cpp
+components/chat.cpp
 components/completions.cpp
 components/edits.cpp
 components/embeddings.cpp
@@ -28,6 +29,7 @@ install(TARGETS oai DESTINATION lib)
 install(FILES liboai.h DESTINATION include)
 install(FILES
 include/components/audio.h
+include/components/chat.h
 include/components/completions.h
 include/components/edits.h
 include/components/embeddings.h

@@ -15,7 +15,7 @@
 #include "../core/response.h"
 
 namespace liboai {
-	class Audio : private Network {
+	class Audio final : private Network {
 		public:
 			Audio() = default;
 			~Audio() = default;
@@ -43,6 +43,9 @@ namespace liboai {
 									   to automatically increase the temperature until
 									   certain thresholds are hit.
 				@param language        The language of the audio file.
+
+				@returns A liboai::Response object containing the
+					data in JSON format.
 			*/
 			LIBOAI_EXPORT liboai::Response transcribe(
 				const std::filesystem::path& file,
@@ -71,6 +74,9 @@ namespace liboai {
 									   to automatically increase the temperature until
 									   certain thresholds are hit.
 				@param language        The language of the audio file.
+				
+				@returns A liboai::Response future containing the
+					data in JSON format.
 			*/
 			LIBOAI_EXPORT liboai::FutureResponse transcribe_async(
 				const std::filesystem::path& file,
@@ -97,6 +103,9 @@ namespace liboai {
 									   If set to 0, the model will use log probability
 									   to automatically increase the temperature until
 									   certain thresholds are hit.
+
+				@returns A liboai::Response object containing the
+					data in JSON format.
 			*/
 			LIBOAI_EXPORT liboai::Response translate(
 				const std::filesystem::path& file,
@@ -122,6 +131,9 @@ namespace liboai {
 									   If set to 0, the model will use log probability
 									   to automatically increase the temperature until
 									   certain thresholds are hit.
+
+				@returns A liboai::Response future containing the
+					data in JSON format.
 			*/
 			LIBOAI_EXPORT liboai::FutureResponse translate_async(
 				const std::filesystem::path& file,

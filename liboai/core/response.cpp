@@ -14,7 +14,12 @@ liboai::Response::Response(const cpr::Response& toParse) noexcept(false)
 {
 	try {
 		if (!this->content.empty()) {
-			this->raw_json = nlohmann::json::parse(this->content);
+			if (this->content[0] == '{') {
+				this->raw_json = nlohmann::json::parse(this->content);
+			}
+			else {
+				this->raw_json = nlohmann::json();
+			}
 		}
 		else {
 			this->raw_json = nlohmann::json();
@@ -38,7 +43,12 @@ liboai::Response::Response(cpr::Response&& toParse) noexcept(false)
 {
 	try {
 		if (!this->content.empty()) {
-			this->raw_json = nlohmann::json::parse(this->content);
+			if (this->content[0] == '{') {
+				this->raw_json = nlohmann::json::parse(this->content);
+			}
+			else {
+				this->raw_json = nlohmann::json();
+			}
 		}
 		else {
 			this->raw_json = nlohmann::json();
@@ -120,7 +130,7 @@ void liboai::Response::CheckResponse() const noexcept(false) {
 		else {
 			throw liboai::exception::OpenAIException(
 				!this->reason.empty() ? this->reason : "An unknown error occurred",
-				liboai::exception::EType::E_BADRESPONSE,
+				liboai::exception::EType::E_BADREQUEST,
 				"liboai::Response::CheckResponse()"
 			);
 		}

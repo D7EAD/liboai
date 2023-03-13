@@ -15,7 +15,7 @@ namespace liboai {
 	namespace exception {
 		enum class EType : uint8_t {
 			E_FAILURETOPARSE,
-			E_BADRESPONSE,
+			E_BADREQUEST,
 			E_APIERROR,
 			E_RATELIMIT,
 			E_CONNECTIONERROR,
@@ -24,7 +24,7 @@ namespace liboai {
 
 		constexpr const char* _etype_strs_[6] = {
 			"E_FAILURETOPARSE:0x00",
-			"E_BADRESPONSE:0x01",
+			"E_BADREQUEST:0x01",
 			"E_APIERROR:0x02",
 			"E_RATELIMIT:0x03",
 			"E_CONNECTIONERROR:0x04",

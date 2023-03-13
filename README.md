@@ -83,5 +83,5 @@ If you'd like to partake in further placing the power of AI in the hands of ever
 
 <h1>To Do</h1>
 <ul>
-  <li>Add <code>chat</code> endpoint functionality.</li>
+  <li>Milestone: remove CPR and create an in-source cURL wrapper.</li>
 </ul>
