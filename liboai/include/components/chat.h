@@ -63,10 +63,11 @@ namespace liboai {
 					Conversation(std::string_view system_data, std::string_view user_data);
 					Conversation(std::string_view system_data, std::initializer_list<std::string_view> user_data);
 					Conversation(std::initializer_list<std::string_view> user_data);
+					explicit Conversation(const std::vector<std::string>& user_data);
 				
 					Conversation& operator=(const Conversation& other);
 					Conversation& operator=(Conversation&& old) noexcept;
-
+					
 					friend std::ostream& operator<<(std::ostream& os, const Conversation& conv);
 
 					/*
