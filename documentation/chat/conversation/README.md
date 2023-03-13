@@ -244,6 +244,16 @@ In general, objects of class <code>liboai::ChatCompletion::Conversation</code> a
 <h2>Methods</h2>
 Below you can find the function signature(s) of the class methods found within <code>liboai::ChatCompletion::Conversation</code>.
 
+<h3>Constructors</h3>
+<p>Constructors available to construct a <code>Conversation</code> object.</p>
+
+```cpp
+Conversation(std::string_view system_data);
+Conversation(std::string_view system_data, std::string_view user_data);
+Conversation(std::string_view system_data, std::initializer_list<std::string_view> user_data);
+Conversation(std::initializer_list<std::string_view> user_data);
+```
+
 <h3>Set System Data</h3>
 <p>Sets the system parameter in the conversation that can be used to influence how the model may respond to input. This should always be called before setting user data, if used. Returns a <code>bool</code> indicating success.</p>
 
