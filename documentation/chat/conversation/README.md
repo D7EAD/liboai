@@ -248,6 +248,9 @@ Below you can find the function signature(s) of the class methods found within <
 <p>Constructors available to construct a <code>Conversation</code> object.</p>
 
 ```cpp
+Conversation();
+Conversation(const Conversation& other);
+Conversation(Conversation&& old) noexcept;
 Conversation(std::string_view system_data);
 Conversation(std::string_view system_data, std::string_view user_data);
 Conversation(std::string_view system_data, std::initializer_list<std::string_view> user_data);
