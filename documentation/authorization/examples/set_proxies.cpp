@@ -4,10 +4,15 @@ using namespace liboai;
 
 int main() {
   OpenAI oai;
+  
+  /*
+    Set some proxies:
+      when we go to an http site, use fakeproxy1
+      when we go to an https site, use fakeproxy2
+  */
   oai.auth.SetProxies({
-    { "http", "http://www.fakeproxy.com" },
-    { "https", "https://www.fakeproxy.com" },
-    { "http", "12.34.56.78:8080" }
+    { "http", "http://www.fakeproxy1.com" },
+    { "https", "https://www.fakeproxy2.com" }
   });
 
   if (oai.auth.SetKeyEnv("OPENAI_API_KEY")) {
