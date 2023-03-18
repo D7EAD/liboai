@@ -69,7 +69,7 @@ int main() {
 <p>For the library to work the way it does, it relies on two major dependencies. These dependencies can be found listed below.<p>
 
 - <a href="https://github.com/nlohmann/json">nlohmann-json</a>
-- <a href="https://github.com/libcpr/cpr">cpr</a>
+- <a href="https://curl.se/">cURL</a>
 
 *If building the library using the provided solution, it is recommended to install these dependencies using <b>vcpkg</b>.*
 
