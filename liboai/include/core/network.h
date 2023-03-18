@@ -2,9 +2,9 @@
 
 /*
 	network.h : liboai network implementation.
-		This header file provides declarations for the liboai Network
-		implementation. Each component class will inherit from this
-		class to make use of the network functionality provided by
+		This header file provides declarations for the abstracted liboai
+		Network implementation. Each component class will inherit from
+		this class to make use of the network functionality provided by
 		it.
 
 		For instance, making a call to liboai::Image::Create(...) will
@@ -13,15 +13,9 @@
 		information to successfully complete the request.
 */
 
-#ifdef __linux__
-	#define LIBOAI_EXPORT
-#else
-	#define LIBOAI_EXPORT __declspec(dllexport)
-#endif
-
 #include <optional>
 #include <future>
-#include <cpr/cpr.h>
+#include "netimpl.h"
 
 namespace liboai {
 	class Network {			
@@ -48,8 +42,8 @@ namespace liboai {
 			*/
 			static inline bool Download(const std::string& to, const std::string& from) noexcept(false) {
 				std::ofstream file(to, std::ios::binary);
-				cpr::Response res;
-				res = cpr::Download(file, cpr::Url{ from });
+				Response res;
+				res = netimpl::Download(file, netimpl::components::Url{ from });
 
 				return res.status_code == 200;
 			}
@@ -74,8 +68,8 @@ namespace liboai {
 				return std::async(
 					std::launch::async, [&]() -> bool {
 						std::ofstream file(to, std::ios::binary);
-						cpr::Response res;
-						res = cpr::Download(file, cpr::Url{ from });
+						Response res;
+						res = netimpl::Download(file, netimpl::components::Url{ from });
 
 						return res.status_code == 200;
 					}
@@ -91,14 +85,14 @@ namespace liboai {
 
 			template <class... _Params,
 				std::enable_if_t<std::conjunction_v<std::negation<std::is_lvalue_reference<_Params>>...>, int> = 0>
-			inline cpr::Response Request(
+			inline Response Request(
 				const Method& http_method,
 				const std::string& endpoint,
 				const std::string& content_type,
-				std::optional<cpr::Header> headers = std::nullopt,
+				std::optional<netimpl::components::Header> headers = std::nullopt,
 				_Params&&... parameters
 			) const {
-				cpr::Header _headers = { { "Content-Type", content_type } };
+				netimpl::components::Header _headers = { { "Content-Type", content_type } };
 				if (headers) {
 					if (headers.value().size() != 0) {
 						for (auto& i : headers.value()) {
@@ -107,19 +101,19 @@ namespace liboai {
 					}
 				}
 				
-				cpr::Response res;
+				Response res;
 				if constexpr (sizeof...(parameters) > 0) {
-					res = Network::MethodSchema<cpr::Timeout&&, cpr::Header&&, _Params&&...>::_method[static_cast<uint8_t>(http_method)](
-						cpr::Url { this->root_ + endpoint },
-						cpr::Timeout{ 30000 },
+					res = Network::MethodSchema<netimpl::components::Timeout&&, netimpl::components::Header&&, _Params&&...>::_method[static_cast<uint8_t>(http_method)](
+						netimpl::components::Url { this->root_ + endpoint },
+						netimpl::components::Timeout{ 30000 },
 						std::move(_headers),
 						std::forward<_Params>(parameters)...
 					);
 				}
 				else {
-					res = Network::MethodSchema<cpr::Timeout&&, cpr::Header&&>::_method[static_cast<uint8_t>(http_method)](
-						cpr::Url { this->root_ + endpoint },
-						cpr::Timeout{ 30000 },
+					res = Network::MethodSchema<netimpl::components::Timeout&&, netimpl::components::Header&&>::_method[static_cast<uint8_t>(http_method)](
+						netimpl::components::Url { this->root_ + endpoint },
+						netimpl::components::Timeout{ 30000 },
 						std::move(_headers)
 					);
 				}			
@@ -143,10 +137,10 @@ namespace liboai {
 
 		private:
 			template <class... T> struct MethodSchema {
-				inline static std::function<cpr::Response(cpr::Url&&, T...)> _method[3] = {
-					cpr::Get    <cpr::Url&&, T...>,
-					cpr::Post   <cpr::Url&&, T...>,
-					cpr::Delete <cpr::Url&&, T...>
+				inline static std::function<Response(netimpl::components::Url&&, T...)> _method[3] = {
+					netimpl::Get    <netimpl::components::Url&&, T...>,
+					netimpl::Post   <netimpl::components::Url&&, T...>,
+					netimpl::Delete <netimpl::components::Url&&, T...>
 				};
 			};
 			const std::string root_ = "https://api.openai.com/v1";

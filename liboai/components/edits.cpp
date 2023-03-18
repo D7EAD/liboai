@@ -9,17 +9,18 @@ liboai::Response liboai::Edits::create(const std::string& model_id, std::optiona
 	jcon.push_back("temperature", std::move(temperature));
 	jcon.push_back("top_p", std::move(top_p));
 
-	cpr::Response res;
+	Response res;
 	res = this->Request(
 		Method::HTTP_POST, "/edits", "application/json",
 		this->auth_.GetAuthorizationHeaders(),
-		cpr::Body {
+		netimpl::components::Body {
 			jcon.dump()
 		},
-		this->auth_.GetProxies()
+		this->auth_.GetProxies(),
+		this->auth_.GetProxyAuth()
 	);
 
-	return liboai::Response(std::move(res));
+	return res;
 }
 
 liboai::FutureResponse liboai::Edits::create_async(const std::string& model_id, std::optional<std::string> input, std::optional<std::string> instruction, std::optional<uint16_t> n, std::optional<float> temperature, std::optional<float> top_p) const & noexcept(false) {
@@ -36,10 +37,11 @@ liboai::FutureResponse liboai::Edits::create_async(const std::string& model_id, 
 			return this->Request(
 				Method::HTTP_POST, "/edits", "application/json",
 				this->auth_.GetAuthorizationHeaders(),
-				cpr::Body {
+				netimpl::components::Body {
 					jcon.dump()
 				},
-				this->auth_.GetProxies()
+				this->auth_.GetProxies(),
+				this->auth_.GetProxyAuth()
 			);
 		}
 	);

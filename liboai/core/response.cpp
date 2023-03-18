@@ -8,38 +8,9 @@ liboai::Response::Response(liboai::Response&& other) noexcept
 	: status_code(other.status_code), elapsed(other.elapsed), status_line(std::move(other.status_line)),
 	content(std::move(other.content)), url(std::move(other.url)), reason(std::move(other.reason)), raw_json(std::move(other.raw_json)) {}
 
-liboai::Response::Response(const cpr::Response& toParse) noexcept(false)
-	: status_code(toParse.status_code), elapsed(toParse.elapsed), status_line(toParse.status_line),
-	content(toParse.text), url(toParse.url.str()), reason(toParse.reason)
-{
-	try {
-		if (!this->content.empty()) {
-			if (this->content[0] == '{') {
-				this->raw_json = nlohmann::json::parse(this->content);
-			}
-			else {
-				this->raw_json = nlohmann::json();
-			}
-		}
-		else {
-			this->raw_json = nlohmann::json();
-		}
-	}
-	catch (const nlohmann::json::parse_error& e) {
-		throw liboai::exception::OpenAIException(
-			e.what(),
-			liboai::exception::EType::E_FAILURETOPARSE,
-			"liboai::Response::Response(const cpr::Response&)"
-		);
-	}
-
-	// check the response for errors -- nothrow on success
-	this->CheckResponse();
-}
-
-liboai::Response::Response(cpr::Response&& toParse) noexcept(false)
-	: status_code(toParse.status_code), elapsed(toParse.elapsed), status_line(std::move(toParse.status_line)),
-	content(std::move(toParse.text)), url(toParse.url.str()), reason(std::move(toParse.reason))
+liboai::Response::Response(std::string&& url, std::string&& content, std::string&& status_line, std::string&& reason, long status_code, double elapsed) noexcept(false) 
+	: status_code(status_code), elapsed(elapsed), status_line(std::move(status_line)),
+	content(std::move(content)), url(url), reason(std::move(reason))
 {
 	try {
 		if (!this->content.empty()) {

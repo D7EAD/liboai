@@ -218,18 +218,19 @@ liboai::Response liboai::ChatCompletion::create(const std::string& model, const 
 		jcon.push_back("messages", conversation.GetJSON()["messages"]);
 	}
 
-	cpr::Response res;
+	Response res;
 	res = this->Request(
 		Method::HTTP_POST, "/chat/completions", "application/json",
 		this->auth_.GetAuthorizationHeaders(),
-		cpr::Body {
+		netimpl::components::Body {
 			jcon.dump()
 		},
-		stream ? cpr::WriteCallback{std::move(stream.value())} : cpr::WriteCallback{},
-		this->auth_.GetProxies()
+		stream ? netimpl::components::WriteCallback{std::move(stream.value())} : netimpl::components::WriteCallback{},
+		this->auth_.GetProxies(),
+		this->auth_.GetProxyAuth()
 	);
 
-	return liboai::Response(std::move(res));
+	return res;
 }
 
 liboai::FutureResponse liboai::ChatCompletion::create_async(const std::string& model, const Conversation& conversation, std::optional<float> temperature, std::optional<float> top_p, std::optional<uint16_t> n, std::optional<std::function<bool(std::string, intptr_t)>> stream, std::optional<std::vector<std::string>> stop, std::optional<uint16_t> max_tokens, std::optional<float> presence_penalty, std::optional<float> frequency_penalty, std::optional<std::unordered_map<std::string, int8_t>> logit_bias, std::optional<std::string> user) const& noexcept(false) {
@@ -255,11 +256,12 @@ liboai::FutureResponse liboai::ChatCompletion::create_async(const std::string& m
 			return this->Request(
 				Method::HTTP_POST, "/chat/completions", "application/json",
 				this->auth_.GetAuthorizationHeaders(),
-				cpr::Body {
+				netimpl::components::Body {
 					jcon.dump()
 				},
-				stream ? cpr::WriteCallback{ std::move(stream.value()) } : cpr::WriteCallback{},
-				this->auth_.GetProxies()
+				stream ? netimpl::components::WriteCallback{ std::move(stream.value()) } : netimpl::components::WriteCallback{},
+				this->auth_.GetProxies(),
+				this->auth_.GetProxyAuth()
 			);
 		}
 	);

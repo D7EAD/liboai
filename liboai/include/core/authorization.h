@@ -125,6 +125,14 @@ namespace liboai {
 					paired { "protocol", "host" } format.
 			*/
 			LIBOAI_EXPORT void SetProxies(std::map<std::string, std::string>&& hosts) noexcept;
+			
+			/*
+				@brief Sets authentication information for proxies per-protocol.
+				
+				@param proto_up : A {protocol, {uname, passwd}} map to use for
+					authentication with proxies on a per-protocol basis.
+			*/
+			LIBOAI_EXPORT void SetProxyAuth(const std::map<std::string, netimpl::components::EncodedAuthentication>& proto_up) noexcept;
 
 			/*			
 				@brief Returns currently the set authorization key.
@@ -139,18 +147,24 @@ namespace liboai {
 			/*
 				@returns The currently set proxies.
 			*/
-			cpr::Proxies GetProxies() const noexcept { return this->proxies_; }
+			netimpl::components::Proxies GetProxies() const noexcept { return this->proxies_; }
 			
+			/*
+				@returns The currently set proxy authentication information.
+			*/
+			netimpl::components::ProxyAuthentication GetProxyAuth() const noexcept { return this->proxyAuth_; }
+
 			/*
 				@returns An authorization header with the
 					currently set authorization information for use
 					in component calls.
 			*/
-			constexpr const cpr::Header& GetAuthorizationHeaders() const noexcept { return this->auth_headers_; }
+			constexpr const netimpl::components::Header& GetAuthorizationHeaders() const noexcept { return this->auth_headers_; }
 
 		private: // member variables
 			std::string key_, org_;
-			cpr::Header auth_headers_;
-			cpr::Proxies proxies_;
+			netimpl::components::Header auth_headers_;
+			netimpl::components::Proxies proxies_;
+			netimpl::components::ProxyAuthentication proxyAuth_;
 	};
 }

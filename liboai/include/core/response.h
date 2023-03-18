@@ -23,8 +23,8 @@
 
 #include <iostream>
 #include <optional>
+#include <future>
 #include <nlohmann/json.hpp>
-#include <cpr/cpr.h>
 #include "exception.h"
 
 namespace liboai {
@@ -66,8 +66,14 @@ namespace liboai {
 			Response() = default;
 			Response(const liboai::Response& other) noexcept;
 			Response(liboai::Response&& old) noexcept;
-			Response(const cpr::Response& toParse) noexcept(false);
-			Response(cpr::Response&& toParse) noexcept(false);
+			Response(
+				std::string&& url,
+				std::string&& content,
+				std::string&& status_line,
+				std::string&& reason,
+				long status_code,
+				double elapsed
+			) noexcept(false);
 			
 			Response& operator=(const liboai::Response& other) noexcept;
 			Response& operator=(liboai::Response&& old) noexcept;

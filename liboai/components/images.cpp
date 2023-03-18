@@ -8,17 +8,18 @@ liboai::Response liboai::Images::create(const std::string& prompt, std::optional
 	jcon.push_back("response_format", std::move(response_format));
 	jcon.push_back("user", std::move(user));
 
-	cpr::Response res;
+	Response res;
 	res = this->Request(
 		Method::HTTP_POST, "/images/generations", "application/json",
 		this->auth_.GetAuthorizationHeaders(),
-		cpr::Body {
+		netimpl::components::Body {
 			jcon.dump()
 		},
-		this->auth_.GetProxies()
+		this->auth_.GetProxies(),
+		this->auth_.GetProxyAuth()
 	);
 
-	return liboai::Response(std::move(res));
+	return res;
 }
 
 liboai::FutureResponse liboai::Images::create_async(const std::string& prompt, std::optional<uint8_t> n, std::optional<std::string> size, std::optional<std::string> response_format, std::optional<std::string> user) const & noexcept(false) {
@@ -34,10 +35,11 @@ liboai::FutureResponse liboai::Images::create_async(const std::string& prompt, s
 			return this->Request(
 				Method::HTTP_POST, "/images/generations", "application/json",
 				this->auth_.GetAuthorizationHeaders(),
-				cpr::Body {
+				netimpl::components::Body {
 					jcon.dump()
 				},
-				this->auth_.GetProxies()
+				this->auth_.GetProxies(),
+				this->auth_.GetProxyAuth()
 			);
 		}
 	);
@@ -52,9 +54,9 @@ liboai::Response liboai::Images::create_edit(const std::filesystem::path& image,
 		);
 	}
 
-	cpr::Multipart form = {
+	netimpl::components::Multipart form = {
 		{ "prompt", prompt },
-		{ "image", cpr::File{image.generic_string()} }
+		{ "image", netimpl::components::File{image.generic_string()} }
 	};
 	
 	if (mask) {
@@ -65,22 +67,23 @@ liboai::Response liboai::Images::create_edit(const std::filesystem::path& image,
 				"liboai::Images::create_edit(...)"
 			);
 		}
-		form.parts.push_back({ "mask", cpr::File{mask.value().generic_string()} });
+		form.parts.push_back({ "mask", netimpl::components::File{mask.value().generic_string()} });
 	}
 	if (n) { form.parts.push_back({ "n", n.value() }); }
 	if (size) { form.parts.push_back({ "size", size.value() }); }
 	if (response_format) { form.parts.push_back({ "response_format", response_format.value() }); }
 	if (user) { form.parts.push_back({ "user", user.value() }); }
 	
-	cpr::Response res;
+	Response res;
 	res = this->Request(
 		Method::HTTP_POST, "/images/edits", "multipart/form-data",
 		this->auth_.GetAuthorizationHeaders(),
 		std::move(form),
-		this->auth_.GetProxies()
+		this->auth_.GetProxies(),
+		this->auth_.GetProxyAuth()
 	);
 
-	return liboai::Response(std::move(res));
+	return res;
 }
 
 liboai::FutureResponse liboai::Images::create_edit_async(const std::filesystem::path& image, const std::string& prompt, std::optional<std::filesystem::path> mask, std::optional<uint8_t> n, std::optional<std::string> size, std::optional<std::string> response_format, std::optional<std::string> user) const & noexcept(false) {
@@ -92,9 +95,9 @@ liboai::FutureResponse liboai::Images::create_edit_async(const std::filesystem::
 		);
 	}
 
-	cpr::Multipart form = {
+	netimpl::components::Multipart form = {
 		{ "prompt", prompt },
-		{ "image", cpr::File{image.generic_string()} }
+		{ "image", netimpl::components::File{image.generic_string()} }
 	};
 	
 	if (mask) {
@@ -105,7 +108,7 @@ liboai::FutureResponse liboai::Images::create_edit_async(const std::filesystem::
 				"liboai::Images::create_edit_async(...)"
 			);
 		}
-		form.parts.push_back({ "mask", cpr::File{mask.value().generic_string()} });
+		form.parts.push_back({ "mask", netimpl::components::File{mask.value().generic_string()} });
 	}
 	if (n) { form.parts.push_back({ "n", n.value() }); }
 	if (size) { form.parts.push_back({ "size", size.value() }); }
@@ -118,7 +121,8 @@ liboai::FutureResponse liboai::Images::create_edit_async(const std::filesystem::
 				Method::HTTP_POST, "/images/edits", "multipart/form-data",
 				this->auth_.GetAuthorizationHeaders(),
 				std::move(form),
-				this->auth_.GetProxies()
+				this->auth_.GetProxies(),
+				this->auth_.GetProxyAuth()
 			);
 		}
 	);
@@ -133,8 +137,8 @@ liboai::Response liboai::Images::create_variation(const std::filesystem::path& i
 		);
 	}
 
-	cpr::Multipart form = {
-		{ "image", cpr::File{image.generic_string()} }
+	netimpl::components::Multipart form = {
+		{ "image", netimpl::components::File{image.generic_string()} }
 	};
 	
 	if (n) { form.parts.push_back({ "n", n.value() }); }
@@ -142,15 +146,16 @@ liboai::Response liboai::Images::create_variation(const std::filesystem::path& i
 	if (response_format) { form.parts.push_back({ "response_format", response_format.value() }); }
 	if (user) { form.parts.push_back({ "user", user.value() }); }
 	
-	cpr::Response res;
+	Response res;
 	res = this->Request(
 		Method::HTTP_POST, "/images/variations", "multipart/form-data",
 		this->auth_.GetAuthorizationHeaders(),
 		std::move(form),
-		this->auth_.GetProxies()
+		this->auth_.GetProxies(),
+		this->auth_.GetProxyAuth()
 	);
 
-	return liboai::Response(std::move(res));
+	return res;
 }
 
 liboai::FutureResponse liboai::Images::create_variation_async(const std::filesystem::path& image, std::optional<uint8_t> n, std::optional<std::string> size, std::optional<std::string> response_format, std::optional<std::string> user) const & noexcept(false) {
@@ -162,8 +167,8 @@ liboai::FutureResponse liboai::Images::create_variation_async(const std::filesys
 		);
 	}
 
-	cpr::Multipart form = {
-		{ "image", cpr::File{image.generic_string()} }
+	netimpl::components::Multipart form = {
+		{ "image", netimpl::components::File{image.generic_string()} }
 	};
 	
 	if (n) { form.parts.push_back({ "n", n.value() }); }
@@ -177,7 +182,8 @@ liboai::FutureResponse liboai::Images::create_variation_async(const std::filesys
 				Method::HTTP_POST, "/images/variations", "multipart/form-data",
 				this->auth_.GetAuthorizationHeaders(),
 				std::move(form),
-				this->auth_.GetProxies()
+				this->auth_.GetProxies(),
+				this->auth_.GetProxyAuth()
 			);
 		}
 	);
