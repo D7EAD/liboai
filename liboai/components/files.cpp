@@ -1,14 +1,15 @@
 #include "../include/components/files.h"
 
 liboai::Response liboai::Files::list() const & noexcept(false) {
-	cpr::Response res;
+	Response res;
 	res = this->Request(
 		Method::HTTP_GET, "/files", "application/json",
 		this->auth_.GetAuthorizationHeaders(),
-		this->auth_.GetProxies()
+		this->auth_.GetProxies(),
+		this->auth_.GetProxyAuth()
 	);
 
-	return liboai::Response(std::move(res));
+	return res;
 }
 
 liboai::FutureResponse liboai::Files::list_async() const & noexcept(false) {
@@ -17,7 +18,8 @@ liboai::FutureResponse liboai::Files::list_async() const & noexcept(false) {
 			return this->Request(
 				Method::HTTP_GET, "/files", "application/json",
 				this->auth_.GetAuthorizationHeaders(),
-				this->auth_.GetProxies()
+				this->auth_.GetProxies(),
+				this->auth_.GetProxyAuth()
 			);
 		}
 	);
@@ -32,20 +34,21 @@ liboai::Response liboai::Files::create(const std::filesystem::path& file, const 
 		);
 	}
 
-	cpr::Multipart form = {
+	netimpl::components::Multipart form = {
 		{ "purpose", purpose },
-		{ "file", cpr::File{file.generic_string()} }
+		{ "file", netimpl::components::File{file.generic_string()} }
 	};
 	
-	cpr::Response res;
+	Response res;
 	res = this->Request(
 		Method::HTTP_POST, "/files", "multipart/form-data",
 		this->auth_.GetAuthorizationHeaders(),
 		std::move(form),
-		this->auth_.GetProxies()
+		this->auth_.GetProxies(),
+		this->auth_.GetProxyAuth()
 	);
 
-	return liboai::Response(std::move(res));
+	return res;
 }
 
 liboai::FutureResponse liboai::Files::create_async(const std::filesystem::path& file, const std::string& purpose) const & noexcept(false) {
@@ -57,9 +60,9 @@ liboai::FutureResponse liboai::Files::create_async(const std::filesystem::path& 
 		);
 	}
 
-	cpr::Multipart form = {
+	netimpl::components::Multipart form = {
 		{ "purpose", purpose },
-		{ "file", cpr::File{file.generic_string()} }
+		{ "file", netimpl::components::File{file.generic_string()} }
 	};
 
 	return std::async(
@@ -68,21 +71,23 @@ liboai::FutureResponse liboai::Files::create_async(const std::filesystem::path& 
 				Method::HTTP_POST, "/files", "multipart/form-data",
 				this->auth_.GetAuthorizationHeaders(),
 				std::move(form),
-				this->auth_.GetProxies()
+				this->auth_.GetProxies(),
+				this->auth_.GetProxyAuth()
 			);
 		}
 	);
 }
 
 liboai::Response liboai::Files::remove(const std::string& file_id) const & noexcept(false) {
-	cpr::Response res;
+	Response res;
 	res = this->Request(
 		Method::HTTP_DELETE, "/files/" + file_id, "application/json",
 		this->auth_.GetAuthorizationHeaders(),
-		this->auth_.GetProxies()
+		this->auth_.GetProxies(),
+		this->auth_.GetProxyAuth()
 	);
 
-	return liboai::Response(std::move(res));
+	return res;
 }
 
 liboai::FutureResponse liboai::Files::remove_async(const std::string& file_id) const & noexcept(false) {
@@ -91,21 +96,23 @@ liboai::FutureResponse liboai::Files::remove_async(const std::string& file_id) c
 			return this->Request(
 				Method::HTTP_DELETE, "/files/" + file_id, "application/json",
 				this->auth_.GetAuthorizationHeaders(),
-				this->auth_.GetProxies()
+				this->auth_.GetProxies(),
+				this->auth_.GetProxyAuth()
 			);
 		}
 	);
 }
 
 liboai::Response liboai::Files::retrieve(const std::string& file_id) const & {
-	cpr::Response res;
+	Response res;
 	res = this->Request(
 		Method::HTTP_GET, "/files/" + file_id, "application/json",
 		this->auth_.GetAuthorizationHeaders(),
-		this->auth_.GetProxies()
+		this->auth_.GetProxies(),
+		this->auth_.GetProxyAuth()
 	);
 
-	return liboai::Response(std::move(res));
+	return res;
 }
 
 liboai::FutureResponse liboai::Files::retrieve_async(const std::string& file_id) const & noexcept(false) {
@@ -114,7 +121,8 @@ liboai::FutureResponse liboai::Files::retrieve_async(const std::string& file_id)
 			return this->Request(
 				Method::HTTP_GET, "/files/" + file_id, "application/json",
 				this->auth_.GetAuthorizationHeaders(),
-				this->auth_.GetProxies()
+				this->auth_.GetProxies(),
+				this->auth_.GetProxyAuth()
 			);
 		}
 	);

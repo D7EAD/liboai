@@ -69,7 +69,7 @@ int main() {
 <p>For the library to work the way it does, it relies on two major dependencies. These dependencies can be found listed below.<p>
 
 - <a href="https://github.com/nlohmann/json">nlohmann-json</a>
-- <a href="https://github.com/libcpr/cpr">cpr</a>
+- <a href="https://curl.se/">cURL</a>
 
 *If building the library using the provided solution, it is recommended to install these dependencies using <b>vcpkg</b>.*
 
@@ -80,8 +80,3 @@ int main() {
 <p>Artificial intelligence is an exciting and quickly-changing field. 
 
 If you'd like to partake in further placing the power of AI in the hands of everyday people, please consider contributing by either submitting new code and features via a **Pull Request**. If you have any issues using the library, or just want to suggest new features, feel free to contact me directly using the info on my <a href="https://github.com/D7EAD">profile</a> or open an **Issue**.
-
-<h1>To Do</h1>
-<ul>
-  <li>Milestone: remove CPR and create an in-source cURL wrapper.</li>
-</ul>

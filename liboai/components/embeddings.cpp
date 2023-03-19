@@ -6,17 +6,18 @@ liboai::Response liboai::Embeddings::create(const std::string& model_id, std::op
 	jcon.push_back("input", std::move(input));
 	jcon.push_back("user", std::move(user));
 
-	cpr::Response res;
+	Response res;
 	res = this->Request(
 		Method::HTTP_POST, "/embeddings", "application/json",
 		this->auth_.GetAuthorizationHeaders(),
-		cpr::Body {
+		netimpl::components::Body {
 			jcon.dump()
 		},
-		this->auth_.GetProxies()
+		this->auth_.GetProxies(),
+		this->auth_.GetProxyAuth()
 	);
 
-	return liboai::Response(std::move(res));
+	return res;
 }
 
 liboai::FutureResponse liboai::Embeddings::create_async(const std::string& model_id, std::optional<std::string> input, std::optional<std::string> user) const & noexcept(false) {
@@ -30,10 +31,11 @@ liboai::FutureResponse liboai::Embeddings::create_async(const std::string& model
 			return this->Request(
 				Method::HTTP_POST, "/embeddings", "application/json",
 				this->auth_.GetAuthorizationHeaders(),
-				cpr::Body {
+				netimpl::components::Body {
 					jcon.dump()
 				},
-				this->auth_.GetProxies()
+				this->auth_.GetProxies(),
+				this->auth_.GetProxyAuth()
 			);
 		}
 	);

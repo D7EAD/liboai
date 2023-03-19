@@ -1,14 +1,15 @@
 #include "../include/components/models.h"
 
 liboai::Response liboai::Models::list() const & noexcept(false) {
-	cpr::Response res;
+	Response res;
 	res = this->Request(
 		Method::HTTP_GET, "/models", "application/json",
 		this->auth_.GetAuthorizationHeaders(),
-		this->auth_.GetProxies()
+		this->auth_.GetProxies(),
+		this->auth_.GetProxyAuth()
 	);
 
-	return liboai::Response(std::move(res));
+	return res;
 }
 
 liboai::FutureResponse liboai::Models::list_async() const & noexcept(false) {
@@ -17,21 +18,23 @@ liboai::FutureResponse liboai::Models::list_async() const & noexcept(false) {
 			return this->Request(
 				Method::HTTP_GET, "/models", "application/json",
 				this->auth_.GetAuthorizationHeaders(),
-				this->auth_.GetProxies()
+				this->auth_.GetProxies(),
+				this->auth_.GetProxyAuth()
 			);
 		}
 	);
 }
 
 liboai::Response liboai::Models::retrieve(const std::string& model) const & noexcept(false) {
-	cpr::Response res;
+	Response res;
 	res = this->Request(
 		Method::HTTP_GET, "/models/" + model, "application/json",
 		this->auth_.GetAuthorizationHeaders(),
-		this->auth_.GetProxies()
+		this->auth_.GetProxies(),
+		this->auth_.GetProxyAuth()
 	);
 
-	return liboai::Response(std::move(res));
+	return res;
 }
 
 liboai::FutureResponse liboai::Models::retrieve_async(const std::string& model) const & noexcept(false) {
@@ -40,21 +43,23 @@ liboai::FutureResponse liboai::Models::retrieve_async(const std::string& model) 
 			return this->Request(
 				Method::HTTP_GET, "/models/" + model, "application/json",
 				this->auth_.GetAuthorizationHeaders(),
-				this->auth_.GetProxies()
+				this->auth_.GetProxies(),
+				this->auth_.GetProxyAuth()
 			);
 		}
 	);
 }
 
 liboai::Response liboai::Models::remove(const std::string& model) const & noexcept(false) {
-	cpr::Response res;
+	Response res;
 	res = this->Request(
 		Method::HTTP_DELETE, "/models/" + model, "application/json",
 		this->auth_.GetAuthorizationHeaders(),
-		this->auth_.GetProxies()
+		this->auth_.GetProxies(),
+		this->auth_.GetProxyAuth()
 	);
 
-	return liboai::Response(std::move(res));
+	return res;
 }
 
 liboai::FutureResponse liboai::Models::remove_async(const std::string& model) const & noexcept(false) {
@@ -63,7 +68,8 @@ liboai::FutureResponse liboai::Models::remove_async(const std::string& model) co
 			return this->Request(
 				Method::HTTP_DELETE, "/models/" + model, "application/json",
 				this->auth_.GetAuthorizationHeaders(),
-				this->auth_.GetProxies()
+				this->auth_.GetProxies(),
+				this->auth_.GetProxyAuth()
 			);
 		}
 	);

@@ -66,6 +66,13 @@ void SetProxies(const std::map<std::string, std::string>& hosts) noexcept;
 void SetProxies(std::map<std::string, std::string>&& hosts) noexcept;
 ```
 
+<h3>Set Proxy Authentication</h3>
+<p>Sets the username and password to use when using a certain proxy protocol.</p>
+
+```cpp
+void SetProxyAuth(const std::map<std::string, netimpl::components::EncodedAuthentication>& proto_up) noexcept;
+```
+
 <h3>Get Key</h3>
 <p>Returns the currently set API key.</p>
 
@@ -85,14 +92,21 @@ constexpr const std::string& GetOrganization() const noexcept;
 <p>Returns the currently set proxies.</p>
 
 ```cpp
-cpr::Proxies GetProxies() const noexcept;
+netimpl::components::Proxies GetProxies() const noexcept;
+```
+
+<h3>Get Proxy Authentication</h3>
+<p>Returns the currently set proxy authentication information.</p>
+
+```cpp
+netimpl::components::ProxyAuthentication GetProxyAuth() const noexcept
 ```
 
 <h3>Get Authorization Headers</h3>
 <p>Returns the currently set authorization headers based on set information.</p>
 
 ```cpp
-constexpr const cpr::Header& GetAuthorizationHeaders() const noexcept;
+constexpr const netimpl::components::Header& GetAuthorizationHeaders() const noexcept;
 ```
 
 <br>

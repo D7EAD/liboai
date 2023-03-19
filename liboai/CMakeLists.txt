@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.10)
 project(oai)
 
 find_package(nlohmann_json CONFIG REQUIRED)
-find_package(cpr CONFIG REQUIRED)
+find_package(curl CONFIG REQUIRED)
 
 add_library(oai
 components/audio.cpp
@@ -17,13 +17,14 @@ components/images.cpp
 components/models.cpp
 components/moderations.cpp
 core/authorization.cpp
+core/netimpl.cpp
 core/response.cpp
 )
 
 target_compile_features(oai PRIVATE cxx_std_17)
 
 target_link_libraries(oai PRIVATE cpr::cpr)
-target_link_libraries(oai PRIVATE nlohmann_json::nlohmann_json)
+target_link_libraries(oai PRIVATE curl::curl)
 
 install(TARGETS oai DESTINATION lib)
 install(FILES liboai.h DESTINATION include)
@@ -42,6 +43,7 @@ DESTINATION include/components)
 install(FILES
 include/core/authorization.h
 include/core/exception.h
+include/core/netimpl.h
 include/core/network.h
 include/core/response.h
 DESTINATION include/core)

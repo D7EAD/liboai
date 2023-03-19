@@ -5,17 +5,18 @@ liboai::Response liboai::Moderations::create(const std::string& input, std::opti
 	jcon.push_back("input", input);
 	jcon.push_back("model", std::move(model));
 	
-	cpr::Response res;
+	Response res;
 	res = this->Request(
 		Method::HTTP_POST, "/moderations", "application/json",
 		this->auth_.GetAuthorizationHeaders(),
-		cpr::Body {
+		netimpl::components::Body {
 			jcon.dump()
 		},
-		this->auth_.GetProxies()
+		this->auth_.GetProxies(),
+		this->auth_.GetProxyAuth()
 	);
 
-	return liboai::Response(std::move(res));
+	return res;
 }
 
 liboai::FutureResponse liboai::Moderations::create_async(const std::string& input, std::optional<std::string> model) const & noexcept(false) {
@@ -28,10 +29,11 @@ liboai::FutureResponse liboai::Moderations::create_async(const std::string& inpu
 			return this->Request(
 				Method::HTTP_POST, "/moderations", "application/json",
 				this->auth_.GetAuthorizationHeaders(),
-				cpr::Body {
+				netimpl::components::Body {
 					jcon.dump()
 				},
-				this->auth_.GetProxies()
+				this->auth_.GetProxies(),
+				this->auth_.GetProxyAuth()
 			);
 		}
 	);

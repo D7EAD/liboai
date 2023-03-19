@@ -87,17 +87,21 @@ bool liboai::Authorization::SetOrganizationEnv(std::string_view var) noexcept {
 }
 
 void liboai::Authorization::SetProxies(const std::initializer_list<std::pair<const std::string, std::string>>& hosts) noexcept {
-	this->proxies_ = cpr::Proxies(hosts);
+	this->proxies_ = netimpl::components::Proxies(hosts);
 }
 
 void liboai::Authorization::SetProxies(std::initializer_list<std::pair<const std::string, std::string>>&& hosts) noexcept {
-	this->proxies_ = cpr::Proxies(std::move(hosts));
+	this->proxies_ = netimpl::components::Proxies(std::move(hosts));
 }
 
 void liboai::Authorization::SetProxies(const std::map<std::string, std::string>& hosts) noexcept {
-	this->proxies_ = cpr::Proxies(hosts);
+	this->proxies_ = netimpl::components::Proxies(hosts);
 }
 
 void liboai::Authorization::SetProxies(std::map<std::string, std::string>&& hosts) noexcept {
-	this->proxies_ = cpr::Proxies(std::move(hosts));
+	this->proxies_ = netimpl::components::Proxies(std::move(hosts));
+}
+
+void liboai::Authorization::SetProxyAuth(const std::map<std::string, netimpl::components::EncodedAuthentication>& proto_up) noexcept {
+	this->proxyAuth_ = netimpl::components::ProxyAuthentication(proto_up);
 }

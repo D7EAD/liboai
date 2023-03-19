@@ -9,8 +9,8 @@ liboai::Response liboai::Audio::transcribe(const std::filesystem::path& file, co
 		);
 	}
 
-	cpr::Multipart form = {
-		{ "file", cpr::File{file.generic_string()} },
+	netimpl::components::Multipart form = {
+		{ "file", netimpl::components::File{file.generic_string()} },
 		{ "model", model }
 	};
 	
@@ -19,15 +19,16 @@ liboai::Response liboai::Audio::transcribe(const std::filesystem::path& file, co
 	if (temperature) { form.parts.push_back({ "temperature", std::to_string(temperature.value()) }); }
 	if (language) { form.parts.push_back({ "language", language.value() }); }
 
-	cpr::Response res;
+	Response res;
 	res = this->Request(
 		Method::HTTP_POST, "/audio/transcriptions", "multipart/form-data",
 		this->auth_.GetAuthorizationHeaders(),
 		std::move(form),
-		this->auth_.GetProxies()
+		this->auth_.GetProxies(),
+		this->auth_.GetProxyAuth()
 	);
 
-	return liboai::Response(std::move(res));
+	return res;
 }
 
 liboai::FutureResponse liboai::Audio::transcribe_async(const std::filesystem::path& file, const std::string& model, std::optional<std::string> prompt, std::optional<std::string> response_format, std::optional<float> temperature, std::optional<std::string> language) const& noexcept(false) {
@@ -39,8 +40,8 @@ liboai::FutureResponse liboai::Audio::transcribe_async(const std::filesystem::pa
 		);
 	}
 
-	cpr::Multipart form = {
-		{ "file", cpr::File{file.generic_string()} },
+	netimpl::components::Multipart form = {
+		{ "file", netimpl::components::File{file.generic_string()} },
 		{ "model", model }
 	};
 
@@ -55,7 +56,8 @@ liboai::FutureResponse liboai::Audio::transcribe_async(const std::filesystem::pa
 				Method::HTTP_POST, "/audio/transcriptions", "multipart/form-data",
 				this->auth_.GetAuthorizationHeaders(),
 				std::move(form),
-				this->auth_.GetProxies()
+				this->auth_.GetProxies(),
+				this->auth_.GetProxyAuth()
 			);
 		}
 	);
@@ -70,8 +72,8 @@ liboai::Response liboai::Audio::translate(const std::filesystem::path& file, con
 		);
 	}
 
-	cpr::Multipart form = {
-		{ "file", cpr::File{file.generic_string()} },
+	netimpl::components::Multipart form = {
+		{ "file", netimpl::components::File{file.generic_string()} },
 		{ "model", model }
 	};
 	
@@ -79,15 +81,16 @@ liboai::Response liboai::Audio::translate(const std::filesystem::path& file, con
 	if (response_format) { form.parts.push_back({ "response_format", std::move(response_format.value()) }); }
 	if (temperature) { form.parts.push_back({ "temperature", std::to_string(temperature.value()) }); }
 
-	cpr::Response res;
+	Response res;
 	res = this->Request(
 		Method::HTTP_POST, "/audio/translations", "multipart/form-data",
 		this->auth_.GetAuthorizationHeaders(),
 		std::move(form),
-		this->auth_.GetProxies()
+		this->auth_.GetProxies(),
+		this->auth_.GetProxyAuth()
 	);
 
-	return liboai::Response(std::move(res));
+	return res;
 }
 
 liboai::FutureResponse liboai::Audio::translate_async(const std::filesystem::path& file, const std::string& model, std::optional<std::string> prompt, std::optional<std::string> response_format, std::optional<float> temperature) const& noexcept(false) {
@@ -99,8 +102,8 @@ liboai::FutureResponse liboai::Audio::translate_async(const std::filesystem::pat
 		);
 	}
 
-	cpr::Multipart form = {
-		{ "file", cpr::File{file.generic_string()} },
+	netimpl::components::Multipart form = {
+		{ "file", netimpl::components::File{file.generic_string()} },
 		{ "model", model }
 	};
 
@@ -114,7 +117,8 @@ liboai::FutureResponse liboai::Audio::translate_async(const std::filesystem::pat
 				Method::HTTP_POST, "/audio/translations", "multipart/form-data",
 				this->auth_.GetAuthorizationHeaders(),
 				std::move(form),
-				this->auth_.GetProxies()
+				this->auth_.GetProxies(),
+				this->auth_.GetProxyAuth()
 			);
 		}
 	);
