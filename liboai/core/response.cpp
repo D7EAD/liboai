@@ -29,7 +29,7 @@ liboai::Response::Response(std::string&& url, std::string&& content, std::string
 		throw liboai::exception::OpenAIException(
 			e.what(),
 			liboai::exception::EType::E_FAILURETOPARSE,
-			"liboai::Response::Response(cpr::Response&&)"
+			"liboai::Response::Response(std::string&&, std::string&&, ...)"
 		);
 	}
 
