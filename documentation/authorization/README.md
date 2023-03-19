@@ -99,7 +99,7 @@ netimpl::components::Proxies GetProxies() const noexcept;
 <p>Returns the currently set proxy authentication information.</p>
 
 ```cpp
-netimpl::components::ProxyAuthentication GetProxyAuth() const noexcept
+netimpl::components::ProxyAuthentication GetProxyAuth() const noexcept;
 ```
 
 <h3>Get Authorization Headers</h3>
