@@ -59,6 +59,10 @@ using namespace liboai;
 
 int main() {
   OpenAI oai;
+  
+  // Set our API key using an environment variable.
+  // This is recommended as hard-coding API keys is
+  // insecure.
   if (oai.auth.SetKeyEnv("OPENAI_API_KEY")) {
     Response response = oai.Image->create(
       "a siamese cat!"
