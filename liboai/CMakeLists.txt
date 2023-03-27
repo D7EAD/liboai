@@ -23,7 +23,7 @@ core/response.cpp
 
 target_compile_features(oai PRIVATE cxx_std_17)
 
-target_link_libraries(oai PRIVATE cpr::cpr)
+target_link_libraries(oai PRIVATE nlohmann_json::nlohmann_json)
 target_link_libraries(oai PRIVATE CURL::libcurl)
 
 install(TARGETS oai DESTINATION lib)
