@@ -4,9 +4,24 @@
 
 <hr>
 <h1>Introduction</h1>
-<p><code>liboai</code> is a simple, <b>unofficial</b> C++17 library for the OpenAI API. It allows developers to access OpenAI endpoints through a simple collection of methods and classes.
+<p><code>liboai</code> is a simple, <b>unofficial</b> C++17 library for the OpenAI API. It allows developers to access OpenAI endpoints through a simple collection of methods and classes. The library can most efficiently be thought of as a <b>spiritual port</b> of OpenAI's Python library, simply called <code>openai</code>, due to its similar structure--with few exceptions.
 
-It can most efficiently be thought of as a <b>spiritual port</b> of OpenAI's Python library, simply called <code>openai</code>, due to its similar structure--with few exceptions. See below for just how similar in style <code>liboai</code> and its Python alternative are when generating an image using DALL-E.</p>
+<h3>Features</h3>
+
+- [x] [ChatGPT](https://github.com/D7EAD/liboai/tree/main/documentation/chat)
+- [X] [Audio](https://github.com/D7EAD/liboai/tree/main/documentation/audio)
+- [x] [Image DALL·E](https://github.com/D7EAD/liboai/tree/main/documentation/images)
+- [x] [Models](https://github.com/D7EAD/liboai/tree/main/documentation/models)
+- [x] [Completions](https://github.com/D7EAD/liboai/tree/main/documentation/completions) 
+- [x] [Edit](https://github.com/D7EAD/liboai/tree/main/documentation/edits) 
+- [x] [Embeddings](https://github.com/D7EAD/liboai/tree/main/documentation/embeddings) 
+- [x] [Files](https://github.com/D7EAD/liboai/tree/main/documentation/files) 
+- [x] [Fine-tunes](https://github.com/D7EAD/liboai/tree/main/documentation/fine-tunes) 
+- [x] [Moderation](https://github.com/D7EAD/liboai/tree/main/documentation/moderation)
+- [X] Asynchronous Support
+
+<h1>Usage</h1>
+See below for just how similar in style <code>liboai</code> and its Python alternative are when generating an image using DALL-E.</p>
 <details open>
 <summary>DALL-E Generation in Python.</summary>
 <br>
