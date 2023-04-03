@@ -17,7 +17,7 @@
 - [x] [Embeddings](https://github.com/D7EAD/liboai/tree/main/documentation/embeddings) 
 - [x] [Files](https://github.com/D7EAD/liboai/tree/main/documentation/files) 
 - [x] [Fine-tunes](https://github.com/D7EAD/liboai/tree/main/documentation/fine-tunes) 
-- [x] [Moderation](https://github.com/D7EAD/liboai/tree/main/documentation/moderation)
+- [x] [Moderation](https://github.com/D7EAD/liboai/tree/main/documentation/moderations)
 - [X] Asynchronous Support
 
 <h1>Usage</h1>
