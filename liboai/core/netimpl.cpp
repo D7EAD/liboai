@@ -30,12 +30,14 @@ liboai::netimpl::CurlHolder::CurlHolder() {
 	}
 }
 
-liboai::netimpl::Session::~Session() {
+liboai::netimpl::CurlHolder::~CurlHolder() {
 	if (this->curl_) {
 		curl_easy_cleanup(this->curl_);
 		this->curl_ = nullptr;
 	}
+}
 
+liboai::netimpl::Session::~Session() {	
 	if (this->headers) {
 		curl_slist_free_all(this->headers);
 		this->headers = nullptr;

@@ -58,7 +58,7 @@ namespace liboai {
 		class CurlHolder {
 			public:
 				CurlHolder();
-				virtual ~CurlHolder() = default;
+				virtual ~CurlHolder();
 				CurlHolder(const CurlHolder&) = delete;
 				CurlHolder(CurlHolder&&) = delete;
 
