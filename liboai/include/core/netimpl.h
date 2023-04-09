@@ -51,9 +51,12 @@ namespace liboai {
 		static bool _flag = false;
 		
 		void ErrorCheck(CURLcode* ecodes, size_t size, std::string_view where);
-		void ErrorCheck(CURLFORMcode* ecodes, size_t size, std::string_view where);
 		void ErrorCheck(CURLcode ecode, std::string_view where);
-		void ErrorCheck(CURLFORMcode ecode, std::string_view where);
+
+		#if LIBCURL_VERSION_MAJOR < 7 || (LIBCURL_VERSION_MAJOR == 7 && LIBCURL_VERSION_MINOR < 56)
+			void ErrorCheck(CURLFORMcode* ecodes, size_t size, std::string_view where);
+			void ErrorCheck(CURLFORMcode ecode, std::string_view where);
+		#endif
 
 		class CurlHolder {
 			public:
@@ -489,8 +492,14 @@ namespace liboai {
 			
 				// internally-used members...
 				curl_slist* headers = nullptr;
-				curl_httppost* form = nullptr;
-				
+				#if LIBCURL_VERSION_MAJOR < 7 || (LIBCURL_VERSION_MAJOR == 7 && LIBCURL_VERSION_MINOR < 56)
+					curl_httppost* form = nullptr;
+				#endif
+
+				#if LIBCURL_VERSION_MAJOR > 7 || (LIBCURL_VERSION_MAJOR == 7 && LIBCURL_VERSION_MINOR >= 56)
+					curl_mime* mime = nullptr;
+				#endif 
+						
 				bool hasBody = false;
 				std::string parameter_string_, url_,
 					response_string_, header_string_;
