@@ -154,8 +154,8 @@ liboai::Response liboai::netimpl::Session::BuildResponseObject() {
 	
 	//memeber std::string variable MUST NOT be passed into the following methods as it would
 	//overwrite its internal memory data pointer
-	char* effectiveUrl = nullptr;
-	e[2] = curl_easy_getinfo(this->curl_, CURLINFO_EFFECTIVE_URL, &effectiveUrl);// &this->url_str);
+	char* effective_url = nullptr;
+	e[2] = curl_easy_getinfo(this->curl_, CURLINFO_EFFECTIVE_URL, &effective_url);// &this->url_str);
 
 	ErrorCheck(e, 3, "liboai::netimpl::Session::BuildResponseObject()");
 
@@ -163,7 +163,7 @@ liboai::Response liboai::netimpl::Session::BuildResponseObject() {
 	this->content = this->response_string_;
 	
 	return liboai::Response{
-		std::move(std::string(effectiveUrl)),  //( this->url_str),
+		std::move(effective_url ==NULL?"": effective_url),
 		std::move(this->content),
 		std::move(this->status_line),
 		std::move(this->reason),
