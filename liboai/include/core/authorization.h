@@ -49,6 +49,7 @@ namespace liboai {
 				@param key : The authorization key to use in component calls.
 				@returns True if the key was set successfully, false otherwise.
 			*/
+			[[nodiscard]]
 			LIBOAI_EXPORT bool SetKey(std::string_view key) noexcept;
 
 			/*
@@ -57,6 +58,7 @@ namespace liboai {
 				@param path : The path to the file containing the authorization key.
 				@returns True if the key was set successfully, false otherwise.
 			*/
+			[[nodiscard]]
 			LIBOAI_EXPORT bool SetKeyFile(const std::filesystem::path& path) noexcept;
 
 			/*
@@ -67,6 +69,7 @@ namespace liboai {
 					retrieve the authorization key from.
 				@returns True if the key was set successfully, false otherwise.
 			*/
+			[[nodiscard]]
 			LIBOAI_EXPORT bool SetKeyEnv(std::string_view var) noexcept;
 			
 			/*
@@ -76,6 +79,7 @@ namespace liboai {
 					component calls.
 				@returns True if the ID was set successfully, false otherwise.
 			*/
+			[[nodiscard]]
 			LIBOAI_EXPORT bool SetOrganization(std::string_view org) noexcept;
 
 			/*
@@ -86,6 +90,7 @@ namespace liboai {
 					organization identifier.
 				@returns True if the ID was set successfully, false otherwise.
 			*/
+			[[nodiscard]]
 			LIBOAI_EXPORT bool SetOrganizationFile(const std::filesystem::path& path) noexcept;
 
 			/*
@@ -96,6 +101,7 @@ namespace liboai {
 					retrieve the organization identifier from.
 				@returns True if the ID was set successfully, false otherwise.
 			*/
+			[[nodiscard]]
 			LIBOAI_EXPORT bool SetOrganizationEnv(std::string_view var) noexcept;
 			
 			/*

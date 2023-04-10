@@ -30,21 +30,32 @@ liboai::netimpl::CurlHolder::CurlHolder() {
 	}
 }
 
-liboai::netimpl::Session::~Session() {
-	 if (this->curl_) {
+liboai::netimpl::CurlHolder::~CurlHolder() {
+	if (this->curl_) {
 		curl_easy_cleanup(this->curl_);
 		this->curl_ = nullptr;
 	}
+}
 
+liboai::netimpl::Session::~Session() {	
 	if (this->headers) {
 		curl_slist_free_all(this->headers);
 		this->headers = nullptr;
 	}
 	
-	if (this->form) {
-		curl_formfree(this->form);
-		this->form = nullptr;
-	} 
+	#if LIBCURL_VERSION_MAJOR < 7 || (LIBCURL_VERSION_MAJOR == 7 && LIBCURL_VERSION_MINOR < 56)
+		if (this->form) {
+			curl_formfree(this->form);
+			this->form = nullptr;
+		}
+	#endif
+	
+	#if LIBCURL_VERSION_MAJOR > 7 || (LIBCURL_VERSION_MAJOR == 7 && LIBCURL_VERSION_MINOR >= 56)
+		if (this->mime) {
+			curl_mime_free(this->mime);
+			this->mime = nullptr;
+		}
+	#endif
 }
 
 void liboai::netimpl::Session::Prepare() {
@@ -365,42 +376,99 @@ void liboai::netimpl::Session::SetOption(const components::Multipart& multipart)
 }
 
 void liboai::netimpl::Session::SetMultipart(const components::Multipart& multipart) {
-	CURLFORMcode fe[3]; memset(fe, CURLFORMcode::CURL_FORMADD_OK, sizeof(fe));
-	CURLcode e;
+	#if LIBCURL_VERSION_MAJOR < 7 || (LIBCURL_VERSION_MAJOR == 7 && LIBCURL_VERSION_MINOR < 56)
+		CURLFORMcode fe[2]; memset(fe, CURLFORMcode::CURL_FORMADD_OK, sizeof(fe));
+		CURLcode e;
+			
+		curl_httppost* lastptr = nullptr;
 
-	curl_httppost* lastptr = nullptr;
+		for (const auto& part : multipart.parts) {
+			std::vector<curl_forms> formdata;
+			if (!part.content_type.empty()) {
+				formdata.push_back({CURLFORM_CONTENTTYPE, part.content_type.c_str()});
+			}
+			if (part.is_file) {
+				CURLFORMcode f;
+				for (const auto& file : part.files) {
+					formdata.push_back({CURLFORM_COPYNAME, part.name.c_str()});
+					formdata.push_back({CURLFORM_FILE, file.filepath.c_str()});
+					if (file.hasOverridedFilename()) {
+						formdata.push_back({CURLFORM_FILENAME, file.overrided_filename.c_str()});
+					}
+					formdata.push_back({CURLFORM_END, nullptr});
+					f = curl_formadd(&this->form, &lastptr, CURLFORM_ARRAY, formdata.data(), CURLFORM_END);
 
-    for (const auto& part : multipart.parts) {
-        std::vector<curl_forms> formdata;
-        if (!part.content_type.empty()) {
-            formdata.push_back({CURLFORM_CONTENTTYPE, part.content_type.c_str()});
-        }
-        if (part.is_file) {
-            for (const auto& file : part.files) {
-                formdata.push_back({CURLFORM_COPYNAME, part.name.c_str()});
-                formdata.push_back({CURLFORM_FILE, file.filepath.c_str()});
-                if (file.hasOverridedFilename()) {
-                    formdata.push_back({CURLFORM_FILENAME, file.overrided_filename.c_str()});
-                }
-                formdata.push_back({CURLFORM_END, nullptr});
-                fe[0] = curl_formadd(&this->form, &lastptr, CURLFORM_ARRAY, formdata.data(), CURLFORM_END);
-                formdata.clear();
-            }
-        } else if (part.is_buffer) {
-            fe[1] = curl_formadd(&this->form, &lastptr, CURLFORM_COPYNAME, part.name.c_str(), CURLFORM_BUFFER, part.value.c_str(), CURLFORM_BUFFERPTR, part.data, CURLFORM_BUFFERLENGTH, part.datalen, CURLFORM_END);
-        } else {
-            formdata.push_back({CURLFORM_COPYNAME, part.name.c_str()});
-            formdata.push_back({CURLFORM_COPYCONTENTS, part.value.c_str()});
-            formdata.push_back({CURLFORM_END, nullptr});
-            fe[2] = curl_formadd(&this->form, &lastptr, CURLFORM_ARRAY, formdata.data(), CURLFORM_END);
-        }
-    }
-    e = curl_easy_setopt(this->curl_, CURLOPT_HTTPPOST, this->form);
+					// check each file
+					ErrorCheck(f, "liboai::netimpl::Session::SetMultipart() @ is_file[formadd]");
+					
+					formdata.clear();
+				}
+			} else if (part.is_buffer) {
+				fe[0] = curl_formadd(&this->form, &lastptr, CURLFORM_COPYNAME, part.name.c_str(), CURLFORM_BUFFER, part.value.c_str(), CURLFORM_BUFFERPTR, part.data, CURLFORM_BUFFERLENGTH, part.datalen, CURLFORM_END);
+			} else {
+				formdata.push_back({CURLFORM_COPYNAME, part.name.c_str()});
+				formdata.push_back({CURLFORM_COPYCONTENTS, part.value.c_str()});
+				formdata.push_back({CURLFORM_END, nullptr});
+				fe[1] = curl_formadd(&this->form, &lastptr, CURLFORM_ARRAY, formdata.data(), CURLFORM_END);
+			}
+		}
+		e = curl_easy_setopt(this->curl_, CURLOPT_HTTPPOST, this->form);
 	
-	ErrorCheck(fe, 3, "liboai::netimpl::Session::SetMultipart()");
-	ErrorCheck(e, "liboai::netimpl::Session::SetMultipart()");
+		ErrorCheck(fe, 2, "liboai::netimpl::Session::SetMultipart()");
+		ErrorCheck(e, "liboai::netimpl::Session::SetMultipart()");
 
-	this->hasBody = true;
+		this->hasBody = true;
+	#endif
+
+	#if LIBCURL_VERSION_MAJOR > 7 || (LIBCURL_VERSION_MAJOR == 7 && LIBCURL_VERSION_MINOR >= 56)
+		CURLcode e[6]; memset(e, CURLcode::CURLE_OK, sizeof(e));
+
+		this->mime = curl_mime_init(this->curl_);
+		if (!this->mime) {
+			throw liboai::exception::OpenAIException(
+				"curl_mime_init() failed",
+				liboai::exception::EType::E_CURLERROR,
+				"liboai::netimpl::Session::SetMultipart()"
+			);
+		}
+
+		for (const auto& part : multipart.parts) {
+			std::vector<curl_mimepart*> mimedata;
+			if (!part.content_type.empty()) {
+				mimedata.push_back(curl_mime_addpart(this->mime));
+				e[0] = curl_mime_type(mimedata.back(), part.content_type.c_str());
+			}
+			if (part.is_file) {
+				CURLcode fe[3]; memset(fe, CURLcode::CURLE_OK, sizeof(fe));
+				for (const auto& file : part.files) {
+					mimedata.push_back(curl_mime_addpart(this->mime));
+					fe[0] = curl_mime_name(mimedata.back(), part.name.c_str());
+					fe[1] = curl_mime_filedata(mimedata.back(), file.filepath.c_str());
+					if (file.hasOverridedFilename()) {
+						fe[2] = curl_mime_filename(mimedata.back(), file.overrided_filename.c_str());
+					}
+
+					// check each file
+					ErrorCheck(fe, 3, "liboai::netimpl::Session::SetMultipart() @ is_file[mime]");
+				}
+			}
+			else if (part.is_buffer) {
+				mimedata.push_back(curl_mime_addpart(this->mime));
+				e[1] = curl_mime_name(mimedata.back(), part.name.c_str());
+				e[2] = curl_mime_data(mimedata.back(), reinterpret_cast<const char*>(part.data), part.datalen);
+			}
+			else {
+				mimedata.push_back(curl_mime_addpart(this->mime));
+				e[3] = curl_mime_name(mimedata.back(), part.name.c_str());
+				e[4] = curl_mime_data(mimedata.back(), part.value.c_str(), CURL_ZERO_TERMINATED);
+			}
+		}
+		e[5] = curl_easy_setopt(this->curl_, CURLOPT_MIMEPOST, this->mime);
+
+		ErrorCheck(e, 6, "liboai::netimpl::Session::SetMultipart()");
+
+		this->hasBody = true;
+	#endif
 }
 
 void liboai::netimpl::Session::SetOption(components::Multipart&& multipart) {
@@ -408,44 +476,102 @@ void liboai::netimpl::Session::SetOption(components::Multipart&& multipart) {
 }
 
 void liboai::netimpl::Session::SetMultipart(components::Multipart&& multipart) {
-	CURLFORMcode fe[3]; memset(fe, CURLFORMcode::CURL_FORMADD_OK, sizeof(fe));
-	CURLcode e;
+	#if LIBCURL_VERSION_MAJOR < 7 || (LIBCURL_VERSION_MAJOR == 7 && LIBCURL_VERSION_MINOR < 56)
+		CURLFORMcode fe[2]; memset(fe, CURLFORMcode::CURL_FORMADD_OK, sizeof(fe));
+		CURLcode e;
 
-	curl_httppost* lastptr = nullptr;
+		curl_httppost* lastptr = nullptr;
 
-	for (const auto& part : multipart.parts) {
-		std::vector<curl_forms> formdata;
-		if (!part.content_type.empty()) {
-			formdata.push_back({ CURLFORM_CONTENTTYPE, part.content_type.c_str() });
-		}
-		if (part.is_file) {
-			for (const auto& file : part.files) {
-				formdata.push_back({ CURLFORM_COPYNAME, part.name.c_str() });
-				formdata.push_back({ CURLFORM_FILE, file.filepath.c_str() });
-				if (file.hasOverridedFilename()) {
-					formdata.push_back({ CURLFORM_FILENAME, file.overrided_filename.c_str() });
+		for (const auto& part : multipart.parts) {
+			std::vector<curl_forms> formdata;
+			if (!part.content_type.empty()) {
+				formdata.push_back({ CURLFORM_CONTENTTYPE, part.content_type.c_str() });
+			}
+			if (part.is_file) {
+				CURLFORMcode f;
+				for (const auto& file : part.files) {
+					formdata.push_back({ CURLFORM_COPYNAME, part.name.c_str() });
+					formdata.push_back({ CURLFORM_FILE, file.filepath.c_str() });
+					if (file.hasOverridedFilename()) {
+						formdata.push_back({ CURLFORM_FILENAME, file.overrided_filename.c_str() });
+					}
+					formdata.push_back({ CURLFORM_END, nullptr });
+					f = curl_formadd(&this->form, &lastptr, CURLFORM_ARRAY, formdata.data(), CURLFORM_END);
+					
+					// check each file
+					ErrorCheck(f, "liboai::netimpl::Session::SetMultipart() @ is_file[formadd]");
+					
+					formdata.clear();
 				}
+			}
+			else if (part.is_buffer) {
+				fe[0] = curl_formadd(&this->form, &lastptr, CURLFORM_COPYNAME, part.name.c_str(), CURLFORM_BUFFER, part.value.c_str(), CURLFORM_BUFFERPTR, part.data, CURLFORM_BUFFERLENGTH, part.datalen, CURLFORM_END);
+			}
+			else {
+				formdata.push_back({ CURLFORM_COPYNAME, part.name.c_str() });
+				formdata.push_back({ CURLFORM_COPYCONTENTS, part.value.c_str() });
 				formdata.push_back({ CURLFORM_END, nullptr });
-				fe[0] = curl_formadd(&this->form, &lastptr, CURLFORM_ARRAY, formdata.data(), CURLFORM_END);
-				formdata.clear();
+				fe[1] = curl_formadd(&this->form, &lastptr, CURLFORM_ARRAY, formdata.data(), CURLFORM_END);
 			}
 		}
-		else if (part.is_buffer) {
-			fe[1] = curl_formadd(&this->form, &lastptr, CURLFORM_COPYNAME, part.name.c_str(), CURLFORM_BUFFER, part.value.c_str(), CURLFORM_BUFFERPTR, part.data, CURLFORM_BUFFERLENGTH, part.datalen, CURLFORM_END);
-		}
-		else {
-			formdata.push_back({ CURLFORM_COPYNAME, part.name.c_str() });
-			formdata.push_back({ CURLFORM_COPYCONTENTS, part.value.c_str() });
-			formdata.push_back({ CURLFORM_END, nullptr });
-			fe[2] = curl_formadd(&this->form, &lastptr, CURLFORM_ARRAY, formdata.data(), CURLFORM_END);
-		}
-	}
-	e = curl_easy_setopt(this->curl_, CURLOPT_HTTPPOST, this->form);
-	
-	ErrorCheck(fe, 3, "liboai::netimpl::Session::SetMultipart()");
-	ErrorCheck(e, "liboai::netimpl::Session::SetMultipart()");
+		e = curl_easy_setopt(this->curl_, CURLOPT_HTTPPOST, this->form);
 
-	this->hasBody = true;
+		ErrorCheck(fe, 2, "liboai::netimpl::Session::SetMultipart()");
+		ErrorCheck(e, "liboai::netimpl::Session::SetMultipart()");
+
+		this->hasBody = true;
+	#endif
+
+	#if LIBCURL_VERSION_MAJOR > 7 || (LIBCURL_VERSION_MAJOR == 7 && LIBCURL_VERSION_MINOR >= 56)
+		CURLcode e[6]; memset(e, CURLcode::CURLE_OK, sizeof(e));
+		curl_mimepart* _part = nullptr;
+
+		this->mime = curl_mime_init(this->curl_);
+		if (!this->mime) {
+			throw liboai::exception::OpenAIException(
+				"curl_mime_init() failed",
+				liboai::exception::EType::E_CURLERROR,
+				"liboai::netimpl::Session::SetMultipart()"
+			);
+		}
+
+		for (const auto& part : multipart.parts) {
+			std::vector<curl_mimepart*> mimedata;
+			if (!part.content_type.empty()) {
+				mimedata.push_back(curl_mime_addpart(this->mime));
+				e[0] = curl_mime_type(mimedata.back(), part.content_type.c_str());
+			}
+			if (part.is_file) {
+				CURLcode fe[3]; memset(fe, CURLcode::CURLE_OK, sizeof(fe));
+				for (const auto& file : part.files) {
+					mimedata.push_back(curl_mime_addpart(this->mime));
+					fe[0] = curl_mime_name(mimedata.back(), part.name.c_str());
+					fe[1] = curl_mime_filedata(mimedata.back(), file.filepath.c_str());
+					if (file.hasOverridedFilename()) {
+						fe[2] = curl_mime_filename(mimedata.back(), file.overrided_filename.c_str());
+					}
+
+					// check each file
+					ErrorCheck(fe, 3, "liboai::netimpl::Session::SetMultipart() @ is_file[mime]");
+				}
+			}
+			else if (part.is_buffer) {
+				mimedata.push_back(curl_mime_addpart(this->mime));
+				e[1] = curl_mime_name(mimedata.back(), part.name.c_str());
+				e[2] = curl_mime_data(mimedata.back(), reinterpret_cast<const char*>(part.data), part.datalen);
+			}
+			else {
+				mimedata.push_back(curl_mime_addpart(this->mime));
+				e[3] = curl_mime_name(mimedata.back(), part.name.c_str());
+				e[4] = curl_mime_data(mimedata.back(), part.value.c_str(), CURL_ZERO_TERMINATED);
+			}
+		}
+		e[5] = curl_easy_setopt(this->curl_, CURLOPT_MIMEPOST, this->mime);
+
+		ErrorCheck(e, 6, "liboai::netimpl::Session::SetMultipart()");
+
+		this->hasBody = true;
+	#endif
 }
 
 std::string liboai::netimpl::CurlHolder::urlEncode(const std::string& s) {
@@ -787,20 +913,6 @@ void liboai::netimpl::ErrorCheck(CURLcode* ecodes, size_t size, std::string_view
 	}
 }
 
-void liboai::netimpl::ErrorCheck(CURLFORMcode* ecodes, size_t size, std::string_view where) {
-	if (ecodes) {
-		for (size_t i = 0; i < size; ++i) {
-			if (ecodes[i] != CURL_FORMADD_OK) {
-				throw liboai::exception::OpenAIException(
-					"curl_formadd() failed.",
-					liboai::exception::EType::E_CURLERROR,
-					where
-				);
-			}
-		}
-	}
-}
-
 void liboai::netimpl::ErrorCheck(CURLcode ecode, std::string_view where) {
 	if (ecode != CURLE_OK) {
 		throw liboai::exception::OpenAIException(
@@ -811,12 +923,28 @@ void liboai::netimpl::ErrorCheck(CURLcode ecode, std::string_view where) {
 	}
 }
 
-void liboai::netimpl::ErrorCheck(CURLFORMcode ecode, std::string_view where) {
-	if (ecode != CURL_FORMADD_OK) {
-		throw liboai::exception::OpenAIException(
-			"curl_formadd() failed.",
-			liboai::exception::EType::E_CURLERROR,
-			where
-		);
+#if LIBCURL_VERSION_MAJOR < 7 || (LIBCURL_VERSION_MAJOR == 7 && LIBCURL_VERSION_MINOR < 56)
+	void liboai::netimpl::ErrorCheck(CURLFORMcode* ecodes, size_t size, std::string_view where) {
+		if (ecodes) {
+			for (size_t i = 0; i < size; ++i) {
+				if (ecodes[i] != CURL_FORMADD_OK) {
+					throw liboai::exception::OpenAIException(
+						"curl_formadd() failed.",
+						liboai::exception::EType::E_CURLERROR,
+						where
+					);
+				}
+			}
+		}
 	}
-}
+
+	void liboai::netimpl::ErrorCheck(CURLFORMcode ecode, std::string_view where) {
+		if (ecode != CURL_FORMADD_OK) {
+			throw liboai::exception::OpenAIException(
+				"curl_formadd() failed.",
+				liboai::exception::EType::E_CURLERROR,
+				where
+			);
+		}
+	}
+#endif
