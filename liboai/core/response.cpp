@@ -37,36 +37,6 @@ liboai::Response::Response(std::string&& url, std::string&& content, std::string
 	this->CheckResponse();
 }
 
-liboai::Response::Response(const std::string& url, const std::string& content,const std::string& status_line,
-	const std::string& reason, long status_code, double elapsed) noexcept(false)
-	: status_code(status_code), elapsed(elapsed), status_line(status_line),
-	content(content), url(url), reason(reason)
-{
-	try {
-		if (!this->content.empty()) {
-			if (this->content[0] == '{') {
-				this->raw_json = nlohmann::json::parse(this->content);
-			}
-			else {
-				this->raw_json = nlohmann::json();
-			}
-		}
-		else {
-			this->raw_json = nlohmann::json();
-		}
-	}
-	catch (nlohmann::json::parse_error& e) {
-		throw liboai::exception::OpenAIException(
-			e.what(),
-			liboai::exception::EType::E_FAILURETOPARSE,
-			"liboai::Response::Response(std::string&&, std::string&&, ...)"
-		);
-	}
-
-	// check the response for errors -- nothrow on success
-	this->CheckResponse();
-}
-
 liboai::Response& liboai::Response::operator=(const liboai::Response& other) noexcept {
 	this->status_code = other.status_code;
 	this->elapsed = other.elapsed;

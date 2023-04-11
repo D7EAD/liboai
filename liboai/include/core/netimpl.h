@@ -456,8 +456,8 @@ namespace liboai {
 
 				void SetOption(const components::Body& body);
 				void SetBody(const components::Body& body);
-				//void SetOption(components::Body&& body);
-//				void SetBody(const components::Body& body);
+				void SetOption(components::Body&& body);
+				void SetBody(components::Body&& body);
 
 				void SetOption(const components::Multipart& multipart);
 				void SetMultipart(const components::Multipart& multipart);

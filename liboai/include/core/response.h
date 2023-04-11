@@ -75,14 +75,6 @@ namespace liboai {
 				double elapsed
 			) noexcept(false);
 
-			Response(
-				const std::string& url,
-				const std::string& content,
-				const std::string& status_line,
-				const std::string& reason,
-				long status_code,
-				double elapsed
-			) noexcept(false);
 			
 			Response& operator=(const liboai::Response& other) noexcept;
 			Response& operator=(liboai::Response&& old) noexcept;

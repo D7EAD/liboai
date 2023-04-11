@@ -163,7 +163,7 @@ liboai::Response liboai::netimpl::Session::BuildResponseObject() {
 	this->content = this->response_string_;
 	
 	return liboai::Response{
-		std::move(effective_url ==NULL?"": effective_url),
+		std::move(effective_url == NULL?"": effective_url),
 		std::move(this->content),
 		std::move(this->status_line),
 		std::move(this->reason),
@@ -342,24 +342,24 @@ void liboai::netimpl::Session::SetOption(const components::Body& body) {
 	this->SetBody(body);
 }
 
-//void liboai::netimpl::Session::SetBody(const components::Body& body) {
-//	// holds error codes - all init to OK to prevent errors
-//	// when checking unset values
-//	CURLcode e[2]; memset(e, CURLcode::CURLE_OK, sizeof(e));
-//
-//	this->hasBody = true;
-//	e[0] = curl_easy_setopt(this->curl_, CURLOPT_POSTFIELDSIZE_LARGE, static_cast<curl_off_t>(body.str().length()));
-//	e[1] = curl_easy_setopt(this->curl_, CURLOPT_POSTFIELDS, body.c_str());
-//
-//	ErrorCheck(e, 2, "liboai::netimpl::Session::SetBody()");
-//}
-
-//void liboai::netimpl::Session::SetOption(components::Body&& body) {
-//	//this->SetBody(std::move(body));
-//	this->SetBody(body);
-//}
-
 void liboai::netimpl::Session::SetBody(const components::Body& body) {
+	// holds error codes - all init to OK to prevent errors
+	// when checking unset values
+	CURLcode e[2]; memset(e, CURLcode::CURLE_OK, sizeof(e));
+
+	this->hasBody = true;
+	e[0] = curl_easy_setopt(this->curl_, CURLOPT_POSTFIELDSIZE_LARGE, static_cast<curl_off_t>(body.str().length()));
+	e[1] = curl_easy_setopt(this->curl_, CURLOPT_POSTFIELDS, body.c_str());
+
+	ErrorCheck(e, 2, "liboai::netimpl::Session::SetBody()");
+}
+
+void liboai::netimpl::Session::SetOption(components::Body&& body)
+{
+	this->SetBody(std::move(body));
+}
+
+void liboai::netimpl::Session::SetBody(components::Body&& body) {
 	// holds error codes - all init to OK to prevent errors
 	// when checking unset values
 	CURLcode e[2]; memset(e, CURLcode::CURLE_OK, sizeof(e));
