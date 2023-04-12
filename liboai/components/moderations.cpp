@@ -13,7 +13,8 @@ liboai::Response liboai::Moderations::create(const std::string& input, std::opti
 			jcon.dump()
 		},
 		this->auth_.GetProxies(),
-		this->auth_.GetProxyAuth()
+		this->auth_.GetProxyAuth(),
+		this->auth_.GetMaxTimeout()
 	);
 
 	return res;
@@ -33,7 +34,8 @@ liboai::FutureResponse liboai::Moderations::create_async(const std::string& inpu
 					jcon.dump()
 				},
 				this->auth_.GetProxies(),
-				this->auth_.GetProxyAuth()
+				this->auth_.GetProxyAuth(),
+				this->auth_.GetMaxTimeout()
 			);
 		}
 	);

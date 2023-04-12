@@ -28,16 +28,16 @@
 		included in order to use the library.
 */
 
-#include "include/components/audio.h"
-#include "include/components/chat.h"
-#include "include/components/completions.h"
-#include "include/components/edits.h"
-#include "include/components/embeddings.h"
-#include "include/components/files.h"
-#include "include/components/fine_tunes.h"
-#include "include/components/images.h"
-#include "include/components/models.h"
-#include "include/components/moderations.h"
+#include "components/audio.h"
+#include "components/chat.h"
+#include "components/completions.h"
+#include "components/edits.h"
+#include "components/embeddings.h"
+#include "components/files.h"
+#include "components/fine_tunes.h"
+#include "components/images.h"
+#include "components/models.h"
+#include "components/moderations.h"
 
 namespace liboai {
 	class OpenAI final {

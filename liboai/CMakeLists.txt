@@ -27,7 +27,8 @@ target_link_libraries(oai PRIVATE nlohmann_json::nlohmann_json)
 target_link_libraries(oai PRIVATE CURL::libcurl)
 
 install(TARGETS oai DESTINATION lib)
-install(FILES liboai.h DESTINATION include)
+#not needed anymore
+#install(FILES liboai.h DESTINATION include)
 install(FILES
 include/components/audio.h
 include/components/chat.h

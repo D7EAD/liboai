@@ -227,7 +227,8 @@ liboai::Response liboai::ChatCompletion::create(const std::string& model, const 
 		},
 		stream ? netimpl::components::WriteCallback{std::move(stream.value())} : netimpl::components::WriteCallback{},
 		this->auth_.GetProxies(),
-		this->auth_.GetProxyAuth()
+		this->auth_.GetProxyAuth(),
+		this->auth_.GetMaxTimeout()
 	);
 
 	return res;
@@ -261,7 +262,8 @@ liboai::FutureResponse liboai::ChatCompletion::create_async(const std::string& m
 				},
 				stream ? netimpl::components::WriteCallback{ std::move(stream.value()) } : netimpl::components::WriteCallback{},
 				this->auth_.GetProxies(),
-				this->auth_.GetProxyAuth()
+				this->auth_.GetProxyAuth(),
+				this->auth_.GetMaxTimeout()
 			);
 		}
 	);

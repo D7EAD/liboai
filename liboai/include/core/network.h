@@ -103,17 +103,15 @@ namespace liboai {
 				
 				Response res;
 				if constexpr (sizeof...(parameters) > 0) {
-					res = Network::MethodSchema<netimpl::components::Timeout&&, netimpl::components::Header&&, _Params&&...>::_method[static_cast<uint8_t>(http_method)](
+					res = Network::MethodSchema<netimpl::components::Header&&, _Params&&...>::_method[static_cast<uint8_t>(http_method)](
 						netimpl::components::Url { this->root_ + endpoint },
-						netimpl::components::Timeout{ 30000 },
 						std::move(_headers),
 						std::forward<_Params>(parameters)...
 					);
 				}
 				else {
-					res = Network::MethodSchema<netimpl::components::Timeout&&, netimpl::components::Header&&>::_method[static_cast<uint8_t>(http_method)](
+					res = Network::MethodSchema<netimpl::components::Header&&>::_method[static_cast<uint8_t>(http_method)](
 						netimpl::components::Url { this->root_ + endpoint },
-						netimpl::components::Timeout{ 30000 },
 						std::move(_headers)
 					);
 				}			

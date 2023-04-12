@@ -48,10 +48,20 @@
 
 namespace liboai {
 	namespace netimpl {		
+		static bool _flag = false;
+		
+		void ErrorCheck(CURLcode* ecodes, size_t size, std::string_view where);
+		void ErrorCheck(CURLcode ecode, std::string_view where);
+
+		#if LIBCURL_VERSION_MAJOR < 7 || (LIBCURL_VERSION_MAJOR == 7 && LIBCURL_VERSION_MINOR < 56)
+			void ErrorCheck(CURLFORMcode* ecodes, size_t size, std::string_view where);
+			void ErrorCheck(CURLFORMcode ecode, std::string_view where);
+		#endif
+
 		class CurlHolder {
 			public:
-				CurlHolder() noexcept;
-				virtual ~CurlHolder() = default;
+				CurlHolder();
+				virtual ~CurlHolder();
 				CurlHolder(const CurlHolder&) = delete;
 				CurlHolder(CurlHolder&&) = delete;
 
@@ -159,7 +169,7 @@ namespace liboai {
 					std::string str_{};
 			};
 
-			struct File {
+			struct File final {
 				explicit File(std::string p_filepath, const std::string& p_overrided_filename = {}) : filepath(std::move(p_filepath)), overrided_filename(p_overrided_filename) {}
 
 				const std::string filepath;
@@ -170,7 +180,7 @@ namespace liboai {
 				};
 			};
 
-			class Files {
+			class Files final {
 				public:
 					Files() = default;
 					Files(const File& p_file) : files{ p_file } {};
@@ -199,7 +209,7 @@ namespace liboai {
 					std::vector<File> files;
 			};
 
-			class Url : public StringHolder<Url> {
+			class Url final : public StringHolder<Url> {
 				public:
 					Url() = default;
 					Url(std::string url) : StringHolder<Url>(std::move(url)) {}
@@ -215,7 +225,7 @@ namespace liboai {
 					Url& operator=(const Url& other) = default;
 			};
 
-			class Body : public StringHolder<Body> {
+			class Body final : public StringHolder<Body> {
 				public:
 					Body() = default;
 					Body(std::string body) : StringHolder<Body>(std::move(body)) {}
@@ -245,7 +255,7 @@ namespace liboai {
 					Body& operator=(const Body& other) = default;
 			};
 
-			struct Buffer {
+			struct Buffer final {
 				using data_t = const unsigned char*;
 
 				template <typename Iterator>
@@ -263,7 +273,7 @@ namespace liboai {
 				const std::filesystem::path filename;
 			};
 
-			struct Part {
+			struct Part final {
 				Part(const std::string& p_name, const std::string& p_value, const std::string& p_content_type = {}) : name{ p_name }, value{ p_value }, content_type{ p_content_type }, is_file{ false }, is_buffer{ false } {}
 				Part(const std::string& p_name, const std::int32_t& p_value, const std::string& p_content_type = {}) : name{ p_name }, value{ std::to_string(p_value) }, content_type{ p_content_type }, is_file{ false }, is_buffer{ false } {}
 				Part(const std::string& p_name, const Files& p_files, const std::string& p_content_type = {}) : name{ p_name }, value{}, content_type{ p_content_type }, is_file{ true }, is_buffer{ false }, files{ p_files } {}
@@ -281,7 +291,7 @@ namespace liboai {
 				Files files;
 			};
 
-			class Multipart {
+			class Multipart final {
 				public:
 					Multipart(const std::initializer_list<Part>& parts);
 
@@ -297,14 +307,14 @@ namespace liboai {
 			};
 			using Header = std::map<std::string, std::string, CaseInsensitiveCompare>;
 
-			struct Parameter {
+			struct Parameter final {
 				Parameter(std::string p_key, std::string p_value) : key{ std::move(p_key) }, value{ std::move(p_value) } {}
 
 				std::string key;
 				std::string value;
 			};
 
-			class Parameters {
+			class Parameters final {
 				public:
 					Parameters() = default;
 					Parameters(const std::initializer_list<Parameter>& parameters);
@@ -319,7 +329,7 @@ namespace liboai {
 					std::vector<Parameter> parameters_;
 			};
 
-			class Timeout {
+			class Timeout final {
 				public:
 					Timeout(const std::chrono::milliseconds& duration) : ms{ duration } {}
 					Timeout(const std::int32_t& milliseconds) : Timeout{ std::chrono::milliseconds(milliseconds) } {}
@@ -329,7 +339,7 @@ namespace liboai {
 					std::chrono::milliseconds ms;
 			};
 
-			class Proxies {
+			class Proxies final {
 				public:
 					Proxies() = default;
 					Proxies(const std::initializer_list<std::pair<const std::string, std::string>>& hosts);
@@ -346,7 +356,7 @@ namespace liboai {
 			std::string urlDecodeHelper(const std::string& s);
 
 			class ProxyAuthentication;
-			class EncodedAuthentication {
+			class EncodedAuthentication final {
 				friend ProxyAuthentication;
 				
 				public:
@@ -369,7 +379,7 @@ namespace liboai {
 					std::string password;
 			};
 			
-			class ProxyAuthentication {
+			class ProxyAuthentication final {
 				public:
 					ProxyAuthentication() = default;
 					ProxyAuthentication(const std::initializer_list<std::pair<const std::string, EncodedAuthentication>>& auths) : proxyAuth_{auths} {}
@@ -383,7 +393,7 @@ namespace liboai {
 					std::map<std::string, EncodedAuthentication> proxyAuth_;
 			};
 
-			class WriteCallback {
+			class WriteCallback final {
 				public:
 					WriteCallback() = default;
 					WriteCallback(std::function<bool(std::string data, intptr_t userdata)> p_callback, intptr_t p_userdata = 0)
@@ -412,11 +422,17 @@ namespace liboai {
 					request method (GET, POST, etc.).
 				4. Return the resulting Response object.
 		*/
-		class Session : private CurlHolder {
+		class Session final : private CurlHolder {
 			public:
 				Session() noexcept = default;
-				~Session() noexcept override;
+				~Session() override;
+
+				liboai::Response Get();
+				liboai::Response Post();
+				liboai::Response Delete();
+				liboai::Response Download(std::ofstream& file);
 				
+			private:
 				template <class... _Options>
 				friend void set_options(Session&, _Options&&...);
 
@@ -426,17 +442,12 @@ namespace liboai {
 				liboai::Response BuildResponseObject();
 				liboai::Response Complete();
 				liboai::Response CompleteDownload();
-				
+
 				void PrepareGet();
-				liboai::Response Get();
 				void PreparePost();
-				liboai::Response Post();
 				void PrepareDelete();
-				liboai::Response Delete();
 				void PrepareDownload(std::ofstream& file);
-				liboai::Response Download(std::ofstream& file);
-			
-			private:
+
 				void ParseResponseHeader(const std::string& headers, std::string* status_line, std::string* reason);
 
 				void SetOption(const components::Url& url);
@@ -481,8 +492,14 @@ namespace liboai {
 			
 				// internally-used members...
 				curl_slist* headers = nullptr;
-				curl_httppost* form = nullptr;
-				
+				#if LIBCURL_VERSION_MAJOR < 7 || (LIBCURL_VERSION_MAJOR == 7 && LIBCURL_VERSION_MINOR < 56)
+					curl_httppost* form = nullptr;
+				#endif
+
+				#if LIBCURL_VERSION_MAJOR > 7 || (LIBCURL_VERSION_MAJOR == 7 && LIBCURL_VERSION_MINOR >= 56)
+					curl_mime* mime = nullptr;
+				#endif
+						
 				bool hasBody = false;
 				std::string parameter_string_, url_,
 					response_string_, header_string_;
