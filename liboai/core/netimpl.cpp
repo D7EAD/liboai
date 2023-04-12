@@ -152,15 +152,18 @@ liboai::Response liboai::netimpl::Session::BuildResponseObject() {
 	// get elapsed time
 	e[1] = curl_easy_getinfo(this->curl_, CURLINFO_TOTAL_TIME, &this->elapsed);
 	
-	// get url
-	e[2] = curl_easy_getinfo(this->curl_, CURLINFO_EFFECTIVE_URL, &this->url_str);
+	//memeber std::string variable MUST NOT be passed into the following methods as it would
+	//overwrite its internal memory data pointer
+	char* effective_url = nullptr;
+	e[2] = curl_easy_getinfo(this->curl_, CURLINFO_EFFECTIVE_URL, &effective_url);
+	this->url_str = (effective_url? effective_url : "");
 
 	ErrorCheck(e, 3, "liboai::netimpl::Session::BuildResponseObject()");
 
 	// fill content
 	this->content = this->response_string_;
 	
-	return liboai::Response {
+	return liboai::Response{
 		std::move(this->url_str),
 		std::move(this->content),
 		std::move(this->status_line),
@@ -168,6 +171,7 @@ liboai::Response liboai::netimpl::Session::BuildResponseObject() {
 		this->status_code,
 		this->elapsed
 	};
+	 
 }
 
 liboai::Response liboai::netimpl::Session::Complete() {
@@ -351,11 +355,13 @@ void liboai::netimpl::Session::SetBody(const components::Body& body) {
 	ErrorCheck(e, 2, "liboai::netimpl::Session::SetBody()");
 }
 
-void liboai::netimpl::Session::SetOption(components::Body&& body) {
+void liboai::netimpl::Session::SetOption(components::Body&& body)
+{
 	this->SetBody(std::move(body));
 }
 
-void liboai::netimpl::Session::SetBody(components::Body&& body) {
+void liboai::netimpl::Session::SetBody(components::Body&& body)
+{
 	// holds error codes - all init to OK to prevent errors
 	// when checking unset values
 	CURLcode e[2]; memset(e, CURLcode::CURLE_OK, sizeof(e));

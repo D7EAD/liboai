@@ -448,7 +448,8 @@ namespace liboai {
 				void PrepareDelete();
 				void PrepareDownload(std::ofstream& file);
 
-				void ParseResponseHeader(const std::string& headers, std::string* status_line, std::string* reason);
+				void ParseResponseHeader(const std::string& headers,
+					std::string* status_line, std::string* reason);
 
 				void SetOption(const components::Url& url);
 				void SetUrl(const components::Url& url);
@@ -517,6 +518,7 @@ namespace liboai {
 
 		template <class... _Options>
 		liboai::Response Post(_Options&&... options) {
+			 
 			Session session;
 			set_options(session, std::forward<_Options>(options)...);
 			return session.Post();
