@@ -156,7 +156,7 @@ liboai::Response liboai::netimpl::Session::BuildResponseObject() {
 	//overwrite its internal memory data pointer
 	char* effective_url = nullptr;
 	e[2] = curl_easy_getinfo(this->curl_, CURLINFO_EFFECTIVE_URL, &effective_url);
-	this->url_str = (effective_url? effective_url : "");
+	this->url_str = (effective_url ? effective_url : "");
 
 	ErrorCheck(e, 3, "liboai::netimpl::Session::BuildResponseObject()");
 
