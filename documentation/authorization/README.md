@@ -73,6 +73,13 @@ void SetProxies(std::map<std::string, std::string>&& hosts) noexcept;
 void SetProxyAuth(const std::map<std::string, netimpl::components::EncodedAuthentication>& proto_up) noexcept;
 ```
 
+<h3>Set Timeout</h3>
+<p>Sets the timeout in milliseconds for the library to use in component calls.</p>
+
+```cpp
+void SetMaxTimeout(int32_t ms) noexcept
+```
+
 <h3>Get Key</h3>
 <p>Returns the currently set API key.</p>
 
@@ -100,6 +107,13 @@ netimpl::components::Proxies GetProxies() const noexcept;
 
 ```cpp
 netimpl::components::ProxyAuthentication GetProxyAuth() const noexcept;
+```
+
+<h3>Get Timeout</h3>
+<p>Returns the currently set timeout.</p>
+
+```cpp
+netimpl::components::Timeout GetMaxTimeout() const noexcept;
 ```
 
 <h3>Get Authorization Headers</h3>
