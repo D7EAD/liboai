@@ -6,7 +6,8 @@ liboai::Response liboai::Models::list() const & noexcept(false) {
 		Method::HTTP_GET, "/models", "application/json",
 		this->auth_.GetAuthorizationHeaders(),
 		this->auth_.GetProxies(),
-		this->auth_.GetProxyAuth()
+		this->auth_.GetProxyAuth(),
+		this->auth_.GetMaxTimeout()
 	);
 
 	return res;
@@ -19,7 +20,8 @@ liboai::FutureResponse liboai::Models::list_async() const & noexcept(false) {
 				Method::HTTP_GET, "/models", "application/json",
 				this->auth_.GetAuthorizationHeaders(),
 				this->auth_.GetProxies(),
-				this->auth_.GetProxyAuth()
+				this->auth_.GetProxyAuth(),
+				this->auth_.GetMaxTimeout()
 			);
 		}
 	);
@@ -31,7 +33,8 @@ liboai::Response liboai::Models::retrieve(const std::string& model) const & noex
 		Method::HTTP_GET, "/models/" + model, "application/json",
 		this->auth_.GetAuthorizationHeaders(),
 		this->auth_.GetProxies(),
-		this->auth_.GetProxyAuth()
+		this->auth_.GetProxyAuth(),
+		this->auth_.GetMaxTimeout()
 	);
 
 	return res;
@@ -44,7 +47,8 @@ liboai::FutureResponse liboai::Models::retrieve_async(const std::string& model) 
 				Method::HTTP_GET, "/models/" + model, "application/json",
 				this->auth_.GetAuthorizationHeaders(),
 				this->auth_.GetProxies(),
-				this->auth_.GetProxyAuth()
+				this->auth_.GetProxyAuth(),
+				this->auth_.GetMaxTimeout()
 			);
 		}
 	);
@@ -56,7 +60,8 @@ liboai::Response liboai::Models::remove(const std::string& model) const & noexce
 		Method::HTTP_DELETE, "/models/" + model, "application/json",
 		this->auth_.GetAuthorizationHeaders(),
 		this->auth_.GetProxies(),
-		this->auth_.GetProxyAuth()
+		this->auth_.GetProxyAuth(),
+		this->auth_.GetMaxTimeout()
 	);
 
 	return res;
@@ -69,7 +74,8 @@ liboai::FutureResponse liboai::Models::remove_async(const std::string& model) co
 				Method::HTTP_DELETE, "/models/" + model, "application/json",
 				this->auth_.GetAuthorizationHeaders(),
 				this->auth_.GetProxies(),
-				this->auth_.GetProxyAuth()
+				this->auth_.GetProxyAuth(),
+				this->auth_.GetMaxTimeout()
 			);
 		}
 	);

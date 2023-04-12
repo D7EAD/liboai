@@ -6,7 +6,8 @@ liboai::Response liboai::Files::list() const & noexcept(false) {
 		Method::HTTP_GET, "/files", "application/json",
 		this->auth_.GetAuthorizationHeaders(),
 		this->auth_.GetProxies(),
-		this->auth_.GetProxyAuth()
+		this->auth_.GetProxyAuth(),
+		this->auth_.GetMaxTimeout()
 	);
 
 	return res;
@@ -19,7 +20,8 @@ liboai::FutureResponse liboai::Files::list_async() const & noexcept(false) {
 				Method::HTTP_GET, "/files", "application/json",
 				this->auth_.GetAuthorizationHeaders(),
 				this->auth_.GetProxies(),
-				this->auth_.GetProxyAuth()
+				this->auth_.GetProxyAuth(),
+				this->auth_.GetMaxTimeout()
 			);
 		}
 	);
@@ -45,7 +47,8 @@ liboai::Response liboai::Files::create(const std::filesystem::path& file, const 
 		this->auth_.GetAuthorizationHeaders(),
 		std::move(form),
 		this->auth_.GetProxies(),
-		this->auth_.GetProxyAuth()
+		this->auth_.GetProxyAuth(),
+		this->auth_.GetMaxTimeout()
 	);
 
 	return res;
@@ -72,7 +75,8 @@ liboai::FutureResponse liboai::Files::create_async(const std::filesystem::path& 
 				this->auth_.GetAuthorizationHeaders(),
 				std::move(form),
 				this->auth_.GetProxies(),
-				this->auth_.GetProxyAuth()
+				this->auth_.GetProxyAuth(),
+				this->auth_.GetMaxTimeout()
 			);
 		}
 	);
@@ -84,7 +88,8 @@ liboai::Response liboai::Files::remove(const std::string& file_id) const & noexc
 		Method::HTTP_DELETE, "/files/" + file_id, "application/json",
 		this->auth_.GetAuthorizationHeaders(),
 		this->auth_.GetProxies(),
-		this->auth_.GetProxyAuth()
+		this->auth_.GetProxyAuth(),
+		this->auth_.GetMaxTimeout()
 	);
 
 	return res;
@@ -97,7 +102,8 @@ liboai::FutureResponse liboai::Files::remove_async(const std::string& file_id) c
 				Method::HTTP_DELETE, "/files/" + file_id, "application/json",
 				this->auth_.GetAuthorizationHeaders(),
 				this->auth_.GetProxies(),
-				this->auth_.GetProxyAuth()
+				this->auth_.GetProxyAuth(),
+				this->auth_.GetMaxTimeout()
 			);
 		}
 	);
@@ -109,7 +115,8 @@ liboai::Response liboai::Files::retrieve(const std::string& file_id) const & {
 		Method::HTTP_GET, "/files/" + file_id, "application/json",
 		this->auth_.GetAuthorizationHeaders(),
 		this->auth_.GetProxies(),
-		this->auth_.GetProxyAuth()
+		this->auth_.GetProxyAuth(),
+		this->auth_.GetMaxTimeout()
 	);
 
 	return res;
@@ -122,7 +129,8 @@ liboai::FutureResponse liboai::Files::retrieve_async(const std::string& file_id)
 				Method::HTTP_GET, "/files/" + file_id, "application/json",
 				this->auth_.GetAuthorizationHeaders(),
 				this->auth_.GetProxies(),
-				this->auth_.GetProxyAuth()
+				this->auth_.GetProxyAuth(),
+				this->auth_.GetMaxTimeout()
 			);
 		}
 	);

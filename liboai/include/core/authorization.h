@@ -140,7 +140,12 @@ namespace liboai {
 			*/
 			LIBOAI_EXPORT void SetProxyAuth(const std::map<std::string, netimpl::components::EncodedAuthentication>& proto_up) noexcept;
 
-			/*			
+			/*
+				@brief Sets the timeout for component calls in milliseconds.
+			*/
+			LIBOAI_EXPORT void SetMaxTimeout(int32_t ms) noexcept { this->timeout_ = netimpl::components::Timeout(ms); }
+
+			/*
 				@brief Returns currently the set authorization key.
 			*/
 			constexpr const std::string& GetKey() const noexcept { return this->key_; }
@@ -159,6 +164,11 @@ namespace liboai {
 				@returns The currently set proxy authentication information.
 			*/
 			netimpl::components::ProxyAuthentication GetProxyAuth() const noexcept { return this->proxyAuth_; }
+			
+			/*
+				@returns The currently set timeout.
+			*/
+			netimpl::components::Timeout GetMaxTimeout() const noexcept { return this->timeout_; }
 
 			/*
 				@returns An authorization header with the
@@ -172,5 +182,6 @@ namespace liboai {
 			netimpl::components::Header auth_headers_;
 			netimpl::components::Proxies proxies_;
 			netimpl::components::ProxyAuthentication proxyAuth_;
+			netimpl::components::Timeout timeout_ = { 30000 };
 	};
 }

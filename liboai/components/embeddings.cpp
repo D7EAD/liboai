@@ -14,7 +14,8 @@ liboai::Response liboai::Embeddings::create(const std::string& model_id, std::op
 			jcon.dump()
 		},
 		this->auth_.GetProxies(),
-		this->auth_.GetProxyAuth()
+		this->auth_.GetProxyAuth(),
+		this->auth_.GetMaxTimeout()
 	);
 
 	return res;
@@ -35,7 +36,8 @@ liboai::FutureResponse liboai::Embeddings::create_async(const std::string& model
 					jcon.dump()
 				},
 				this->auth_.GetProxies(),
-				this->auth_.GetProxyAuth()
+				this->auth_.GetProxyAuth(),
+				this->auth_.GetMaxTimeout()
 			);
 		}
 	);

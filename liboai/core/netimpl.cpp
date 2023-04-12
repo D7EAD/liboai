@@ -152,8 +152,7 @@ liboai::Response liboai::netimpl::Session::BuildResponseObject() {
 	// get elapsed time
 	e[1] = curl_easy_getinfo(this->curl_, CURLINFO_TOTAL_TIME, &this->elapsed);
 	
-	//memeber std::string variable MUST NOT be passed into the following methods as it would
-	//overwrite its internal memory data pointer
+	// get url
 	char* effective_url = nullptr;
 	e[2] = curl_easy_getinfo(this->curl_, CURLINFO_EFFECTIVE_URL, &effective_url);
 	this->url_str = (effective_url ? effective_url : "");
@@ -163,7 +162,7 @@ liboai::Response liboai::netimpl::Session::BuildResponseObject() {
 	// fill content
 	this->content = this->response_string_;
 	
-	return liboai::Response{
+	return liboai::Response {
 		std::move(this->url_str),
 		std::move(this->content),
 		std::move(this->status_line),
@@ -171,7 +170,6 @@ liboai::Response liboai::netimpl::Session::BuildResponseObject() {
 		this->status_code,
 		this->elapsed
 	};
-	 
 }
 
 liboai::Response liboai::netimpl::Session::Complete() {
@@ -355,13 +353,11 @@ void liboai::netimpl::Session::SetBody(const components::Body& body) {
 	ErrorCheck(e, 2, "liboai::netimpl::Session::SetBody()");
 }
 
-void liboai::netimpl::Session::SetOption(components::Body&& body)
-{
+void liboai::netimpl::Session::SetOption(components::Body&& body) {
 	this->SetBody(std::move(body));
 }
 
-void liboai::netimpl::Session::SetBody(components::Body&& body)
-{
+void liboai::netimpl::Session::SetBody(components::Body&& body) {
 	// holds error codes - all init to OK to prevent errors
 	// when checking unset values
 	CURLcode e[2]; memset(e, CURLcode::CURLE_OK, sizeof(e));
@@ -813,13 +809,15 @@ void liboai::netimpl::Session::SetOption(const components::WriteCallback& write)
 }
 
 void liboai::netimpl::Session::SetWriteCallback(const components::WriteCallback& write) {
-	CURLcode e[2]; memset(e, CURLcode::CURLE_OK, sizeof(e));
+	if (write.callback) {
+		CURLcode e[2]; memset(e, CURLcode::CURLE_OK, sizeof(e));
 
-	e[0] = curl_easy_setopt(this->curl_, CURLOPT_WRITEFUNCTION, components::writeUserFunction);
-	this->write_ = write;
-	e[1] = curl_easy_setopt(this->curl_, CURLOPT_WRITEDATA, &this->write_);
+		e[0] = curl_easy_setopt(this->curl_, CURLOPT_WRITEFUNCTION, components::writeUserFunction);
+		this->write_ = write;
+		e[1] = curl_easy_setopt(this->curl_, CURLOPT_WRITEDATA, &this->write_);
 
-	ErrorCheck(e, 2, "liboai::netimpl::Session::SetWriteCallback()");
+		ErrorCheck(e, 2, "liboai::netimpl::Session::SetWriteCallback()");
+	}
 }
 
 liboai::netimpl::components::Proxies::Proxies(const std::initializer_list<std::pair<const std::string, std::string>>& hosts)

@@ -16,7 +16,8 @@ liboai::Response liboai::Images::create(const std::string& prompt, std::optional
 			jcon.dump()
 		},
 		this->auth_.GetProxies(),
-		this->auth_.GetProxyAuth()
+		this->auth_.GetProxyAuth(),
+		this->auth_.GetMaxTimeout()
 	);
 
 	return res;
@@ -39,7 +40,8 @@ liboai::FutureResponse liboai::Images::create_async(const std::string& prompt, s
 					jcon.dump()
 				},
 				this->auth_.GetProxies(),
-				this->auth_.GetProxyAuth()
+				this->auth_.GetProxyAuth(),
+				this->auth_.GetMaxTimeout()
 			);
 		}
 	);
@@ -80,7 +82,8 @@ liboai::Response liboai::Images::create_edit(const std::filesystem::path& image,
 		this->auth_.GetAuthorizationHeaders(),
 		std::move(form),
 		this->auth_.GetProxies(),
-		this->auth_.GetProxyAuth()
+		this->auth_.GetProxyAuth(),
+		this->auth_.GetMaxTimeout()
 	);
 
 	return res;
@@ -122,7 +125,8 @@ liboai::FutureResponse liboai::Images::create_edit_async(const std::filesystem::
 				this->auth_.GetAuthorizationHeaders(),
 				std::move(form),
 				this->auth_.GetProxies(),
-				this->auth_.GetProxyAuth()
+				this->auth_.GetProxyAuth(),
+				this->auth_.GetMaxTimeout()
 			);
 		}
 	);
@@ -152,7 +156,8 @@ liboai::Response liboai::Images::create_variation(const std::filesystem::path& i
 		this->auth_.GetAuthorizationHeaders(),
 		std::move(form),
 		this->auth_.GetProxies(),
-		this->auth_.GetProxyAuth()
+		this->auth_.GetProxyAuth(),
+		this->auth_.GetMaxTimeout()
 	);
 
 	return res;
@@ -183,7 +188,8 @@ liboai::FutureResponse liboai::Images::create_variation_async(const std::filesys
 				this->auth_.GetAuthorizationHeaders(),
 				std::move(form),
 				this->auth_.GetProxies(),
-				this->auth_.GetProxyAuth()
+				this->auth_.GetProxyAuth(),
+				this->auth_.GetMaxTimeout()
 			);
 		}
 	);

@@ -25,7 +25,8 @@ liboai::Response liboai::Audio::transcribe(const std::filesystem::path& file, co
 		this->auth_.GetAuthorizationHeaders(),
 		std::move(form),
 		this->auth_.GetProxies(),
-		this->auth_.GetProxyAuth()
+		this->auth_.GetProxyAuth(),
+		this->auth_.GetMaxTimeout()
 	);
 
 	return res;
@@ -57,7 +58,8 @@ liboai::FutureResponse liboai::Audio::transcribe_async(const std::filesystem::pa
 				this->auth_.GetAuthorizationHeaders(),
 				std::move(form),
 				this->auth_.GetProxies(),
-				this->auth_.GetProxyAuth()
+				this->auth_.GetProxyAuth(),
+				this->auth_.GetMaxTimeout()
 			);
 		}
 	);
@@ -87,7 +89,8 @@ liboai::Response liboai::Audio::translate(const std::filesystem::path& file, con
 		this->auth_.GetAuthorizationHeaders(),
 		std::move(form),
 		this->auth_.GetProxies(),
-		this->auth_.GetProxyAuth()
+		this->auth_.GetProxyAuth(),
+		this->auth_.GetMaxTimeout()
 	);
 
 	return res;
@@ -118,7 +121,8 @@ liboai::FutureResponse liboai::Audio::translate_async(const std::filesystem::pat
 				this->auth_.GetAuthorizationHeaders(),
 				std::move(form),
 				this->auth_.GetProxies(),
-				this->auth_.GetProxyAuth()
+				this->auth_.GetProxyAuth(),
+				this->auth_.GetMaxTimeout()
 			);
 		}
 	);

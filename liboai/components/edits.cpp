@@ -17,7 +17,8 @@ liboai::Response liboai::Edits::create(const std::string& model_id, std::optiona
 			jcon.dump()
 		},
 		this->auth_.GetProxies(),
-		this->auth_.GetProxyAuth()
+		this->auth_.GetProxyAuth(),
+		this->auth_.GetMaxTimeout()
 	);
 
 	return res;
@@ -41,7 +42,8 @@ liboai::FutureResponse liboai::Edits::create_async(const std::string& model_id, 
 					jcon.dump()
 				},
 				this->auth_.GetProxies(),
-				this->auth_.GetProxyAuth()
+				this->auth_.GetProxyAuth(),
+				this->auth_.GetMaxTimeout()
 			);
 		}
 	);

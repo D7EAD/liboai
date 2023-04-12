@@ -23,7 +23,8 @@ liboai::Response liboai::FineTunes::create(const std::string& training_file, std
 			jcon.dump()
 		},
 		this->auth_.GetProxies(),
-		this->auth_.GetProxyAuth()
+		this->auth_.GetProxyAuth(),
+		this->auth_.GetMaxTimeout()
 	);
 
 	return res;
@@ -53,7 +54,8 @@ liboai::FutureResponse liboai::FineTunes::create_async(const std::string& traini
 					jcon.dump()
 				},
 				this->auth_.GetProxies(),
-				this->auth_.GetProxyAuth()
+				this->auth_.GetProxyAuth(),
+				this->auth_.GetMaxTimeout()
 			);
 		}
 	);
@@ -65,7 +67,8 @@ liboai::Response liboai::FineTunes::list() const& {
 		Method::HTTP_GET, "/fine-tunes", "application/json",
 		this->auth_.GetAuthorizationHeaders(),
 		this->auth_.GetProxies(),
-		this->auth_.GetProxyAuth()
+		this->auth_.GetProxyAuth(),
+		this->auth_.GetMaxTimeout()
 	);
 
 	return res;
@@ -78,7 +81,8 @@ liboai::FutureResponse liboai::FineTunes::list_async() const & noexcept(false) {
 				Method::HTTP_GET, "/fine-tunes", "application/json",
 				this->auth_.GetAuthorizationHeaders(),
 				this->auth_.GetProxies(),
-				this->auth_.GetProxyAuth()
+				this->auth_.GetProxyAuth(),
+				this->auth_.GetMaxTimeout()
 			);
 		}
 	);
@@ -90,7 +94,8 @@ liboai::Response liboai::FineTunes::retrieve(const std::string& fine_tune_id) co
 		Method::HTTP_GET, "/fine-tunes/" + fine_tune_id, "application/json",
 		this->auth_.GetAuthorizationHeaders(),
 		this->auth_.GetProxies(),
-		this->auth_.GetProxyAuth()
+		this->auth_.GetProxyAuth(),
+		this->auth_.GetMaxTimeout()
 	);
 
 	return res;
@@ -103,7 +108,8 @@ liboai::FutureResponse liboai::FineTunes::retrieve_async(const std::string& fine
 				Method::HTTP_GET, "/fine-tunes/" + fine_tune_id, "application/json",
 				this->auth_.GetAuthorizationHeaders(),
 				this->auth_.GetProxies(),
-				this->auth_.GetProxyAuth()
+				this->auth_.GetProxyAuth(),
+				this->auth_.GetMaxTimeout()
 			);
 		}
 	);
@@ -115,7 +121,8 @@ liboai::Response liboai::FineTunes::cancel(const std::string& fine_tune_id) cons
 		Method::HTTP_POST, "/fine-tunes/" + fine_tune_id + "/cancel", "application/json",
 		this->auth_.GetAuthorizationHeaders(),
 		this->auth_.GetProxies(),
-		this->auth_.GetProxyAuth()
+		this->auth_.GetProxyAuth(),
+		this->auth_.GetMaxTimeout()
 	);
 
 	return res;
@@ -128,7 +135,8 @@ liboai::FutureResponse liboai::FineTunes::cancel_async(const std::string& fine_t
 				Method::HTTP_POST, "/fine-tunes/" + fine_tune_id + "/cancel", "application/json",
 				this->auth_.GetAuthorizationHeaders(),
 				this->auth_.GetProxies(),
-				this->auth_.GetProxyAuth()
+				this->auth_.GetProxyAuth(),
+				this->auth_.GetMaxTimeout()
 			);
 		}
 	);
@@ -145,7 +153,8 @@ liboai::Response liboai::FineTunes::list_events(const std::string& fine_tune_id,
 		std::move(params),
 		stream ? netimpl::components::WriteCallback{std::move(stream.value())} : netimpl::components::WriteCallback{},
 		this->auth_.GetProxies(),
-		this->auth_.GetProxyAuth()
+		this->auth_.GetProxyAuth(),
+		this->auth_.GetMaxTimeout()
 	);
 
 	return res;
@@ -163,7 +172,8 @@ liboai::FutureResponse liboai::FineTunes::list_events_async(const std::string& f
 				std::move(params),
 				stream ? netimpl::components::WriteCallback{std::move(stream.value())} : netimpl::components::WriteCallback{},
 				this->auth_.GetProxies(),
-				this->auth_.GetProxyAuth()
+				this->auth_.GetProxyAuth(),
+				this->auth_.GetMaxTimeout()
 			);
 		}
 	);

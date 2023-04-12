@@ -74,7 +74,6 @@ namespace liboai {
 				long status_code,
 				double elapsed
 			) noexcept(false);
-
 			
 			Response& operator=(const liboai::Response& other) noexcept;
 			Response& operator=(liboai::Response&& old) noexcept;
