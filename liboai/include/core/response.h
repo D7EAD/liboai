@@ -15,7 +15,7 @@
 		into a usable format for the user to access via this class.
 */
 
-#ifdef __linux__
+#if defined(__linux__) || defined(__APPLE__)
 	#define LIBOAI_EXPORT
 #else
 	#define LIBOAI_EXPORT __declspec(dllexport)
