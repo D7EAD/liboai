@@ -10,7 +10,7 @@
   <li><a href="https://github.com/D7EAD/liboai/tree/v2.3.0/documentation/chat/conversation#synopsis">Methods</a></li>
 </ul>
 
-The <code>Conversation</code> class is defined at <code>liboai::ChatCompletion::Conversation</code>, but can be accessed via the <code>using</code> alias, <code>Conversation</code>, located under <code>liboai::</code>.
+The <code>Conversation</code> class is defined at <code>liboai::Conversation</code>.
 
 This class can most effectively be thought of as a container for any conversation(s) that one may wish to carry out with a given model using the <code>ChatCompletion</code> methods. It keeps track of the history of the conversation for subsequent calls to the methods, allows a developer to set <a href="https://platform.openai.com/docs/guides/chat/instructing-chat-models">system</a> directions, retrieve the last response, add user input, and so on.
 
@@ -171,11 +171,11 @@ This may print something along the lines of the following:
 <h3>Usage Pattern</h3>
 As you have hopefully noticed, there is a pattern that can be followed with <code>Conversation</code>. Generally, when we want to make use of the methods found within <code>liboai::ChatCompletion</code>, we should adhere to the following series of steps:
 <ol>
-  <li>Create a <code>ChatCompletion::Conversation</code> object.</li>
+  <li>Create a <code>Conversation</code> object.</li>
   <li>Set the user data (or optional, single-time system data as well), which is the user's input such as a question or a command.</li>
-  <li>Provide the <code>ChatCompletion::Conversation</code> object to <code>ChatCompletion::create</code> or a similar method.</li>
-  <li>Update the <code>ChatCompletion::Conversation</code> object with the response from the API.</li>
-  <li>Retrieve the chat model's response from the <code>ChatCompletion::Conversation</code> object.</li>
+  <li>Provide the <codeChatCompletion::Conversation</code> object to <code>ChatCompletion::create</code> or a similar method.</li>
+  <li>Update the <code>Conversation</code> object with the response from the API.</li>
+  <li>Retrieve the chat model's response from the <code>Conversation</code> object.</li>
   <li>Repeat steps 2, 3, 4, and 5 until the conversation is complete.</li>
 </ol>
 
@@ -239,10 +239,10 @@ int main() {
 With the use of <code>Conversation</code> objects, as we carry on a given conversation, our object will keep track of not only the history of the conversation we are having, but its contained context as well. That means that if we were to, at first, ask our model "When was last year's Super Bowl," and then subsequently ask it, "Who played in it," it would be aware of the context of the conversation for the second inquiry and answer accordingly.
 <br>
 <br>
-In general, objects of class <code>liboai::ChatCompletion::Conversation</code> allow us to more easily engage in conversation with existing and future conversational chat models via the use of <code>liboai::ChatCompletion</code> methods.
+In general, objects of class <code>liboai::Conversation</code> allow us to more easily engage in conversation with existing and future conversational chat models via the use of <code>liboai::ChatCompletion</code> methods.
 
 <h2>Methods</h2>
-Below you can find the function signature(s) of the class methods found within <code>liboai::ChatCompletion::Conversation</code>.
+Below you can find the function signature(s) of the class methods found within <code>liboai::Conversation</code>.
 
 <h3>Constructors</h3>
 <p>Constructors available to construct a <code>Conversation</code> object.</p>
