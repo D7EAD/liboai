@@ -15,6 +15,138 @@
 #include "../core/response.h"
 
 namespace liboai {
+	/*
+		@brief Class containing, and used for keeping track of, the chat history.
+			An object of this class should be created, set with system and user data,
+			and provided to ChatCompletion::create (system is optional).
+
+			The general usage of this class is as follows:
+				1. Create a ChatCompletion::Conversation object.
+				2. Set the user data, which is the user's input - such as
+				   a question or a command as well as optionally set the
+				   system data to guide how the assistant responds.
+				3. Provide the ChatCompletion::Conversation object to
+				   ChatCompletion::create.
+				4. Update the ChatCompletion::Conversation object with
+				   the response from the API - either the object or the
+				   response content can be used to update the object.
+				5. Retrieve the assistant's response from the
+				   ChatCompletion::Conversation object.
+				6. Repeat steps 2, 3, 4 and 5 until the conversation is
+				   complete.
+
+			After providing the object to ChatCompletion::create, the object will
+			be updated with the 'assistant' response - this response is the
+			assistant's response to the user's input. A developer could then
+			retrieve this response and display it to the user, and then set the
+			next user input in the object and pass it back to ChatCompletion::create,
+			if desired.
+	*/
+	class Conversation final {
+		public:
+			Conversation();
+			~Conversation() = default;
+			Conversation(const Conversation& other);
+			Conversation(Conversation&& old) noexcept;
+
+			Conversation(std::string_view system_data);
+			Conversation(std::string_view system_data, std::string_view user_data);
+			Conversation(std::string_view system_data, std::initializer_list<std::string_view> user_data);
+			Conversation(std::initializer_list<std::string_view> user_data);
+			explicit Conversation(const std::vector<std::string>& user_data);
+
+			Conversation& operator=(const Conversation& other);
+			Conversation& operator=(Conversation&& old) noexcept;
+
+			friend std::ostream& operator<<(std::ostream& os, const Conversation& conv);
+
+			/*
+				@brief Sets the system data for the conversation.
+					This method sets the system data for the conversation.
+					The system data is the data that helps set the behavior
+					of the assistant so it knows how to respond.
+
+					@param *data      The system data to set.
+			*/
+			LIBOAI_EXPORT bool SetSystemData(std::string_view data) & noexcept(false);
+
+			/*
+				@brief Removes the set system data from the top of the conversation.
+					The system data must be the first data set, if used,
+					in order to be removed. If the system data is not
+					the first data set, this method will return false.
+			*/
+			LIBOAI_EXPORT bool PopSystemData() & noexcept(false);
+
+			/*
+				@brief Adds user input to the conversation.
+					This method adds user input to the conversation.
+					The user input is the user's input - such as a question
+					or a command.
+
+					If using a system prompt, the user input should be
+					provided after the system prompt is set - i.e. after
+					SetSystemData() is called.
+
+					@param *data      The user input to add.
+			*/
+			LIBOAI_EXPORT bool AddUserData(std::string_view data) & noexcept(false);
+
+			/*
+				@brief Removes the last added user data.
+			*/
+			LIBOAI_EXPORT bool PopUserData() & noexcept(false);
+
+			/*
+				@brief Gets the last response from the assistant.
+					This method gets the last response from the assistant.
+					The response is the assistant's response to the user's
+					input.
+			*/
+			LIBOAI_EXPORT std::string GetLastResponse() const& noexcept;
+
+			/*
+				@brief Removes the last assistant response.
+			*/
+			LIBOAI_EXPORT bool PopLastResponse() & noexcept(false);
+
+			/*
+				@brief Updates the conversation given JSON data.
+					This method updates the conversation given JSON data.
+					The JSON data should be the JSON 'messages' data returned
+					from the OpenAI API.
+
+					@param *history      The JSON data to update the conversation with.
+										 This should be the 'messages' array of data returned
+										 from a call to ChatCompletion::create.
+			*/
+			LIBOAI_EXPORT bool Update(std::string_view history) & noexcept(false);
+
+			/*
+				@brief Updates the conversation given a Response object.
+					This method updates the conversation given a Response object.
+
+					@param *response     The Response to update the conversation with.
+										 This should be the Response returned from a call
+										 to ChatCompletion::create.
+			*/
+			LIBOAI_EXPORT bool Update(const Response& response) & noexcept(false);
+
+			/*
+				@brief Returns the raw JSON dump of the internal conversation object
+					in string format.
+			*/
+			LIBOAI_EXPORT std::string GetRawConversation() const& noexcept;
+
+			/*
+				@brief Returns the JSON object of the internal conversation.
+			*/
+			LIBOAI_EXPORT const nlohmann::json& GetJSON() const& noexcept;
+
+		private:
+			nlohmann::json _conversation;
+	};
+
 	class ChatCompletion final : private Network {
 		public:
 			ChatCompletion() = default;
@@ -24,138 +156,6 @@ namespace liboai {
 
 			ChatCompletion& operator=(const ChatCompletion&) = delete;
 			ChatCompletion& operator=(ChatCompletion&&) = delete;
-
-			/*
-				@brief Class containing, and used for keeping track of, the chat history.
-					An object of this class should be created, set with system and user data,
-					and provided to ChatCompletion::create (system is optional).
-
-					The general usage of this class is as follows:
-						1. Create a ChatCompletion::Conversation object.
-						2. Set the user data, which is the user's input - such as
-						   a question or a command as well as optionally set the
-						   system data to guide how the assistant responds.
-						3. Provide the ChatCompletion::Conversation object to
-						   ChatCompletion::create.
-						4. Update the ChatCompletion::Conversation object with
-						   the response from the API - either the object or the
-						   response content can be used to update the object.
-						5. Retrieve the assistant's response from the
-						   ChatCompletion::Conversation object.
-						6. Repeat steps 2, 3, 4 and 5 until the conversation is
-						   complete.
-					
-					After providing the object to ChatCompletion::create, the object will
-					be updated with the 'assistant' response - this response is the
-					assistant's response to the user's input. A developer could then
-					retrieve this response and display it to the user, and then set the
-					next user input in the object and pass it back to ChatCompletion::create,
-					if desired.
-			*/
-			class Conversation final {
-				public:
-					Conversation();
-					~Conversation() = default;
-					Conversation(const Conversation& other);
-					Conversation(Conversation&& old) noexcept;
-					
-					Conversation(std::string_view system_data);
-					Conversation(std::string_view system_data, std::string_view user_data);
-					Conversation(std::string_view system_data, std::initializer_list<std::string_view> user_data);
-					Conversation(std::initializer_list<std::string_view> user_data);
-					explicit Conversation(const std::vector<std::string>& user_data);
-				
-					Conversation& operator=(const Conversation& other);
-					Conversation& operator=(Conversation&& old) noexcept;
-					
-					friend std::ostream& operator<<(std::ostream& os, const Conversation& conv);
-
-					/*
-						@brief Sets the system data for the conversation.
-							This method sets the system data for the conversation.
-							The system data is the data that helps set the behavior
-							of the assistant so it knows how to respond.
-
-							@param *data      The system data to set.
-					*/
-					LIBOAI_EXPORT bool SetSystemData(std::string_view data) & noexcept(false);
-
-					/*
-						@brief Removes the set system data from the top of the conversation.
-							The system data must be the first data set, if used,
-							in order to be removed. If the system data is not
-							the first data set, this method will return false.
-					*/
-					LIBOAI_EXPORT bool PopSystemData() & noexcept(false);
-
-					/*
-						@brief Adds user input to the conversation.
-							This method adds user input to the conversation.
-							The user input is the user's input - such as a question
-							or a command.
-
-							If using a system prompt, the user input should be
-							provided after the system prompt is set - i.e. after
-							SetSystemData() is called.
-
-							@param *data      The user input to add.
-					*/
-					LIBOAI_EXPORT bool AddUserData(std::string_view data) & noexcept(false);
-					
-					/*
-						@brief Removes the last added user data.
-					*/
-					LIBOAI_EXPORT bool PopUserData() & noexcept(false);
-
-					/*
-						@brief Gets the last response from the assistant.
-							This method gets the last response from the assistant.
-							The response is the assistant's response to the user's
-							input.
-					*/
-					LIBOAI_EXPORT std::string GetLastResponse() const & noexcept;
-
-					/*
-						@brief Removes the last assistant response.
-					*/
-					LIBOAI_EXPORT bool PopLastResponse() & noexcept(false);
-
-					/*
-						@brief Updates the conversation given JSON data.
-							This method updates the conversation given JSON data.
-							The JSON data should be the JSON 'messages' data returned
-							from the OpenAI API.
-
-							@param *history      The JSON data to update the conversation with.
-												 This should be the 'messages' array of data returned
-												 from a call to ChatCompletion::create.
-					*/
-					LIBOAI_EXPORT bool Update(std::string_view history) & noexcept(false);
-
-					/*
-						@brief Updates the conversation given a Response object.
-							This method updates the conversation given a Response object.
-
-							@param *response     The Response to update the conversation with.
-												 This should be the Response returned from a call
-												 to ChatCompletion::create.
-					*/
-					LIBOAI_EXPORT bool Update(const Response& response) & noexcept(false);
-
-					/*
-						@brief Returns the raw JSON dump of the internal conversation object
-							in string format.
-					*/
-					LIBOAI_EXPORT std::string GetRawConversation() const & noexcept;
-
-					/*
-						@brief Returns the JSON object of the internal conversation.
-					*/
-					LIBOAI_EXPORT const nlohmann::json& GetJSON() const & noexcept;
-					
-				private:
-					nlohmann::json _conversation;
-			};
 
 			/*
 				@brief Creates a completion for the chat message.
@@ -272,5 +272,4 @@ namespace liboai {
 		private:
 			Authorization& auth_ = Authorization::Authorizer();
 	};
-	using Conversation = ChatCompletion::Conversation;
 }

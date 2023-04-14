@@ -1,30 +1,30 @@
 #include "../include/components/chat.h"
 
-liboai::ChatCompletion::Conversation::Conversation() {
+liboai::Conversation::Conversation() {
 	this->_conversation["messages"] = nlohmann::json::array();
 }
 
-liboai::ChatCompletion::Conversation::Conversation(const Conversation& other) {
+liboai::Conversation::Conversation(const Conversation& other) {
 	this->_conversation = other._conversation;
 }
 
-liboai::ChatCompletion::Conversation::Conversation(Conversation&& old) noexcept {
+liboai::Conversation::Conversation(Conversation&& old) noexcept {
 	this->_conversation = std::move(old._conversation);
 	old._conversation = nlohmann::json::object();
 }
 
-liboai::ChatCompletion::Conversation::Conversation(std::string_view system_data) {
+liboai::Conversation::Conversation(std::string_view system_data) {
 	this->_conversation["messages"] = nlohmann::json::array();
 	this->SetSystemData(system_data);
 }
 
-liboai::ChatCompletion::Conversation::Conversation(std::string_view system_data, std::string_view user_data) {
+liboai::Conversation::Conversation(std::string_view system_data, std::string_view user_data) {
 	this->_conversation["messages"] = nlohmann::json::array();
 	this->SetSystemData(system_data);
 	this->AddUserData(user_data);
 }
 
-liboai::ChatCompletion::Conversation::Conversation(std::string_view system_data, std::initializer_list<std::string_view> user_data) {
+liboai::Conversation::Conversation(std::string_view system_data, std::initializer_list<std::string_view> user_data) {
 	this->_conversation["messages"] = nlohmann::json::array();
 	this->SetSystemData(system_data);
 	
@@ -33,7 +33,7 @@ liboai::ChatCompletion::Conversation::Conversation(std::string_view system_data,
 	}
 }
 
-liboai::ChatCompletion::Conversation::Conversation(std::initializer_list<std::string_view> user_data) {
+liboai::Conversation::Conversation(std::initializer_list<std::string_view> user_data) {
 	this->_conversation["messages"] = nlohmann::json::array();
 
 	for (auto& data : user_data) {
@@ -41,7 +41,7 @@ liboai::ChatCompletion::Conversation::Conversation(std::initializer_list<std::st
 	}
 }
 
-liboai::ChatCompletion::Conversation::Conversation(const std::vector<std::string>& user_data) {
+liboai::Conversation::Conversation(const std::vector<std::string>& user_data) {
 	this->_conversation["messages"] = nlohmann::json::array();
 	
 	for (auto& data : user_data) {
@@ -49,18 +49,18 @@ liboai::ChatCompletion::Conversation::Conversation(const std::vector<std::string
 	}
 }
 
-liboai::ChatCompletion::Conversation& liboai::ChatCompletion::Conversation::operator=(const Conversation& other) {
+liboai::Conversation& liboai::Conversation::operator=(const Conversation& other) {
 	this->_conversation = other._conversation;
 	return *this;
 }
 
-liboai::ChatCompletion::Conversation& liboai::ChatCompletion::Conversation::operator=(Conversation&& old) noexcept {
+liboai::Conversation& liboai::Conversation::operator=(Conversation&& old) noexcept {
 	this->_conversation = std::move(old._conversation);
 	old._conversation = nlohmann::json::object();
 	return *this;
 }
 
-bool liboai::ChatCompletion::Conversation::SetSystemData(std::string_view data) & noexcept(false) {
+bool liboai::Conversation::SetSystemData(std::string_view data) & noexcept(false) {
 	// if data provided is non-empty
 	if (!data.empty()) {
 		// if system is not set already - only one system message shall exist in any
@@ -76,7 +76,7 @@ bool liboai::ChatCompletion::Conversation::SetSystemData(std::string_view data) 
 	return false; // data is empty
 }
 
-bool liboai::ChatCompletion::Conversation::PopSystemData() & noexcept(false) {
+bool liboai::Conversation::PopSystemData() & noexcept(false) {
 	// if conversation is non-empty
 	if (!this->_conversation["messages"].empty()) {
 		// if first message is system
@@ -89,7 +89,7 @@ bool liboai::ChatCompletion::Conversation::PopSystemData() & noexcept(false) {
 	return false; // conversation is empty
 }
 
-bool liboai::ChatCompletion::Conversation::AddUserData(std::string_view data) & noexcept(false) {
+bool liboai::Conversation::AddUserData(std::string_view data) & noexcept(false) {
 	// if data provided is non-empty
 	if (!data.empty()) {
 		this->_conversation["messages"].push_back({ { "role", "user" }, {"content", data} });
@@ -98,7 +98,7 @@ bool liboai::ChatCompletion::Conversation::AddUserData(std::string_view data) & 
 	return false; // data is empty
 }
 
-bool liboai::ChatCompletion::Conversation::PopUserData() & noexcept(false) {
+bool liboai::Conversation::PopUserData() & noexcept(false) {
 	// if conversation is not empty
 	if (!this->_conversation["messages"].empty()) {
 		// if last message is user message
@@ -111,7 +111,7 @@ bool liboai::ChatCompletion::Conversation::PopUserData() & noexcept(false) {
 	return false; // conversation is empty
 }
 
-std::string liboai::ChatCompletion::Conversation::GetLastResponse() const & noexcept {
+std::string liboai::Conversation::GetLastResponse() const & noexcept {
 	// if conversation is not empty
 	if (!this->_conversation["messages"].empty()) {
 		// if last message is from system
@@ -122,7 +122,7 @@ std::string liboai::ChatCompletion::Conversation::GetLastResponse() const & noex
 	return ""; // no response found
 }
 
-bool liboai::ChatCompletion::Conversation::PopLastResponse() & noexcept(false) {
+bool liboai::Conversation::PopLastResponse() & noexcept(false) {
 	// if conversation is not empty
 	if (!this->_conversation["messages"].empty()) {
 		// if last message is assistant message
@@ -135,7 +135,7 @@ bool liboai::ChatCompletion::Conversation::PopLastResponse() & noexcept(false) {
 	return false; // conversation is empty
 }
 
-bool liboai::ChatCompletion::Conversation::Update(std::string_view response) & noexcept(false) {
+bool liboai::Conversation::Update(std::string_view response) & noexcept(false) {
 	// if response is non-empty
 	if (!response.empty()) {
 		nlohmann::json j = nlohmann::json::parse(response);
@@ -188,15 +188,15 @@ bool liboai::ChatCompletion::Conversation::Update(std::string_view response) & n
 	return false; // response is empty
 }
 
-bool liboai::ChatCompletion::Conversation::Update(const Response& response) & noexcept(false) {
+bool liboai::Conversation::Update(const Response& response) & noexcept(false) {
 	return this->Update(response.content);
 }
 
-std::string liboai::ChatCompletion::Conversation::GetRawConversation() const & noexcept {
+std::string liboai::Conversation::GetRawConversation() const & noexcept {
 	return this->_conversation.dump(4);
 }
 
-const nlohmann::json& liboai::ChatCompletion::Conversation::GetJSON() const & noexcept {
+const nlohmann::json& liboai::Conversation::GetJSON() const & noexcept {
 	return this->_conversation;
 }
 
