@@ -18,8 +18,8 @@
 <p>Static and dynamic libraries take many forms:</p>
 
 * <b>Windows</b>
-  * Dynamic-Link Libraries (.dll)
-  * Static Libraries (.lib)
+  * Dynamic-Link Library (.dll)
+  * Static Library (.lib)
 * <b>Linux</b>
   * Shared Object (.so)
   * Static Library (.a)
