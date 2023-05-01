@@ -6,7 +6,7 @@
 
 * cURL available and <b>linked</b> to the project.
 * nlohmann-json available.
-* Compiled as C++17.
+* Compiling to C++17.
 
 <p>Assuming your existing codebase has the above in mind, you can safely add <code>liboai</code>'s header and implementation files to your existing project and compile.</p>
 
