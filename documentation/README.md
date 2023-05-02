@@ -204,7 +204,7 @@ int main() {
 </table>
 
 <br>
-<p>After a succesful run of the above snippet, the file found at the URL returned from the component call will be download to the path <code>C:/some/folder/file.png</code>.
+<p>After a successful run of the above snippet, the file found at the URL returned from the component call will be download to the path <code>C:/some/folder/file.png</code>.
 <br>
 
 <h1>Synopsis</h1>
