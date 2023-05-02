@@ -1,7 +1,7 @@
 #pragma once
 
 /*
-	respone.h : liboai response container implementation.
+	response.h : liboai response container implementation.
 		This header file provides declarations for the liboai Response
 		implementation. Each component class will include this header
 		and use the Response class to return data to the user.
