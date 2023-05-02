@@ -36,7 +36,7 @@
   2. Create a new C++ project.
   3. Import the <code>liboai</code> source code (.cpp and .h files).
   4. *Link your project to the cURL library.
-  5. *Make sure you are targetting C++17.
+  5. *Make sure you are targeting C++17.
   6. *Compile as a static or dynamic library.
   
 <p>Now, in the project you'd like to integrate <code>liboai</code> into:
