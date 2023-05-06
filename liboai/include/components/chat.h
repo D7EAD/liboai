@@ -136,7 +136,7 @@ namespace liboai {
 				@brief Returns the raw JSON dump of the internal conversation object
 					in string format.
 			*/
-			LIBOAI_EXPORT std::string GetRawConversation() const& noexcept;
+			LIBOAI_EXPORT std::string GetRawConversation() const & noexcept;
 
 			/*
 				@brief Returns the JSON object of the internal conversation.
