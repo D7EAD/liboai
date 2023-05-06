@@ -75,7 +75,7 @@ void liboai::netimpl::Session::Prepare() {
 	// set proxy if available
 	const std::string protocol = url_.substr(0, url_.find(':'));
 	if (proxies_.has(protocol)) {
-		e[1] = curl_easy_setopt(this->curl_, CURLOPT_PROXY, proxies_[protocol]);
+		e[1] = curl_easy_setopt(this->curl_, CURLOPT_PROXY, proxies_[protocol].c_str());
 		if (proxyAuth_.has(protocol)) {
 			e[2] = curl_easy_setopt(this->curl_, CURLOPT_PROXYUSERNAME, proxyAuth_.GetUsername(protocol));
 			e[3] = curl_easy_setopt(this->curl_, CURLOPT_PROXYPASSWORD, proxyAuth_.GetPassword(protocol));
@@ -107,7 +107,7 @@ void liboai::netimpl::Session::Prepare() {
 void liboai::netimpl::Session::PrepareDownloadInternal() {
 	// holds error codes - all init to OK to prevent errors
 	// when checking unset values
-	CURLcode e[5]; memset(e, CURLcode::CURLE_OK, sizeof(e));
+	CURLcode e[6]; memset(e, CURLcode::CURLE_OK, sizeof(e));
 
 	if (!this->parameter_string_.empty()) {
 		this->url_ += "?";
@@ -119,17 +119,17 @@ void liboai::netimpl::Session::PrepareDownloadInternal() {
 
 	const std::string protocol = url_.substr(0, url_.find(':'));
 	if (proxies_.has(protocol)) {
-		curl_easy_setopt(this->curl_, CURLOPT_PROXY, proxies_[protocol]);
+		e[1] = curl_easy_setopt(this->curl_, CURLOPT_PROXY, proxies_[protocol].c_str());
 		if (proxyAuth_.has(protocol)) {
-			e[1] = curl_easy_setopt(this->curl_, CURLOPT_PROXYUSERNAME, proxyAuth_.GetUsername(protocol));
-			e[2] = curl_easy_setopt(this->curl_, CURLOPT_PROXYPASSWORD, proxyAuth_.GetPassword(protocol));
+			e[2] = curl_easy_setopt(this->curl_, CURLOPT_PROXYUSERNAME, proxyAuth_.GetUsername(protocol));
+			e[3] = curl_easy_setopt(this->curl_, CURLOPT_PROXYPASSWORD, proxyAuth_.GetPassword(protocol));
 		}
 	}
 
-	e[3] = curl_easy_setopt(this->curl_, CURLOPT_HEADERFUNCTION, liboai::netimpl::components::writeFunction);
-	e[4] = curl_easy_setopt(this->curl_, CURLOPT_HEADERDATA, &this->header_string_);
+	e[4] = curl_easy_setopt(this->curl_, CURLOPT_HEADERFUNCTION, liboai::netimpl::components::writeFunction);
+	e[5] = curl_easy_setopt(this->curl_, CURLOPT_HEADERDATA, &this->header_string_);
 
-	ErrorCheck(e, 5, "liboai::netimpl::Session::PrepareDownloadInternal()");
+	ErrorCheck(e, 6, "liboai::netimpl::Session::PrepareDownloadInternal()");
 }
 
 CURLcode liboai::netimpl::Session::Perform() {
