@@ -424,7 +424,7 @@ namespace liboai {
 		*/
 		class Session final : private CurlHolder {
 			public:
-				Session() noexcept = default;
+				Session() = default;
 				~Session() override;
 
 				liboai::Response Get();
