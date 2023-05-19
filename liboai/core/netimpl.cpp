@@ -85,10 +85,8 @@ void liboai::netimpl::Session::Prepare() {
 	// accept all encoding types
 	e[4] = curl_easy_setopt(this->curl_, CURLOPT_ACCEPT_ENCODING, "");
 
-	#if LIBCURL_VERSION_MAJOR >= 7
-		#if LIBCURL_VERSION_MINOR >= 71
-			e[5] = curl_easy_setopt(this->curl_, CURLOPT_SSL_OPTIONS, CURLSSLOPT_NATIVE_CA);
-		#endif
+	#if LIBCURL_VERSION_MAJOR > 7 || (LIBCURL_VERSION_MAJOR == 7 && LIBCURL_VERSION_MINOR >= 71)
+		e[5] = curl_easy_setopt(this->curl_, CURLOPT_SSL_OPTIONS, CURLSSLOPT_NATIVE_CA);
 	#endif
 
 	// set string the response will be sent to
