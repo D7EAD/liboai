@@ -148,7 +148,7 @@ liboai::Response liboai::FineTunes::list_events(const std::string& fine_tune_id,
 
 	Response res;
 	res = this->Request(
-		Method::HTTP_POST, "/fine-tunes/" + fine_tune_id + "/events", "application/json",
+		Method::HTTP_GET, "/fine-tunes/" + fine_tune_id + "/events", "application/json",
 		this->auth_.GetAuthorizationHeaders(),
 		std::move(params),
 		stream ? netimpl::components::WriteCallback{std::move(stream.value())} : netimpl::components::WriteCallback{},
@@ -167,7 +167,7 @@ liboai::FutureResponse liboai::FineTunes::list_events_async(const std::string& f
 	return std::async(
 		std::launch::async, [&, params]() -> liboai::Response {
 			return this->Request(
-				Method::HTTP_POST, "/fine-tunes/" + fine_tune_id + "/events", "application/json",
+				Method::HTTP_GET, "/fine-tunes/" + fine_tune_id + "/events", "application/json",
 				this->auth_.GetAuthorizationHeaders(),
 				std::move(params),
 				stream ? netimpl::components::WriteCallback{std::move(stream.value())} : netimpl::components::WriteCallback{},
