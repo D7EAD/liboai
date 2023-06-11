@@ -53,30 +53,3 @@ liboai::FutureResponse liboai::Models::retrieve_async(const std::string& model) 
 		}
 	);
 }
-
-liboai::Response liboai::Models::remove(const std::string& model) const & noexcept(false) {
-	Response res;
-	res = this->Request(
-		Method::HTTP_DELETE, this->openai_root_, "/models/" + model, "application/json",
-		this->auth_.GetAuthorizationHeaders(),
-		this->auth_.GetProxies(),
-		this->auth_.GetProxyAuth(),
-		this->auth_.GetMaxTimeout()
-	);
-
-	return res;
-}
-
-liboai::FutureResponse liboai::Models::remove_async(const std::string& model) const & noexcept(false) {
-	return std::async(
-		std::launch::async, [&]() -> liboai::Response {
-			return this->Request(
-				Method::HTTP_DELETE, this->openai_root_, "/models/" + model, "application/json",
-				this->auth_.GetAuthorizationHeaders(),
-				this->auth_.GetProxies(),
-				this->auth_.GetProxyAuth(),
-				this->auth_.GetMaxTimeout()
-			);
-		}
-	);
-}

@@ -64,30 +64,6 @@ namespace liboai {
 			LIBOAI_EXPORT liboai::FutureResponse retrieve_async(
 				const std::string& model
 			) const & noexcept(false);
-			
-			/*
-				@brief Delete a fine-tuned model.
-
-				#param *model   The model to delete.
-
-				@returns A liboai::Response object containing the image(s)
-					data in JSON format.
-			*/
-			LIBOAI_EXPORT liboai::Response remove(
-				const std::string& model
-			) const & noexcept(false);
-
-			/*
-				@brief Asynchronously delete a fine-tuned model.
-
-				#param *model   The model to delete.
-
-				@returns A liboai::Response future containing the image(s)
-					data in JSON format.
-			*/
-			LIBOAI_EXPORT liboai::FutureResponse remove_async(
-				const std::string& model
-			) const & noexcept(false);
 
 		private:
 			Authorization& auth_ = Authorization::Authorizer();

@@ -165,12 +165,39 @@ liboai::FutureResponse liboai::FineTunes::list_events_async(const std::string& f
 	stream ? params.Add({ "stream", "true"}) : void();
 
 	return std::async(
-		std::launch::async, [&, params]() -> liboai::Response {
+		std::launch::async, [&, params, stream]() -> liboai::Response {
 			return this->Request(
 				Method::HTTP_GET, this->openai_root_, "/fine-tunes/" + fine_tune_id + "/events", "application/json",
 				this->auth_.GetAuthorizationHeaders(),
 				std::move(params),
 				stream ? netimpl::components::WriteCallback{std::move(stream.value())} : netimpl::components::WriteCallback{},
+				this->auth_.GetProxies(),
+				this->auth_.GetProxyAuth(),
+				this->auth_.GetMaxTimeout()
+			);
+		}
+	);
+}
+
+liboai::Response liboai::FineTunes::remove(const std::string& model) const& noexcept(false) {
+	Response res;
+	res = this->Request(
+		Method::HTTP_DELETE, this->openai_root_, "/models/" + model, "application/json",
+		this->auth_.GetAuthorizationHeaders(),
+		this->auth_.GetProxies(),
+		this->auth_.GetProxyAuth(),
+		this->auth_.GetMaxTimeout()
+	);
+
+	return res;
+}
+
+liboai::FutureResponse liboai::FineTunes::remove_async(const std::string& model) const& noexcept(false) {
+	return std::async(
+		std::launch::async, [&]() -> liboai::Response {
+			return this->Request(
+				Method::HTTP_DELETE, this->openai_root_, "/models/" + model, "application/json",
+				this->auth_.GetAuthorizationHeaders(),
 				this->auth_.GetProxies(),
 				this->auth_.GetProxyAuth(),
 				this->auth_.GetMaxTimeout()
