@@ -8,7 +8,7 @@ int main() {
   Conversation convo;
   convo.AddUserData("Hi, how are you?");
 
-  if (oai.auth.SetKeyEnv("OPENAI_API_KEY")) {
+  if (oai.auth.SetAzureKeyEnv("AZURE_API_KEY")) {
     try {
       Response res = oai.Azure->create_chat_completion(
         "resource", "deploymentID", "api_version",
