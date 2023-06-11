@@ -53,6 +53,24 @@ namespace liboai {
 			LIBOAI_EXPORT bool SetKey(std::string_view key) noexcept;
 
 			/*
+				@brief Sets the authorization key for the Azure OpenAI API
+					as the passed string.
+				@param key : The authorization key to use in Azure component calls.
+				@returns True if the key was set successfully, false otherwise.
+			*/
+			[[nodiscard]]
+			LIBOAI_EXPORT bool SetAzureKey(std::string_view key) noexcept;
+			
+			/*
+				@brief Sets the Active Directory authorization token for the Azure OpenAI API
+					as the passed string.
+				@param key : The authorization key to use in Azure component calls.
+				@returns True if the key was set successfully, false otherwise.
+			*/
+			[[nodiscard]]
+			LIBOAI_EXPORT bool SetAzureKeyAD(std::string_view key) noexcept;
+
+			/*
 				@brief Sets the authorization key for the OpenAI API
 					as the first line present in the file at the passed path.
 				@param path : The path to the file containing the authorization key.
@@ -60,6 +78,24 @@ namespace liboai {
 			*/
 			[[nodiscard]]
 			LIBOAI_EXPORT bool SetKeyFile(const std::filesystem::path& path) noexcept;
+
+			/*
+				@brief Sets the authorization key for the Azure OpenAI API
+					as the first line present in the file at the passed path.
+				@param key : The path to the file containing the authorization key.
+				@returns True if the key was set successfully, false otherwise.
+			*/
+			[[nodiscard]]
+			LIBOAI_EXPORT bool SetAzureKeyFile(const std::filesystem::path& path) noexcept;
+
+			/*
+				@brief Sets the Active Directory authorization token for the Azure OpenAI API
+					as the first line present in the file at the passed path.
+				@param key : The path to the file containing the authorization key.
+				@returns True if the key was set successfully, false otherwise.
+			*/
+			[[nodiscard]]
+			LIBOAI_EXPORT bool SetAzureKeyFileAD(const std::filesystem::path& path) noexcept;
 
 			/*
 				@brief Sets the authorization key for the OpenAI API
@@ -71,6 +107,28 @@ namespace liboai {
 			*/
 			[[nodiscard]]
 			LIBOAI_EXPORT bool SetKeyEnv(std::string_view var) noexcept;
+
+			/*
+				@brief Sets the authorization key for the Azure OpenAI API
+					as the value stored in the environment variable with
+					the passed name.
+				@param var : The name of the environment variable to
+					retrieve the authorization key from.
+				@returns True if the key was set successfully, false otherwise.
+			*/
+			[[nodiscard]]
+			LIBOAI_EXPORT bool SetAzureKeyEnv(std::string_view var) noexcept;
+			
+			/*
+				@brief Sets the Active Directory authorization token for the Azure OpenAI API
+					as the value stored in the environment variable with
+					the passed name.
+				@param var : The name of the environment variable to
+					retrieve the authorization key from.
+				@returns True if the key was set successfully, false otherwise.
+			*/
+			[[nodiscard]]
+			LIBOAI_EXPORT bool SetAzureKeyEnvAD(std::string_view var) noexcept;
 			
 			/*
 				@brief Sets the organization identifier as the passed
@@ -175,11 +233,18 @@ namespace liboai {
 					currently set authorization information for use
 					in component calls.
 			*/
-			constexpr const netimpl::components::Header& GetAuthorizationHeaders() const noexcept { return this->auth_headers_; }
+			constexpr const netimpl::components::Header& GetAuthorizationHeaders() const noexcept { return this->openai_auth_headers_; }
+
+			/*
+				@returns An authorization header with the
+					currently set Azure authorization information for use
+					in Azure component calls.
+			*/
+			constexpr const netimpl::components::Header& GetAzureAuthorizationHeaders() const noexcept { return this->azure_auth_headers_; }
 
 		private: // member variables
 			std::string key_, org_;
-			netimpl::components::Header auth_headers_;
+			netimpl::components::Header openai_auth_headers_, azure_auth_headers_;
 			netimpl::components::Proxies proxies_;
 			netimpl::components::ProxyAuthentication proxyAuth_;
 			netimpl::components::Timeout timeout_ = { 30000 };

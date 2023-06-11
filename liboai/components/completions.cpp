@@ -21,7 +21,7 @@ liboai::Response liboai::Completions::create(const std::string& model_id, std::o
 
 	Response res;
 	res = this->Request(
-		Method::HTTP_POST, "/completions", "application/json",
+		Method::HTTP_POST, this->openai_root_, "/completions", "application/json",
 		this->auth_.GetAuthorizationHeaders(),
 		netimpl::components::Body {
 			jcon.dump()
@@ -55,9 +55,9 @@ liboai::FutureResponse liboai::Completions::create_async(const std::string& mode
 	jcon.push_back("user", std::move(user));
 
 	return std::async(
-		std::launch::async, [&, jcon]() -> liboai::Response {
+		std::launch::async, [&, jcon, stream]() -> liboai::Response {
 			return this->Request(
-				Method::HTTP_POST, "/completions", "application/json",
+				Method::HTTP_POST, this->openai_root_, "/completions", "application/json",
 				this->auth_.GetAuthorizationHeaders(),
 				netimpl::components::Body {
 					jcon.dump()

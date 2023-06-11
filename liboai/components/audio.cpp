@@ -21,7 +21,7 @@ liboai::Response liboai::Audio::transcribe(const std::filesystem::path& file, co
 
 	Response res;
 	res = this->Request(
-		Method::HTTP_POST, "/audio/transcriptions", "multipart/form-data",
+		Method::HTTP_POST, this->openai_root_, "/audio/transcriptions", "multipart/form-data",
 		this->auth_.GetAuthorizationHeaders(),
 		std::move(form),
 		this->auth_.GetProxies(),
@@ -50,11 +50,11 @@ liboai::FutureResponse liboai::Audio::transcribe_async(const std::filesystem::pa
 	if (response_format) { form.parts.push_back({ "response_format", response_format.value() }); }
 	if (temperature) { form.parts.push_back({ "temperature", std::to_string(temperature.value()) }); }
 	if (language) { form.parts.push_back({ "language", language.value() }); }
-
+	
 	return std::async(
 		std::launch::async, [&, form]() -> liboai::Response {
 			return this->Request(
-				Method::HTTP_POST, "/audio/transcriptions", "multipart/form-data",
+				Method::HTTP_POST, this->openai_root_, "/audio/transcriptions", "multipart/form-data",
 				this->auth_.GetAuthorizationHeaders(),
 				std::move(form),
 				this->auth_.GetProxies(),
@@ -85,7 +85,7 @@ liboai::Response liboai::Audio::translate(const std::filesystem::path& file, con
 
 	Response res;
 	res = this->Request(
-		Method::HTTP_POST, "/audio/translations", "multipart/form-data",
+		Method::HTTP_POST, this->openai_root_, "/audio/translations", "multipart/form-data",
 		this->auth_.GetAuthorizationHeaders(),
 		std::move(form),
 		this->auth_.GetProxies(),
@@ -117,7 +117,7 @@ liboai::FutureResponse liboai::Audio::translate_async(const std::filesystem::pat
 	return std::async(
 		std::launch::async, [&, form]() -> liboai::Response {
 			return this->Request(
-				Method::HTTP_POST, "/audio/translations", "multipart/form-data",
+				Method::HTTP_POST, this->openai_root_, "/audio/translations", "multipart/form-data",
 				this->auth_.GetAuthorizationHeaders(),
 				std::move(form),
 				this->auth_.GetProxies(),

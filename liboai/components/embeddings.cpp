@@ -8,7 +8,7 @@ liboai::Response liboai::Embeddings::create(const std::string& model_id, std::op
 
 	Response res;
 	res = this->Request(
-		Method::HTTP_POST, "/embeddings", "application/json",
+		Method::HTTP_POST, this->openai_root_, "/embeddings", "application/json",
 		this->auth_.GetAuthorizationHeaders(),
 		netimpl::components::Body {
 			jcon.dump()
@@ -30,7 +30,7 @@ liboai::FutureResponse liboai::Embeddings::create_async(const std::string& model
 	return std::async(
 		std::launch::async, [&, jcon]() -> liboai::Response {
 			return this->Request(
-				Method::HTTP_POST, "/embeddings", "application/json",
+				Method::HTTP_POST, this->openai_root_, "/embeddings", "application/json",
 				this->auth_.GetAuthorizationHeaders(),
 				netimpl::components::Body {
 					jcon.dump()

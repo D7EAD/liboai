@@ -29,6 +29,7 @@
 */
 
 #include "components/audio.h"
+#include "components/azure.h"
 #include "components/chat.h"
 #include "components/completions.h"
 #include "components/edits.h"
@@ -55,6 +56,12 @@ namespace liboai {
 			*/
 			std::unique_ptr<liboai::Audio> Audio = std::make_unique<liboai::Audio>();
 
+			/*
+				@brief A pointer to the Azure component class that
+					provides access to its API endpoints.
+			*/
+			std::unique_ptr<liboai::Azure> Azure = std::make_unique<liboai::Azure>();
+			
 			/*
 				@brief A pointer to the Chat component class that
 					provides access to its OpenAI API endpoints.
@@ -109,7 +116,7 @@ namespace liboai {
 			*/
 			std::unique_ptr<liboai::Moderations> Moderation = std::make_unique<liboai::Moderations>();
 		
-		public:
+		public:			
 			/*
 				@brief Convenience reference to the Authorization class
 					singleton used to set authorization information.
