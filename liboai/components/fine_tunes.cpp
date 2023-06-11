@@ -192,7 +192,7 @@ liboai::Response liboai::FineTunes::remove(const std::string& model) const& noex
 	return res;
 }
 
-liboai::FutureResponse liboai::FineTunes::remove_async(const std::string& model) const& noexcept(false) {
+liboai::FutureResponse liboai::FineTunes::remove_async(const std::string& model) const & noexcept(false) {
 	return std::async(
 		std::launch::async, [&]() -> liboai::Response {
 			return this->Request(

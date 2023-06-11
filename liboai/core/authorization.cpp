@@ -12,7 +12,7 @@ bool liboai::Authorization::SetKey(std::string_view key) noexcept {
 	return false;
 }
 
-LIBOAI_EXPORT bool liboai::Authorization::SetAzureKey(std::string_view key) noexcept {
+bool liboai::Authorization::SetAzureKey(std::string_view key) noexcept {
 	if (!key.empty()) {
 		this->key_ = key;
 		if (this->azure_auth_headers_.size() > 0) {
@@ -24,7 +24,7 @@ LIBOAI_EXPORT bool liboai::Authorization::SetAzureKey(std::string_view key) noex
 	return false;
 }
 
-LIBOAI_EXPORT bool liboai::Authorization::SetAzureKeyAD(std::string_view key) noexcept {
+bool liboai::Authorization::SetAzureKeyAD(std::string_view key) noexcept {
 	if (!key.empty()) {
 		this->key_ = key;
 		if (this->azure_auth_headers_.size() > 0) {
@@ -51,7 +51,7 @@ bool liboai::Authorization::SetKeyFile(const std::filesystem::path& path) noexce
 	return false;
 }
 
-LIBOAI_EXPORT bool liboai::Authorization::SetAzureKeyFile(const std::filesystem::path& path) noexcept {
+bool liboai::Authorization::SetAzureKeyFile(const std::filesystem::path& path) noexcept {
 	if (std::filesystem::exists(path) && std::filesystem::is_regular_file(path) && std::filesystem::file_size(path) > 0) {
 		std::ifstream file(path);
 		if (file.is_open()) {
@@ -66,7 +66,7 @@ LIBOAI_EXPORT bool liboai::Authorization::SetAzureKeyFile(const std::filesystem:
 	return false;
 }
 
-LIBOAI_EXPORT bool liboai::Authorization::SetAzureKeyFileAD(const std::filesystem::path& path) noexcept {
+bool liboai::Authorization::SetAzureKeyFileAD(const std::filesystem::path& path) noexcept {
 	if (std::filesystem::exists(path) && std::filesystem::is_regular_file(path) && std::filesystem::file_size(path) > 0) {
 		std::ifstream file(path);
 		if (file.is_open()) {
@@ -97,7 +97,7 @@ bool liboai::Authorization::SetKeyEnv(std::string_view var) noexcept {
 	return false;
 }
 
-LIBOAI_EXPORT bool liboai::Authorization::SetAzureKeyEnv(std::string_view var) noexcept {
+bool liboai::Authorization::SetAzureKeyEnv(std::string_view var) noexcept {
 	if (!var.empty()) {
 		const char* key = std::getenv(var.data());
 		if (key != nullptr) {
@@ -113,7 +113,7 @@ LIBOAI_EXPORT bool liboai::Authorization::SetAzureKeyEnv(std::string_view var) n
 	return false;
 }
 
-LIBOAI_EXPORT bool liboai::Authorization::SetAzureKeyEnvAD(std::string_view var) noexcept {
+bool liboai::Authorization::SetAzureKeyEnvAD(std::string_view var) noexcept {
 	if (!var.empty()) {
 		const char* key = std::getenv(var.data());
 		if (key != nullptr) {
