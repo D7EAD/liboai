@@ -674,7 +674,7 @@ void liboai::netimpl::Session::SetUrl(const components::Url& url) {
 
 	#if defined(LIBOAI_DEBUG)
 		_liboai_dbg(
-			"[dbg] [@%s] Set URL for Session (0x%p) to \"%s\".\n",
+			"[dbg] [@%s] Set base URL for Session (0x%p) to \"%s\".\n",
 			__func__, this, this->url_.c_str()
 		);
 	#endif
