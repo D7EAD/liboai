@@ -55,8 +55,8 @@ namespace liboai {
 				std::optional<uint16_t> best_of = std::nullopt,
 				std::optional<std::unordered_map<std::string, int8_t>> logit_bias = std::nullopt,
 				std::optional<std::string> user = std::nullopt
-			);
-
+			) const & noexcept(false);
+			
 			/*
 				@brief Given a prompt, the model will asynchronously return
 				    one or more	predicted completions, and can also return the
@@ -89,7 +89,7 @@ namespace liboai {
 				std::optional<uint16_t> best_of = std::nullopt,
 				std::optional<std::unordered_map<std::string, int8_t>> logit_bias = std::nullopt,
 				std::optional<std::string> user = std::nullopt
-			);
+			) const & noexcept(false);
 
 			/*
 				@brief Creates an embedding vector representing the input text.
@@ -110,7 +110,7 @@ namespace liboai {
 				const std::string& api_version,
 				const std::string& input,
 				std::optional<std::string> user = std::nullopt
-			);
+			) const & noexcept(false);
 
 			/*
 				@brief Asynchronously creates an embedding vector representing the input text.
@@ -131,7 +131,7 @@ namespace liboai {
 				const std::string& api_version,
 				const std::string& input,
 				std::optional<std::string> user = std::nullopt
-			);
+			) const & noexcept(false);
 
 			/*
 				@brief Creates a completion for the chat message.
@@ -159,7 +159,7 @@ namespace liboai {
 				std::optional<float> frequency_penalty = std::nullopt,
 				std::optional<std::unordered_map<std::string, int8_t>> logit_bias = std::nullopt,
 				std::optional<std::string> user = std::nullopt
-			);
+			) const & noexcept(false);
 
 			/*
 				@brief Asynchronously creates a completion for the chat message.
@@ -187,7 +187,7 @@ namespace liboai {
 				std::optional<float> frequency_penalty = std::nullopt,
 				std::optional<std::unordered_map<std::string, int8_t>> logit_bias = std::nullopt,
 				std::optional<std::string> user = std::nullopt
-			);
+			) const & noexcept(false);
 
 			/*
 				@brief Generate a batch of images from a text caption.
@@ -208,7 +208,7 @@ namespace liboai {
 				const std::string& prompt,
 				std::optional<uint8_t> n = std::nullopt,
 				std::optional<std::string> size = std::nullopt
-			);
+			) const & noexcept(false);
 
 			/*
 				@brief Asynchronously generate a batch of images from a text caption.
@@ -229,7 +229,7 @@ namespace liboai {
 				const std::string& prompt,
 				std::optional<uint8_t> n = std::nullopt,
 				std::optional<std::string> size = std::nullopt
-			);
+			) const & noexcept(false);
 
 			/*
 				@brief Retrieve the results (URL) of a previously called image generation operation.
@@ -245,7 +245,7 @@ namespace liboai {
 				const std::string& resource_name,
 				const std::string& api_version,
 				const std::string& operation_id
-			);
+			) const & noexcept(false);
 
 			/*
 				@brief Asynchronously retrieve the results (URL) of a previously called image generation operation.
@@ -261,7 +261,7 @@ namespace liboai {
 				const std::string& resource_name,
 				const std::string& api_version,
 				const std::string& operation_id
-			);
+			) const & noexcept(false);
 
 			/*
 				@brief Deletes the corresponding image from the Azure server.
@@ -277,7 +277,7 @@ namespace liboai {
 				const std::string& resource_name,
 				const std::string& api_version,
 				const std::string& operation_id
-			);
+			) const & noexcept(false);
 
 			/*
 				@brief Asynchronously deletes the corresponding image from the Azure server.
@@ -293,7 +293,7 @@ namespace liboai {
 				const std::string& resource_name,
 				const std::string& api_version,
 				const std::string& operation_id
-			);
+			) const & noexcept(false);
 
 		private:
 			Authorization& auth_ = Authorization::Authorizer();
