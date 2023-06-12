@@ -7,7 +7,7 @@ liboai::Response liboai::Moderations::create(const std::string& input, std::opti
 	
 	Response res;
 	res = this->Request(
-		Method::HTTP_POST, "/moderations", "application/json",
+		Method::HTTP_POST, this->openai_root_, "/moderations", "application/json",
 		this->auth_.GetAuthorizationHeaders(),
 		netimpl::components::Body {
 			jcon.dump()
@@ -28,7 +28,7 @@ liboai::FutureResponse liboai::Moderations::create_async(const std::string& inpu
 	return std::async(
 		std::launch::async, [&, jcon]() -> liboai::Response {
 			return this->Request(
-				Method::HTTP_POST, "/moderations", "application/json",
+				Method::HTTP_POST, this->openai_root_, "/moderations", "application/json",
 				this->auth_.GetAuthorizationHeaders(),
 				netimpl::components::Body {
 					jcon.dump()

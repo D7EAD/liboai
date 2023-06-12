@@ -220,7 +220,7 @@ liboai::Response liboai::ChatCompletion::create(const std::string& model, const 
 
 	Response res;
 	res = this->Request(
-		Method::HTTP_POST, "/chat/completions", "application/json",
+		Method::HTTP_POST, this->openai_root_, "/chat/completions", "application/json",
 		this->auth_.GetAuthorizationHeaders(),
 		netimpl::components::Body {
 			jcon.dump()
@@ -253,9 +253,9 @@ liboai::FutureResponse liboai::ChatCompletion::create_async(const std::string& m
 	}
 
 	return std::async(
-		std::launch::async, [&, jcon]() -> liboai::Response {
+		std::launch::async, [&, jcon, stream]() -> liboai::Response {
 			return this->Request(
-				Method::HTTP_POST, "/chat/completions", "application/json",
+				Method::HTTP_POST, this->openai_root_, "/chat/completions", "application/json",
 				this->auth_.GetAuthorizationHeaders(),
 				netimpl::components::Body {
 					jcon.dump()

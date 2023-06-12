@@ -11,7 +11,7 @@ liboai::Response liboai::Edits::create(const std::string& model_id, std::optiona
 
 	Response res;
 	res = this->Request(
-		Method::HTTP_POST, "/edits", "application/json",
+		Method::HTTP_POST, this->openai_root_, "/edits", "application/json",
 		this->auth_.GetAuthorizationHeaders(),
 		netimpl::components::Body {
 			jcon.dump()
@@ -36,7 +36,7 @@ liboai::FutureResponse liboai::Edits::create_async(const std::string& model_id, 
 	return std::async(
 		std::launch::async, [&, jcon]() -> liboai::Response {
 			return this->Request(
-				Method::HTTP_POST, "/edits", "application/json",
+				Method::HTTP_POST, this->openai_root_, "/edits", "application/json",
 				this->auth_.GetAuthorizationHeaders(),
 				netimpl::components::Body {
 					jcon.dump()

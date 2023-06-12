@@ -7,7 +7,7 @@ int main() {
   if (oai.auth.SetKeyEnv("OPENAI_API_KEY")) {
     try {
       // call async method; returns a future
-      auto fut = oai.Model->remove_async(
+      auto fut = oai.FineTune->remove_async(
         "curie:ft-acmeco-2021-03-03-21-44-20"
       );
 

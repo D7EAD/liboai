@@ -10,7 +10,7 @@ liboai::Response liboai::Images::create(const std::string& prompt, std::optional
 
 	Response res;
 	res = this->Request(
-		Method::HTTP_POST, "/images/generations", "application/json",
+		Method::HTTP_POST, this->openai_root_, "/images/generations", "application/json",
 		this->auth_.GetAuthorizationHeaders(),
 		netimpl::components::Body {
 			jcon.dump()
@@ -34,7 +34,7 @@ liboai::FutureResponse liboai::Images::create_async(const std::string& prompt, s
 	return std::async(
 		std::launch::async, [&, jcon]() -> liboai::Response {
 			return this->Request(
-				Method::HTTP_POST, "/images/generations", "application/json",
+				Method::HTTP_POST, this->openai_root_, "/images/generations", "application/json",
 				this->auth_.GetAuthorizationHeaders(),
 				netimpl::components::Body {
 					jcon.dump()
@@ -78,7 +78,7 @@ liboai::Response liboai::Images::create_edit(const std::filesystem::path& image,
 	
 	Response res;
 	res = this->Request(
-		Method::HTTP_POST, "/images/edits", "multipart/form-data",
+		Method::HTTP_POST, this->openai_root_, "/images/edits", "multipart/form-data",
 		this->auth_.GetAuthorizationHeaders(),
 		std::move(form),
 		this->auth_.GetProxies(),
@@ -121,7 +121,7 @@ liboai::FutureResponse liboai::Images::create_edit_async(const std::filesystem::
 	return std::async(
 		std::launch::async, [&, form]() -> liboai::Response {
 			return this->Request(
-				Method::HTTP_POST, "/images/edits", "multipart/form-data",
+				Method::HTTP_POST, this->openai_root_, "/images/edits", "multipart/form-data",
 				this->auth_.GetAuthorizationHeaders(),
 				std::move(form),
 				this->auth_.GetProxies(),
@@ -152,7 +152,7 @@ liboai::Response liboai::Images::create_variation(const std::filesystem::path& i
 	
 	Response res;
 	res = this->Request(
-		Method::HTTP_POST, "/images/variations", "multipart/form-data",
+		Method::HTTP_POST, this->openai_root_, "/images/variations", "multipart/form-data",
 		this->auth_.GetAuthorizationHeaders(),
 		std::move(form),
 		this->auth_.GetProxies(),
@@ -184,7 +184,7 @@ liboai::FutureResponse liboai::Images::create_variation_async(const std::filesys
 	return std::async(
 		std::launch::async, [&, form]() -> liboai::Response {
 			return this->Request(
-				Method::HTTP_POST, "/images/variations", "multipart/form-data",
+				Method::HTTP_POST, this->openai_root_, "/images/variations", "multipart/form-data",
 				this->auth_.GetAuthorizationHeaders(),
 				std::move(form),
 				this->auth_.GetProxies(),

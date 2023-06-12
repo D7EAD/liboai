@@ -74,8 +74,8 @@ namespace liboai {
 						return res.status_code == 200;
 					}
 				);
-			}			
-
+			}
+			
 		protected:
 			enum class Method : uint8_t {
 				HTTP_GET,     // GET
@@ -87,6 +87,7 @@ namespace liboai {
 				std::enable_if_t<std::conjunction_v<std::negation<std::is_lvalue_reference<_Params>>...>, int> = 0>
 			inline Response Request(
 				const Method& http_method,
+				const std::string& root,
 				const std::string& endpoint,
 				const std::string& content_type,
 				std::optional<netimpl::components::Header> headers = std::nullopt,
@@ -104,14 +105,14 @@ namespace liboai {
 				Response res;
 				if constexpr (sizeof...(parameters) > 0) {
 					res = Network::MethodSchema<netimpl::components::Header&&, _Params&&...>::_method[static_cast<uint8_t>(http_method)](
-						netimpl::components::Url { this->root_ + endpoint },
+						netimpl::components::Url { root + endpoint },
 						std::move(_headers),
 						std::forward<_Params>(parameters)...
 					);
 				}
 				else {
 					res = Network::MethodSchema<netimpl::components::Header&&>::_method[static_cast<uint8_t>(http_method)](
-						netimpl::components::Url { this->root_ + endpoint },
+						netimpl::components::Url { root + endpoint },
 						std::move(_headers)
 					);
 				}			
@@ -132,6 +133,9 @@ namespace liboai {
 				}
 				return false;
 			}
+			
+			const std::string openai_root_ = "https://api.openai.com/v1";
+			const std::string azure_root_ = ".openai.azure.com/openai";
 
 		private:
 			template <class... T> struct MethodSchema {
@@ -141,6 +145,5 @@ namespace liboai {
 					netimpl::Delete <netimpl::components::Url&&, T...>
 				};
 			};
-			const std::string root_ = "https://api.openai.com/v1";
 	};
 }

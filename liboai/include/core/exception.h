@@ -11,6 +11,10 @@
 #include <exception>
 #include <memory>
 
+#if defined(LIBOAI_DEBUG)
+	#define _liboai_dbg(fmt, ...) printf(fmt, __VA_ARGS__);
+#endif
+
 namespace liboai {
 	namespace exception {
 		enum class EType : uint8_t {

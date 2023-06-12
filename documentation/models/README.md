@@ -40,24 +40,6 @@ liboai::FutureResponse retrieve_async(
 ) const & noexcept(false);
 ```
 
-<h3>Delete Fine-Tune Model</h3>
-<p>Delete a fine-tuned model. You must have the Owner role in your organization. Returns a <code>liboai::Response</code> containing response data.</p>
-
-```cpp
-liboai::Response remove(
-  const std::string& model
-) const & noexcept(false);
-```
-
-<h3>Delete Fine-Tune Model (async)</h3>
-<p>Asynchronously delete a fine-tuned model. You must have the Owner role in your organization. Returns a <code>liboai::FutureResponse</code> containing future response data.</p>
-
-```cpp
-liboai::FutureResponse remove_async(
-  const std::string& model
-) const & noexcept(false);
-```
-
 <br>
 <h2>Example Usage</h2>
 <p>For example usage of the above function(s), please refer to the <a href="./examples">examples</a> folder.

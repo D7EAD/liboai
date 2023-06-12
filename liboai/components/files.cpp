@@ -3,7 +3,7 @@
 liboai::Response liboai::Files::list() const & noexcept(false) {
 	Response res;
 	res = this->Request(
-		Method::HTTP_GET, "/files", "application/json",
+		Method::HTTP_GET, this->openai_root_, "/files", "application/json",
 		this->auth_.GetAuthorizationHeaders(),
 		this->auth_.GetProxies(),
 		this->auth_.GetProxyAuth(),
@@ -17,7 +17,7 @@ liboai::FutureResponse liboai::Files::list_async() const & noexcept(false) {
 	return std::async(
 		std::launch::async, [&]() -> liboai::Response {
 			return this->Request(
-				Method::HTTP_GET, "/files", "application/json",
+				Method::HTTP_GET, this->openai_root_, "/files", "application/json",
 				this->auth_.GetAuthorizationHeaders(),
 				this->auth_.GetProxies(),
 				this->auth_.GetProxyAuth(),
@@ -43,7 +43,7 @@ liboai::Response liboai::Files::create(const std::filesystem::path& file, const 
 	
 	Response res;
 	res = this->Request(
-		Method::HTTP_POST, "/files", "multipart/form-data",
+		Method::HTTP_POST, this->openai_root_, "/files", "multipart/form-data",
 		this->auth_.GetAuthorizationHeaders(),
 		std::move(form),
 		this->auth_.GetProxies(),
@@ -71,7 +71,7 @@ liboai::FutureResponse liboai::Files::create_async(const std::filesystem::path& 
 	return std::async(
 		std::launch::async, [&, form]() -> liboai::Response {
 			return this->Request(
-				Method::HTTP_POST, "/files", "multipart/form-data",
+				Method::HTTP_POST, this->openai_root_, "/files", "multipart/form-data",
 				this->auth_.GetAuthorizationHeaders(),
 				std::move(form),
 				this->auth_.GetProxies(),
@@ -85,7 +85,7 @@ liboai::FutureResponse liboai::Files::create_async(const std::filesystem::path& 
 liboai::Response liboai::Files::remove(const std::string& file_id) const & noexcept(false) {
 	Response res;
 	res = this->Request(
-		Method::HTTP_DELETE, "/files/" + file_id, "application/json",
+		Method::HTTP_DELETE, this->openai_root_, "/files/" + file_id, "application/json",
 		this->auth_.GetAuthorizationHeaders(),
 		this->auth_.GetProxies(),
 		this->auth_.GetProxyAuth(),
@@ -99,7 +99,7 @@ liboai::FutureResponse liboai::Files::remove_async(const std::string& file_id) c
 	return std::async(
 		std::launch::async, [&]() -> liboai::Response {
 			return this->Request(
-				Method::HTTP_DELETE, "/files/" + file_id, "application/json",
+				Method::HTTP_DELETE, this->openai_root_, "/files/" + file_id, "application/json",
 				this->auth_.GetAuthorizationHeaders(),
 				this->auth_.GetProxies(),
 				this->auth_.GetProxyAuth(),
@@ -112,7 +112,7 @@ liboai::FutureResponse liboai::Files::remove_async(const std::string& file_id) c
 liboai::Response liboai::Files::retrieve(const std::string& file_id) const & {
 	Response res;
 	res = this->Request(
-		Method::HTTP_GET, "/files/" + file_id, "application/json",
+		Method::HTTP_GET, this->openai_root_, "/files/" + file_id, "application/json",
 		this->auth_.GetAuthorizationHeaders(),
 		this->auth_.GetProxies(),
 		this->auth_.GetProxyAuth(),
@@ -126,7 +126,7 @@ liboai::FutureResponse liboai::Files::retrieve_async(const std::string& file_id)
 	return std::async(
 		std::launch::async, [&]() -> liboai::Response {
 			return this->Request(
-				Method::HTTP_GET, "/files/" + file_id, "application/json",
+				Method::HTTP_GET, this->openai_root_, "/files/" + file_id, "application/json",
 				this->auth_.GetAuthorizationHeaders(),
 				this->auth_.GetProxies(),
 				this->auth_.GetProxyAuth(),

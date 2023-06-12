@@ -203,6 +203,30 @@ namespace liboai {
 				std::optional<std::function<bool(std::string, intptr_t)>> stream = std::nullopt
 			) const & noexcept(false);
 
+			/*
+				@brief Delete a fine-tuned model. You must have the Owner role in your organization.
+
+				@param *model   The model to delete
+
+				@return A liboai::Response future containing the image(s)
+					data in JSON format.
+			*/
+			LIBOAI_EXPORT liboai::Response remove(
+				const std::string& model
+			) const & noexcept(false);
+
+			/*
+				@brief Asynchronously deletes a fine-tuned model. You must have the Owner role in your organization.
+
+				@param *model   The model to delete
+
+				@return A liboai::Response future containing the image(s)
+					data in JSON format.
+			*/
+			LIBOAI_EXPORT liboai::FutureResponse remove_async(
+				const std::string& model
+			) const & noexcept(false);
+
 		private:
 			Authorization& auth_ = Authorization::Authorizer();
 	};
