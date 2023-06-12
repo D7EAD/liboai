@@ -7,6 +7,7 @@ find_package(CURL CONFIG REQUIRED)
 
 add_library(oai
 components/audio.cpp
+components/azure.cpp
 components/chat.cpp
 components/completions.cpp
 components/edits.cpp
@@ -31,6 +32,7 @@ install(TARGETS oai DESTINATION lib)
 #install(FILES liboai.h DESTINATION include)
 install(FILES
 include/components/audio.h
+include/components/azure.h
 include/components/chat.h
 include/components/completions.h
 include/components/edits.h
