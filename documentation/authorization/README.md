@@ -49,7 +49,7 @@ bool SetKeyFile(const std::filesystem::path& path) noexcept;
 bool SetAzureKeyFile(const std::filesystem::path& path) noexcept;
 ```
 
-<h3>Set Active Directory zure API Key (File)</h3>
+<h3>Set Active Directory Azure API Key (File)</h3>
 <p>Sets the Active Directory Azure API key to use in subsequent component calls from data found in file at path.</p>
 
 ```cpp
