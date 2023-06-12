@@ -1168,10 +1168,12 @@ void liboai::netimpl::Session::SetHeader(const components::Header& header) {
         }
     }
 
-    curl_slist* temp = curl_slist_append(this->headers, "Transfer-Encoding:chunked");
-    if (temp) {
-		this->headers = temp;
-    }
+	curl_slist* temp;
+//  Causes cURL error for simple GET requests
+//    curl_slist* temp = curl_slist_append(this->headers, "Transfer-Encoding: chunked");
+//    if (temp) {
+//		this->headers = temp;
+//    }
 
 	// remove preset curl headers for files >1MB
     temp = curl_slist_append(this->headers, "Expect:");

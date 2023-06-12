@@ -133,6 +133,19 @@ namespace liboai {
 			LIBOAI_EXPORT bool Update(const Response& response) & noexcept(false);
 
 			/*
+				@brief Appends stream data (SSEs) from streamed methods.
+					This method updates the conversation given a token from a
+					streamed method. This method should be used when using
+					streamed methods such as ChatCompletion::create or 
+					create_async with a callback supplied. This function should
+					be called from within the stream's callback function
+					receiving the SSEs.
+
+					@param *token The token to update the conversation with.
+			*/
+//			LIBOAI_EXPORT bool AppendToken(std::string_view token) & noexcept(false);
+
+			/*
 				@brief Returns the raw JSON dump of the internal conversation object
 					in string format.
 			*/
