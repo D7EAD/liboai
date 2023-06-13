@@ -53,20 +53,23 @@ liboai::FutureResponse liboai::Completions::create_async(const std::string& mode
 	jcon.push_back("best_of", std::move(best_of));
 	jcon.push_back("logit_bias", std::move(logit_bias));
 	jcon.push_back("user", std::move(user));
+	
+	auto _fn = [this](
+		liboai::JsonConstructor&& jcon,
+		std::optional<std::function<bool(std::string, intptr_t)>>&& stream
+	) -> liboai::Response {
+		return this->Request(
+			Method::HTTP_POST, this->openai_root_, "/completions", "application/json",
+			this->auth_.GetAuthorizationHeaders(),
+			netimpl::components::Body {
+				jcon.dump()
+			},
+			stream ? netimpl::components::WriteCallback{std::move(stream.value())} : netimpl::components::WriteCallback{},
+			this->auth_.GetProxies(),
+			this->auth_.GetProxyAuth(),
+			this->auth_.GetMaxTimeout()
+		);
+	};
 
-	return std::async(
-		std::launch::async, [&, jcon, stream]() -> liboai::Response {
-			return this->Request(
-				Method::HTTP_POST, this->openai_root_, "/completions", "application/json",
-				this->auth_.GetAuthorizationHeaders(),
-				netimpl::components::Body {
-					jcon.dump()
-				},
-				stream ? netimpl::components::WriteCallback{std::move(stream.value())} : netimpl::components::WriteCallback{},
-				this->auth_.GetProxies(),
-				this->auth_.GetProxyAuth(),
-				this->auth_.GetMaxTimeout()
-			);
-		}
-	);
+	return std::async(std::launch::async, _fn, std::move(jcon), std::move(stream));
 }

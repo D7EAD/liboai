@@ -45,20 +45,20 @@ liboai::FutureResponse liboai::FineTunes::create_async(const std::string& traini
 	jcon.push_back("classification_betas", std::move(classification_betas));
 	jcon.push_back("suffix", std::move(suffix));
 
-	return std::async(
-		std::launch::async, [&]() -> liboai::Response {
-			return this->Request(
-				Method::HTTP_POST, this->openai_root_, "/fine-tunes", "application/json",
-				this->auth_.GetAuthorizationHeaders(),
-				netimpl::components::Body {
-					jcon.dump()
-				},
-				this->auth_.GetProxies(),
-				this->auth_.GetProxyAuth(),
-				this->auth_.GetMaxTimeout()
-			);
-		}
-	);
+	auto _fn = [this](liboai::JsonConstructor&& jcon) -> liboai::Response {
+		return this->Request(
+			Method::HTTP_POST, this->openai_root_, "/fine-tunes", "application/json",
+			this->auth_.GetAuthorizationHeaders(),
+			netimpl::components::Body {
+				jcon.dump()
+			},
+			this->auth_.GetProxies(),
+			this->auth_.GetProxyAuth(),
+			this->auth_.GetMaxTimeout()
+		);
+	};
+
+	return std::async(std::launch::async, _fn, std::move(jcon));
 }
 
 liboai::Response liboai::FineTunes::list() const& {
@@ -75,17 +75,17 @@ liboai::Response liboai::FineTunes::list() const& {
 }
 
 liboai::FutureResponse liboai::FineTunes::list_async() const & noexcept(false) {
-	return std::async(
-		std::launch::async, [&]() -> liboai::Response {
-			return this->Request(
-				Method::HTTP_GET, this->openai_root_, "/fine-tunes", "application/json",
-				this->auth_.GetAuthorizationHeaders(),
-				this->auth_.GetProxies(),
-				this->auth_.GetProxyAuth(),
-				this->auth_.GetMaxTimeout()
-			);
-		}
-	);
+	auto _fn = [this]() -> liboai::Response {
+		return this->Request(
+			Method::HTTP_GET, this->openai_root_, "/fine-tunes", "application/json",
+			this->auth_.GetAuthorizationHeaders(),
+			this->auth_.GetProxies(),
+			this->auth_.GetProxyAuth(),
+			this->auth_.GetMaxTimeout()
+		);
+	};
+
+	return std::async(std::launch::async, _fn);
 }
 
 liboai::Response liboai::FineTunes::retrieve(const std::string& fine_tune_id) const& {
@@ -102,17 +102,17 @@ liboai::Response liboai::FineTunes::retrieve(const std::string& fine_tune_id) co
 }
 
 liboai::FutureResponse liboai::FineTunes::retrieve_async(const std::string& fine_tune_id) const & noexcept(false) {
-	return std::async(
-		std::launch::async, [&]() -> liboai::Response {
-			return this->Request(
-				Method::HTTP_GET, this->openai_root_, "/fine-tunes/" + fine_tune_id, "application/json",
-				this->auth_.GetAuthorizationHeaders(),
-				this->auth_.GetProxies(),
-				this->auth_.GetProxyAuth(),
-				this->auth_.GetMaxTimeout()
-			);
-		}
-	);
+	auto _fn = [this](const std::string& fine_tune_id) -> liboai::Response {
+		return this->Request(
+			Method::HTTP_GET, this->openai_root_, "/fine-tunes/" + fine_tune_id, "application/json",
+			this->auth_.GetAuthorizationHeaders(),
+			this->auth_.GetProxies(),
+			this->auth_.GetProxyAuth(),
+			this->auth_.GetMaxTimeout()
+		);
+	};
+
+	return std::async(std::launch::async, _fn, fine_tune_id);
 }
 
 liboai::Response liboai::FineTunes::cancel(const std::string& fine_tune_id) const& {	
@@ -129,17 +129,17 @@ liboai::Response liboai::FineTunes::cancel(const std::string& fine_tune_id) cons
 }
 
 liboai::FutureResponse liboai::FineTunes::cancel_async(const std::string& fine_tune_id) const & noexcept(false) {
-	return std::async(
-		std::launch::async, [&]() -> liboai::Response {
-			return this->Request(
-				Method::HTTP_POST, this->openai_root_, "/fine-tunes/" + fine_tune_id + "/cancel", "application/json",
-				this->auth_.GetAuthorizationHeaders(),
-				this->auth_.GetProxies(),
-				this->auth_.GetProxyAuth(),
-				this->auth_.GetMaxTimeout()
-			);
-		}
-	);
+	auto _fn = [this](const std::string& fine_tune_id) -> liboai::Response {
+		return this->Request(
+			Method::HTTP_POST, this->openai_root_, "/fine-tunes/" + fine_tune_id + "/cancel", "application/json",
+			this->auth_.GetAuthorizationHeaders(),
+			this->auth_.GetProxies(),
+			this->auth_.GetProxyAuth(),
+			this->auth_.GetMaxTimeout()
+		);
+	};
+	
+	return std::async(std::launch::async, _fn, fine_tune_id);
 }
 
 liboai::Response liboai::FineTunes::list_events(const std::string& fine_tune_id, std::optional<std::function<bool(std::string, intptr_t)>> stream) const & noexcept(false) {
@@ -163,20 +163,24 @@ liboai::Response liboai::FineTunes::list_events(const std::string& fine_tune_id,
 liboai::FutureResponse liboai::FineTunes::list_events_async(const std::string& fine_tune_id, std::optional<std::function<bool(std::string, intptr_t)>> stream) const & noexcept(false) {
 	netimpl::components::Parameters params;
 	stream ? params.Add({ "stream", "true"}) : void();
+	
+	auto _fn = [this](
+		netimpl::components::Parameters&& params,
+		const std::string& fine_tune_id,
+		std::optional<std::function<bool(std::string, intptr_t)>>&& stream
+	) -> liboai::Response {
+		return this->Request(
+			Method::HTTP_GET, this->openai_root_, "/fine-tunes/" + fine_tune_id + "/events", "application/json",
+			this->auth_.GetAuthorizationHeaders(),
+			std::move(params),
+			stream ? netimpl::components::WriteCallback{std::move(stream.value())} : netimpl::components::WriteCallback{},
+			this->auth_.GetProxies(),
+			this->auth_.GetProxyAuth(),
+			this->auth_.GetMaxTimeout()
+		);
+	};
 
-	return std::async(
-		std::launch::async, [&, params, stream]() -> liboai::Response {
-			return this->Request(
-				Method::HTTP_GET, this->openai_root_, "/fine-tunes/" + fine_tune_id + "/events", "application/json",
-				this->auth_.GetAuthorizationHeaders(),
-				std::move(params),
-				stream ? netimpl::components::WriteCallback{std::move(stream.value())} : netimpl::components::WriteCallback{},
-				this->auth_.GetProxies(),
-				this->auth_.GetProxyAuth(),
-				this->auth_.GetMaxTimeout()
-			);
-		}
-	);
+	return std::async(std::launch::async, _fn, std::move(params), fine_tune_id, std::move(stream));
 }
 
 liboai::Response liboai::FineTunes::remove(const std::string& model) const& noexcept(false) {
@@ -193,15 +197,15 @@ liboai::Response liboai::FineTunes::remove(const std::string& model) const& noex
 }
 
 liboai::FutureResponse liboai::FineTunes::remove_async(const std::string& model) const & noexcept(false) {
-	return std::async(
-		std::launch::async, [&]() -> liboai::Response {
-			return this->Request(
-				Method::HTTP_DELETE, this->openai_root_, "/models/" + model, "application/json",
-				this->auth_.GetAuthorizationHeaders(),
-				this->auth_.GetProxies(),
-				this->auth_.GetProxyAuth(),
-				this->auth_.GetMaxTimeout()
-			);
-		}
-	);
+	auto _fn = [this](const std::string& model) -> liboai::Response {
+		return this->Request(
+			Method::HTTP_DELETE, this->openai_root_, "/models/" + model, "application/json",
+			this->auth_.GetAuthorizationHeaders(),
+			this->auth_.GetProxies(),
+			this->auth_.GetProxyAuth(),
+			this->auth_.GetMaxTimeout()
+		);
+	};
+	
+	return std::async(std::launch::async, _fn, model);
 }

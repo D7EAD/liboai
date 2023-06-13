@@ -170,7 +170,27 @@ namespace liboai {
 			};
 
 			struct File final {
+				File(const File& other) {
+					this->filepath = other.filepath;
+					this->overrided_filename = other.overrided_filename;
+				}
+				File(File&& old) noexcept {
+					this->filepath = std::move(old.filepath);
+					this->overrided_filename = std::move(old.overrided_filename);
+				}
 				explicit File(std::string p_filepath, const std::string& p_overrided_filename = {}) : filepath(std::move(p_filepath)), overrided_filename(p_overrided_filename) {}
+
+				File& operator=(const File& other) {
+					this->filepath = other.filepath;
+					this->overrided_filename = other.overrided_filename;
+					return *this;
+				}
+
+				File& operator=(File&& old) noexcept {
+					this->filepath = std::move(old.filepath);
+					this->overrided_filename = std::move(old.overrided_filename);
+					return *this;
+				}
 
 				std::string filepath;
 				std::string overrided_filename;
@@ -183,6 +203,12 @@ namespace liboai {
 			class Files final {
 				public:
 					Files() = default;
+					Files(const Files& other) {
+						this->files = other.files;
+					}
+					Files(Files&& old) noexcept {
+						this->files = std::move(old.files);
+					}
 					Files(const File& p_file) : files{ p_file } {};
 					Files(const std::initializer_list<File>& p_files) : files{ p_files } {};
 					Files(const std::initializer_list<std::string>& p_filepaths) {
@@ -191,6 +217,15 @@ namespace liboai {
 						}
 					};
 					~Files() noexcept = default;
+
+					Files& operator=(const Files& other) {
+						this->files = other.files;
+						return *this;
+					}
+					Files& operator=(Files&& old) noexcept {
+						this->files = std::move(old.files);
+						return *this;
+					}
 
 					using iterator = std::vector<File>::iterator;
 					using const_iterator = std::vector<File>::const_iterator;
@@ -280,11 +315,54 @@ namespace liboai {
 			};
 
 			struct Part final {
+				Part(const Part& other) {
+					this->name = other.name;
+					this->value = other.value;
+					this->content_type = other.content_type;
+					this->data = other.data;
+					this->datalen = other.datalen;
+					this->is_file = other.is_file;
+					this->is_buffer = other.is_buffer;
+					this->files = other.files;
+				}
+				Part(Part&& old) noexcept {
+					this->name = std::move(old.name);
+					this->value = std::move(old.value);
+					this->content_type = std::move(old.content_type);
+					this->data = old.data;
+					this->datalen = old.datalen;
+					this->is_file = old.is_file;
+					this->is_buffer = old.is_buffer;
+					this->files = std::move(old.files);
+				}
 				Part(const std::string& p_name, const std::string& p_value, const std::string& p_content_type = {}) : name{ p_name }, value{ p_value }, content_type{ p_content_type }, is_file{ false }, is_buffer{ false } {}
 				Part(const std::string& p_name, const std::int32_t& p_value, const std::string& p_content_type = {}) : name{ p_name }, value{ std::to_string(p_value) }, content_type{ p_content_type }, is_file{ false }, is_buffer{ false } {}
 				Part(const std::string& p_name, const Files& p_files, const std::string& p_content_type = {}) : name{ p_name }, value{}, content_type{ p_content_type }, is_file{ true }, is_buffer{ false }, files{ p_files } {}
 				Part(const std::string& p_name, Files&& p_files, const std::string& p_content_type = {}) : name{ p_name }, value{}, content_type{ p_content_type }, is_file{ true }, is_buffer{ false }, files{ std::move(p_files) } {}
 				Part(const std::string& p_name, const Buffer& buffer, const std::string& p_content_type = {}) : name{ p_name }, value{ buffer.filename.string() }, content_type{ p_content_type }, data{ buffer.data }, datalen{ buffer.datalen }, is_file{ false }, is_buffer{ true } {}
+
+				Part& operator=(const Part& other) {
+					this->name = other.name;
+					this->value = other.value;
+					this->content_type = other.content_type;
+					this->data = other.data;
+					this->datalen = other.datalen;
+					this->is_file = other.is_file;
+					this->is_buffer = other.is_buffer;
+					this->files = other.files;
+					return *this;
+				}
+				Part& operator=(Part&& old) noexcept {
+					this->name = std::move(old.name);
+					this->value = std::move(old.value);
+					this->content_type = std::move(old.content_type);
+					this->data = old.data;
+					this->datalen = old.datalen;
+					this->is_file = old.is_file;
+					this->is_buffer = old.is_buffer;
+					this->files = std::move(old.files);
+					return *this;
+				}
 
 				std::string name;
 				std::string value;

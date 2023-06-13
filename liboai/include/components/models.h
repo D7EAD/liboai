@@ -56,7 +56,7 @@ namespace liboai {
 			/*
 				@brief Asynchronously retrieve a specific model's information.
 
-				#param *model   The model to retrieve information for.
+				@param *model   The model to retrieve information for.
 
 				@returns A liboai::Response future containing the image(s)
 					data in JSON format.
