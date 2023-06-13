@@ -32,19 +32,19 @@ liboai::FutureResponse liboai::Edits::create_async(const std::string& model_id, 
 	jcon.push_back("n", std::move(n));
 	jcon.push_back("temperature", std::move(temperature));
 	jcon.push_back("top_p", std::move(top_p));
+	
+	auto _fn = [this](liboai::JsonConstructor&& jcon) -> liboai::Response {
+		return this->Request(
+			Method::HTTP_POST, this->openai_root_, "/edits", "application/json",
+			this->auth_.GetAuthorizationHeaders(),
+			netimpl::components::Body {
+				jcon.dump()
+			},
+			this->auth_.GetProxies(),
+			this->auth_.GetProxyAuth(),
+			this->auth_.GetMaxTimeout()
+		);
+	};
 
-	return std::async(
-		std::launch::async, [&, jcon]() -> liboai::Response {
-			return this->Request(
-				Method::HTTP_POST, this->openai_root_, "/edits", "application/json",
-				this->auth_.GetAuthorizationHeaders(),
-				netimpl::components::Body {
-					jcon.dump()
-				},
-				this->auth_.GetProxies(),
-				this->auth_.GetProxyAuth(),
-				this->auth_.GetMaxTimeout()
-			);
-		}
-	);
+	return std::async(std::launch::async, _fn, std::move(jcon));
 }

@@ -14,17 +14,17 @@ liboai::Response liboai::Files::list() const & noexcept(false) {
 }
 
 liboai::FutureResponse liboai::Files::list_async() const & noexcept(false) {
-	return std::async(
-		std::launch::async, [&]() -> liboai::Response {
-			return this->Request(
-				Method::HTTP_GET, this->openai_root_, "/files", "application/json",
-				this->auth_.GetAuthorizationHeaders(),
-				this->auth_.GetProxies(),
-				this->auth_.GetProxyAuth(),
-				this->auth_.GetMaxTimeout()
-			);
-		}
-	);
+	auto _fn = [this]() -> liboai::Response {
+		return this->Request(
+			Method::HTTP_GET, this->openai_root_, "/files", "application/json",
+			this->auth_.GetAuthorizationHeaders(),
+			this->auth_.GetProxies(),
+			this->auth_.GetProxyAuth(),
+			this->auth_.GetMaxTimeout()
+		);
+	};
+
+	return std::async(std::launch::async, _fn);
 }
 
 liboai::Response liboai::Files::create(const std::filesystem::path& file, const std::string& purpose) const & noexcept(false) {
@@ -67,19 +67,19 @@ liboai::FutureResponse liboai::Files::create_async(const std::filesystem::path& 
 		{ "purpose", purpose },
 		{ "file", netimpl::components::File{file.generic_string()} }
 	};
+	
+	auto _fn = [this](netimpl::components::Multipart&& form) -> liboai::Response {
+		return this->Request(
+			Method::HTTP_POST, this->openai_root_, "/files", "multipart/form-data",
+			this->auth_.GetAuthorizationHeaders(),
+			std::move(form),
+			this->auth_.GetProxies(),
+			this->auth_.GetProxyAuth(),
+			this->auth_.GetMaxTimeout()
+		);
+	};
 
-	return std::async(
-		std::launch::async, [&, form]() -> liboai::Response {
-			return this->Request(
-				Method::HTTP_POST, this->openai_root_, "/files", "multipart/form-data",
-				this->auth_.GetAuthorizationHeaders(),
-				std::move(form),
-				this->auth_.GetProxies(),
-				this->auth_.GetProxyAuth(),
-				this->auth_.GetMaxTimeout()
-			);
-		}
-	);
+	return std::async(std::launch::async, _fn, std::move(form));
 }
 
 liboai::Response liboai::Files::remove(const std::string& file_id) const & noexcept(false) {
@@ -96,17 +96,17 @@ liboai::Response liboai::Files::remove(const std::string& file_id) const & noexc
 }
 
 liboai::FutureResponse liboai::Files::remove_async(const std::string& file_id) const & noexcept(false) {
-	return std::async(
-		std::launch::async, [&]() -> liboai::Response {
-			return this->Request(
-				Method::HTTP_DELETE, this->openai_root_, "/files/" + file_id, "application/json",
-				this->auth_.GetAuthorizationHeaders(),
-				this->auth_.GetProxies(),
-				this->auth_.GetProxyAuth(),
-				this->auth_.GetMaxTimeout()
-			);
-		}
-	);
+	auto _fn = [this](const std::string& file_id) -> liboai::Response {
+		return this->Request(
+			Method::HTTP_DELETE, this->openai_root_, "/files/" + file_id, "application/json",
+			this->auth_.GetAuthorizationHeaders(),
+			this->auth_.GetProxies(),
+			this->auth_.GetProxyAuth(),
+			this->auth_.GetMaxTimeout()
+		);
+	};
+
+	return std::async(std::launch::async, _fn, file_id);
 }
 
 liboai::Response liboai::Files::retrieve(const std::string& file_id) const & {
@@ -123,17 +123,17 @@ liboai::Response liboai::Files::retrieve(const std::string& file_id) const & {
 }
 
 liboai::FutureResponse liboai::Files::retrieve_async(const std::string& file_id) const & noexcept(false) {
-	return std::async(
-		std::launch::async, [&]() -> liboai::Response {
-			return this->Request(
-				Method::HTTP_GET, this->openai_root_, "/files/" + file_id, "application/json",
-				this->auth_.GetAuthorizationHeaders(),
-				this->auth_.GetProxies(),
-				this->auth_.GetProxyAuth(),
-				this->auth_.GetMaxTimeout()
-			);
-		}
-	);
+	auto _fn = [this](const std::string& file_id) -> liboai::Response {
+		return this->Request(
+			Method::HTTP_GET, this->openai_root_, "/files/" + file_id, "application/json",
+			this->auth_.GetAuthorizationHeaders(),
+			this->auth_.GetProxies(),
+			this->auth_.GetProxyAuth(),
+			this->auth_.GetMaxTimeout()
+		);
+	};
+
+	return std::async(std::launch::async, _fn, file_id);
 }
 
 bool liboai::Files::download(const std::string& file_id, const std::string& save_to) const & noexcept(false) {

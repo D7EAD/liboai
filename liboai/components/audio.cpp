@@ -51,18 +51,18 @@ liboai::FutureResponse liboai::Audio::transcribe_async(const std::filesystem::pa
 	if (temperature) { form.parts.push_back({ "temperature", std::to_string(temperature.value()) }); }
 	if (language) { form.parts.push_back({ "language", language.value() }); }
 	
-	return std::async(
-		std::launch::async, [&, form]() -> liboai::Response {
-			return this->Request(
-				Method::HTTP_POST, this->openai_root_, "/audio/transcriptions", "multipart/form-data",
-				this->auth_.GetAuthorizationHeaders(),
-				std::move(form),
-				this->auth_.GetProxies(),
-				this->auth_.GetProxyAuth(),
-				this->auth_.GetMaxTimeout()
-			);
-		}
-	);
+	auto _fn = [this](netimpl::components::Multipart&& form) -> liboai::Response {
+		return this->Request(
+			Method::HTTP_POST, this->openai_root_, "/audio/transcriptions", "multipart/form-data",
+			this->auth_.GetAuthorizationHeaders(),
+			std::move(form),
+			this->auth_.GetProxies(),
+			this->auth_.GetProxyAuth(),
+			this->auth_.GetMaxTimeout()
+		);
+	};
+	
+	return std::async(std::launch::async, _fn, std::move(form));
 }
 
 liboai::Response liboai::Audio::translate(const std::filesystem::path& file, const std::string& model, std::optional<std::string> prompt, std::optional<std::string> response_format, std::optional<float> temperature) const& noexcept(false) {
@@ -113,17 +113,17 @@ liboai::FutureResponse liboai::Audio::translate_async(const std::filesystem::pat
 	if (prompt) { form.parts.push_back({ "prompt", std::move(prompt.value()) }); }
 	if (response_format) { form.parts.push_back({ "response_format", std::move(response_format.value()) }); }
 	if (temperature) { form.parts.push_back({ "temperature", std::to_string(temperature.value()) }); }
-
-	return std::async(
-		std::launch::async, [&, form]() -> liboai::Response {
-			return this->Request(
-				Method::HTTP_POST, this->openai_root_, "/audio/translations", "multipart/form-data",
-				this->auth_.GetAuthorizationHeaders(),
-				std::move(form),
-				this->auth_.GetProxies(),
-				this->auth_.GetProxyAuth(),
-				this->auth_.GetMaxTimeout()
-			);
-		}
-	);
+	
+	auto _fn = [this](netimpl::components::Multipart&& form) -> liboai::Response {
+		return this->Request(
+			Method::HTTP_POST, this->openai_root_, "/audio/translations", "multipart/form-data",
+			this->auth_.GetAuthorizationHeaders(),
+			std::move(form),
+			this->auth_.GetProxies(),
+			this->auth_.GetProxyAuth(),
+			this->auth_.GetMaxTimeout()
+		);
+	};
+		
+	return std::async(std::launch::async, _fn, std::move(form));
 }

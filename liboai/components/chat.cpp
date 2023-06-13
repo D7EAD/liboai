@@ -252,21 +252,24 @@ liboai::FutureResponse liboai::ChatCompletion::create_async(const std::string& m
 		jcon.push_back("messages", conversation.GetJSON()["messages"]);
 	}
 
-	return std::async(
-		std::launch::async, [&, jcon, stream]() -> liboai::Response {
-			return this->Request(
-				Method::HTTP_POST, this->openai_root_, "/chat/completions", "application/json",
-				this->auth_.GetAuthorizationHeaders(),
-				netimpl::components::Body {
-					jcon.dump()
-				},
-				stream ? netimpl::components::WriteCallback{ std::move(stream.value()) } : netimpl::components::WriteCallback{},
-				this->auth_.GetProxies(),
-				this->auth_.GetProxyAuth(),
-				this->auth_.GetMaxTimeout()
-			);
-		}
-	);
+	auto _fn = [this](
+		liboai::JsonConstructor&& jcon,
+		std::optional<std::function<bool(std::string, intptr_t)>>&& stream
+	) -> liboai::Response {
+		return this->Request(
+			Method::HTTP_POST, this->openai_root_, "/chat/completions", "application/json",
+			this->auth_.GetAuthorizationHeaders(),
+			netimpl::components::Body {
+				jcon.dump()
+			},
+			stream ? netimpl::components::WriteCallback{ std::move(stream.value()) } : netimpl::components::WriteCallback{},
+			this->auth_.GetProxies(),
+			this->auth_.GetProxyAuth(),
+			this->auth_.GetMaxTimeout()
+		);
+	};
+		
+	return std::async(std::launch::async, _fn, std::move(jcon), std::move(stream));
 }
 
 std::ostream& liboai::operator<<(std::ostream& os, const Conversation& conv) {

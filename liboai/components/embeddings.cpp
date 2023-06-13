@@ -27,18 +27,18 @@ liboai::FutureResponse liboai::Embeddings::create_async(const std::string& model
 	jcon.push_back("input", std::move(input));
 	jcon.push_back("user", std::move(user));
 
-	return std::async(
-		std::launch::async, [&, jcon]() -> liboai::Response {
-			return this->Request(
-				Method::HTTP_POST, this->openai_root_, "/embeddings", "application/json",
-				this->auth_.GetAuthorizationHeaders(),
-				netimpl::components::Body {
-					jcon.dump()
-				},
-				this->auth_.GetProxies(),
-				this->auth_.GetProxyAuth(),
-				this->auth_.GetMaxTimeout()
-			);
-		}
-	);
+	auto _fn = [this](liboai::JsonConstructor&& jcon) -> liboai::Response {
+		return this->Request(
+			Method::HTTP_POST, this->openai_root_, "/embeddings", "application/json",
+			this->auth_.GetAuthorizationHeaders(),
+			netimpl::components::Body {
+				jcon.dump()
+			},
+			this->auth_.GetProxies(),
+			this->auth_.GetProxyAuth(),
+			this->auth_.GetMaxTimeout()
+		);
+	};
+
+	return std::async(std::launch::async, _fn, std::move(jcon));
 }
