@@ -22,7 +22,7 @@ namespace liboai {
 	class Authorization final {
 		public: // cons/des, operator deletions
 			Authorization() = default;
-			~Authorization() = default;
+			~Authorization();
 
 			// non-copyable, singleton paradigm
 			Authorization(Authorization const&) = delete;

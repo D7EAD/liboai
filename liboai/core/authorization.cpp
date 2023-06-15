@@ -1,5 +1,9 @@
 #include "../include/core/authorization.h"
 
+liboai::Authorization::~Authorization() {
+	netimpl::components::EncodedAuthentication().SecureStringClear(this->key_);
+}
+
 bool liboai::Authorization::SetKey(std::string_view key) noexcept {
 	if (!key.empty()) {
 		this->key_ = key;
