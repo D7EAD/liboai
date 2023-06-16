@@ -188,8 +188,9 @@ int main() {
         "a siamese cat!"
       );
       Network::Download(
-        "C:/some/folder/file.png",                    // to
-        response["data"][0]["url"].get<std::string>() // from
+        "C:/some/folder/file.png",                     // to
+        response["data"][0]["url"].get<std::string>(), // from
+	oai.auth.GetAuthorizationHeaders()
       );
     }
     catch (std::exception& e) {
