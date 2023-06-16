@@ -138,13 +138,17 @@ liboai::FutureResponse liboai::Files::retrieve_async(const std::string& file_id)
 
 bool liboai::Files::download(const std::string& file_id, const std::string& save_to) const & noexcept(false) {
 	return Network::Download(
-		save_to, ("https://api.openai.com/v1/files/" + file_id + "/content")
+		save_to,
+		("https://api.openai.com/v1/files/" + file_id + "/content"),
+		this->auth_.GetAuthorizationHeaders()
 	);
 }
 
 std::future<bool> liboai::Files::download_async(const std::string& file_id, const std::string& save_to) const & noexcept(false) {
 	return std::async(
-		std::launch::async,
-		&liboai::Network::Download, save_to, ("https://api.openai.com/v1/files/" + file_id + "/content")
+		std::launch::async, &liboai::Network::Download,
+		save_to,
+		("https://api.openai.com/v1/files/" + file_id + "/content"),
+		this->auth_.GetAuthorizationHeaders()
 	);
 }
