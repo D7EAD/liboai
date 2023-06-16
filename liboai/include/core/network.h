@@ -40,10 +40,18 @@ namespace liboai {
 
 				@returns Bool indicating success or failure.
 			*/
-			static inline bool Download(const std::string& to, const std::string& from) noexcept(false) {
+			static inline bool Download(
+				const std::string& to,
+				const std::string& from,
+				netimpl::components::Header authorization
+			) noexcept(false) {
 				std::ofstream file(to, std::ios::binary);
 				Response res;
-				res = netimpl::Download(file, netimpl::components::Url{ from });
+				res = netimpl::Download(
+					file,
+					netimpl::components::Url{ from },
+					std::move(authorization)
+				);
 
 				return res.status_code == 200;
 			}
@@ -64,12 +72,20 @@ namespace liboai {
 
 				@returns Future bool indicating success or failure.
 			*/
-			static inline std::future<bool> DownloadAsync(const std::string& to, const std::string& from) noexcept(false) {
+			static inline std::future<bool> DownloadAsync(
+				const std::string& to,
+				const std::string& from,
+				netimpl::components::Header authorization
+			) noexcept(false) {
 				return std::async(
 					std::launch::async, [&]() -> bool {
 						std::ofstream file(to, std::ios::binary);
 						Response res;
-						res = netimpl::Download(file, netimpl::components::Url{ from });
+						res = netimpl::Download(
+							file,
+							netimpl::components::Url{ from },
+							std::move(authorization)
+						);
 
 						return res.status_code == 200;
 					}
