@@ -18,12 +18,9 @@ namespace liboai {
 	class Models final : private Network {
 		public:
 			Models() = default;
+			NON_COPYABLE(Models)
+			NON_MOVABLE(Models)
 			~Models() = default;
-			Models(const Models&) = delete;
-			Models(Models&&) = delete;
-
-			Models& operator=(const Models&) = delete;
-			Models& operator=(Models&&) = delete;
 
 			/*
 				@brief List all available models.

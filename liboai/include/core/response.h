@@ -21,6 +21,9 @@
 	#define LIBOAI_EXPORT __declspec(dllexport)
 #endif
 
+#define NON_COPYABLE(Class)	Class(const Class&) = delete; Class& operator=(const Class&) = delete;
+#define NON_MOVABLE(Class) Class(Class&&) = delete; Class& operator=(Class&&) = delete;
+
 #include <iostream>
 #include <optional>
 #include <future>
@@ -28,6 +31,10 @@
 #include "exception.h"
 
 namespace liboai {
+	template <typename T, typename = void> struct has_value_type : std::false_type {};
+	template <typename T> struct has_value_type<T, std::void_t<typename T::value_type>> : std::true_type {};
+	template <typename T> inline constexpr const bool has_value_type_v = has_value_type<T>::value;
+
 	class JsonConstructor final {
 		public:
 			JsonConstructor() {}
@@ -41,15 +48,21 @@ namespace liboai {
 						this->_json[key.data()] = true;
 					}
 				}
+				else if constexpr (std::is_same_v<_Ty, std::function<bool(std::string, intptr_t)>>) {
+					if (value) {
+						this->_json[key.data()] = true;
+					}
+				}
 				else {
 					this->_json[key.data()] = value;
 				}
 			}
-
-			template <class _Ty>
-			void push_back(std::string_view key, std::optional<_Ty>&& value) {
+			
+			template <class _Ty,
+				std::enable_if_t<std::conjunction_v<has_value_type<_Ty>, std::is_same<_Ty, std::optional<typename _Ty::value_type>>>, int> = 0>
+			void push_back(std::string_view key, _Ty&& value) {
 				if (value) {
-					this->_json[key.data()] = std::forward<_Ty>(value.value());
+					this->_json[key.data()] = std::forward<typename _Ty::value_type>(value.value());
 				}
 			}
 

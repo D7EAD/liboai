@@ -22,15 +22,9 @@ namespace liboai {
 	class Authorization final {
 		public: // cons/des, operator deletions
 			Authorization() = default;
+			NON_COPYABLE(Authorization)
+			NON_MOVABLE(Authorization)
 			~Authorization();
-
-			// non-copyable, singleton paradigm
-			Authorization(Authorization const&) = delete;
-			void operator=(Authorization const&) = delete;
-
-			// non-movable, singleton paradigm
-			Authorization(Authorization&&) = delete;
-			void operator=(Authorization&&) = delete;
 
 		public:	// member methods
 			/*
