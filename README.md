@@ -11,7 +11,7 @@
 - [x] [ChatGPT](https://github.com/D7EAD/liboai/tree/main/documentation/chat)
 - [X] [Audio](https://github.com/D7EAD/liboai/tree/main/documentation/audio)
 - [X] [Azure](https://github.com/D7EAD/liboai/tree/main/documentation/azure)
-- [ ] [Functions](https://platform.openai.com/docs/api-reference/chat/create) (testing)
+- [X] [Functions](https://platform.openai.com/docs/api-reference/chat/create) ([v4.0.0-dev](https://github.com/D7EAD/liboai/tree/v4.0.0-dev))
 - [x] [Image DALL·E](https://github.com/D7EAD/liboai/tree/main/documentation/images)
 - [x] [Models](https://github.com/D7EAD/liboai/tree/main/documentation/models)
 - [x] [Completions](https://github.com/D7EAD/liboai/tree/main/documentation/completions) 
