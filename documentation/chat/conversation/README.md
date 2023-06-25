@@ -311,30 +311,30 @@ bool PopLastResponse() & noexcept(false);
 ```
 
 <h3>Check if Last Response is Function Call</h3>
-<p>Returns whether the most recent response, following a call to Update or a complete AppendStreamData, contains a function_call or not. Returns a boolean indicating if the last response is a function call.</p>
+<p>Returns whether the most recent response, following a call to <code>Update</code> or a complete <code>AppendStreamData</code>, contains a function_call or not. Returns a boolean indicating if the last response is a function call.</p>
 
 ```cpp
 bool LastResponseIsFunctionCall() const & noexcept;
 ```
 
 <h3>Get the Name of the Last Response's Function Call</h3>
-<p>Returns the name of the function_call in the most recent response. This should only be called if `LastResponseIsFunctionCall()` returns true. Returns a `std::string` containing the name of the last response's function call, empty if non-existent.</p>
+<p>Returns the name of the function_call in the most recent response. This should only be called if <code>LastResponseIsFunctionCall()</code> returns true. Returns a <code>std::string</code> containing the name of the last response's function call, empty if non-existent.</p>
 
 ```cpp
 std::string GetLastFunctionCallName() const & noexcept(false);
 ```
 
 <h3>Get the Arguments of the Last Response's Function Call</h3>
-<p>Returns the arguments of the function_call in the most recent response in their raw JSON form. This should only be called if `LastResponseIsFunctionCall()` returns true. Returns a `std::string` containing the name of the last response's arguments in JSON form, empty if non-existent.</p>
+<p>Returns the arguments of the function_call in the most recent response in their raw JSON form. This should only be called if <code>LastResponseIsFunctionCall()</code> returns true. Returns a <code>std::string</code> containing the name of the last response's arguments in JSON form, empty if non-existent.</p>
 
 ```cpp
 std::string GetLastFunctionCallArguments() const & noexcept(false);	
 ```
 
 <h3>Update Conversation</h3>
-<p>Updates the conversation given a Response object. This method updates the conversation given a Response object. This method should only be used if `AppendStreamData` was NOT used immediately before it.
+<p>Updates the conversation given a Response object. This method updates the conversation given a Response object. This method should only be used if <code>AppendStreamData</code> was NOT used immediately before it.
 
-For instance, if we made a call to `create*()`, and provided a callback function to stream and, within this callback, we used `AppendStreamData` to update the conversation per message, we would NOT want to use this method. In this scenario, the `AppendStreamData` method would have already updated the conversation, so this method would be a bad idea to call afterwards. Returns a <code>bool</code> indicating success.</p>
+For instance, if we made a call to <code>create*()</code>, and provided a callback function to stream and, within this callback, we used <code>AppendStreamData</code> to update the conversation per message, we would NOT want to use this method. In this scenario, the <code>AppendStreamData</code> method would have already updated the conversation, so this method would be a bad idea to call afterwards. Returns a <code>bool</code> indicating success.</p>
 
 ```cpp
 bool Update(std::string_view history) & noexcept(false);
@@ -349,14 +349,14 @@ std::string Export() const & noexcept(false);
 ```
 
 <h3>Import Conversation</h3>
-<p>Imports a conversation from a JSON string. This method imports a conversation from a JSON string. The JSON string should be the JSON string returned from a call to Export(). Returns a boolean indicating success.</p>
+<p>Imports a conversation from a JSON string. This method imports a conversation from a JSON string. The JSON string should be the JSON string returned from a call to <code>Export()</code>. Returns a boolean indicating success.</p>
 
 ```cpp
 bool Import() const & noexcept(false);	
 ```
 
 <h3>Append Stream Data</h3>
-<p>Appends stream data (SSEs) from streamed methods. This method updates the conversation given a token from a streamed method. This method should be used when using streamed methods such as `ChatCompletion::create` or `create_async` with a callback supplied. This function should be called from within the stream's callback function receiving the SSEs. Returns a boolean indicating data appending success.</p>
+<p>Appends stream data (SSEs) from streamed methods. This method updates the conversation given a token from a streamed method. This method should be used when using streamed methods such as <code>ChatCompletion::create</code> or <code>create_async</code> with a callback supplied. This function should be called from within the stream's callback function receiving the SSEs. Returns a boolean indicating data appending success.</p>
 
 ```cpp
 bool AppendStreamData(std::string data) & noexcept(false);
