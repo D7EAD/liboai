@@ -576,8 +576,8 @@ namespace liboai {
 			class WriteCallback final {
 				public:
 					WriteCallback() = default;
-					WriteCallback(const WriteCallback& other) : callback(other.callback), userdata(other.userdata) {}
-					WriteCallback(WriteCallback&& old) noexcept : callback(std::move(old.callback)), userdata(std::move(old.userdata)) {}
+					WriteCallback(const WriteCallback& other) : userdata(other.userdata), callback(other.callback) {}
+					WriteCallback(WriteCallback&& old) noexcept : userdata(std::move(old.userdata)), callback(std::move(old.callback)) {}
 					WriteCallback(std::function<bool(std::string data, intptr_t userdata)> p_callback, intptr_t p_userdata = 0)
 						: userdata(p_userdata), callback(std::move(p_callback)) {}
 
