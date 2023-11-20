@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.10)
 project(oai)
 
 find_package(nlohmann_json CONFIG REQUIRED)
-find_package(CURL CONFIG REQUIRED)
+find_package(CURL REQUIRED)
 
 add_library(oai
 components/audio.cpp
