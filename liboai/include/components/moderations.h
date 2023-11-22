@@ -18,12 +18,9 @@ namespace liboai {
 	class Moderations final : private Network {
 		public:
 			Moderations() = default;
+			NON_COPYABLE(Moderations)
+			NON_MOVABLE(Moderations)
 			~Moderations() = default;
-			Moderations(const Moderations&) = delete;
-			Moderations(Moderations&&) = delete;
-			
-			Moderations& operator=(const Moderations&) = delete;
-			Moderations& operator=(Moderations&&) = delete;
 
 			/*
 				@brief Create a new moderation and classify

@@ -56,7 +56,7 @@ liboai::FutureResponse liboai::Completions::create_async(const std::string& mode
 	
 	auto _fn = [this](
 		liboai::JsonConstructor&& jcon,
-		std::optional<std::function<bool(std::string, intptr_t)>>&& stream
+		std::optional<StreamCallback>&& stream
 	) -> liboai::Response {
 		return this->Request(
 			Method::HTTP_POST, this->openai_root_, "/completions", "application/json",

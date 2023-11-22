@@ -18,12 +18,9 @@ namespace liboai {
 	class Edits final : private Network {
 		public:
 			Edits() = default;
+			NON_COPYABLE(Edits)
+			NON_MOVABLE(Edits)
 			~Edits() = default;
-			Edits(const Edits&) = delete;
-			Edits(Edits&&) = delete;
-			
-			Edits& operator=(const Edits&) = delete;
-			Edits& operator=(Edits&&) = delete;
 
 			/*
 				@brief Creates a new edit for the provided input,

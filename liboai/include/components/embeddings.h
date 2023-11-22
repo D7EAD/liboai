@@ -18,12 +18,9 @@ namespace liboai {
 	class Embeddings final : private Network {
 		public:
 			Embeddings() = default;
+			NON_COPYABLE(Embeddings)
+			NON_MOVABLE(Embeddings)
 			~Embeddings() = default;
-			Embeddings(const Embeddings&) = delete;
-			Embeddings(Embeddings&&) = delete;
-			
-			Embeddings& operator=(const Embeddings&) = delete;
-			Embeddings& operator=(Embeddings&&) = delete;
 
 			/*
 				@brief Creates an embedding vector representing the input text.

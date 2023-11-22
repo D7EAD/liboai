@@ -18,12 +18,11 @@ namespace liboai {
 	class Completions final : private Network {
 		public:
 			Completions() = default;
+			NON_COPYABLE(Completions)
+			NON_MOVABLE(Completions)
 			~Completions() = default;
-			Completions(const Completions&) = delete;
-			Completions(Completions&&) = delete;
 			
-			Completions& operator=(const Completions&) = delete;
-			Completions& operator=(Completions&&) = delete;
+			using StreamCallback = std::function<bool(std::string, intptr_t)>;
 
 			/*
 				@brief Given a prompt, the model will return one or more
@@ -84,7 +83,7 @@ namespace liboai {
 				std::optional<float> temperature = std::nullopt,
 				std::optional<float> top_p = std::nullopt,
 				std::optional<uint16_t> n = std::nullopt,
-				std::optional<std::function<bool(std::string, intptr_t)>> stream = std::nullopt,
+				std::optional<StreamCallback> stream = std::nullopt,
 				std::optional<uint8_t> logprobs = std::nullopt,
 				std::optional<bool> echo = std::nullopt,
 				std::optional<std::vector<std::string>> stop = std::nullopt,
@@ -155,7 +154,7 @@ namespace liboai {
 				std::optional<float> temperature = std::nullopt,
 				std::optional<float> top_p = std::nullopt,
 				std::optional<uint16_t> n = std::nullopt,
-				std::optional<std::function<bool(std::string, intptr_t)>> stream = std::nullopt,
+				std::optional<StreamCallback> stream = std::nullopt,
 				std::optional<uint8_t> logprobs = std::nullopt,
 				std::optional<bool> echo = std::nullopt,
 				std::optional<std::vector<std::string>> stop = std::nullopt,

@@ -167,7 +167,7 @@ liboai::FutureResponse liboai::FineTunes::list_events_async(const std::string& f
 	auto _fn = [this](
 		netimpl::components::Parameters&& params,
 		const std::string& fine_tune_id,
-		std::optional<std::function<bool(std::string, intptr_t)>>&& stream
+		std::optional<StreamCallback>&& stream
 	) -> liboai::Response {
 		return this->Request(
 			Method::HTTP_GET, this->openai_root_, "/fine-tunes/" + fine_tune_id + "/events", "application/json",

@@ -18,11 +18,11 @@
 #include "netimpl.h"
 
 namespace liboai {
-	class Network {			
+	class Network {
 		public:
 			Network() noexcept = default;
-			Network(Network&&) = delete;
-			Network(const Network&) = delete;
+			NON_COPYABLE(Network)
+			NON_MOVABLE(Network)
 		
 			/*
 				@brief Function to download a file at 'from'
@@ -40,6 +40,7 @@ namespace liboai {
 
 				@returns Bool indicating success or failure.
 			*/
+			[[nodiscard]]
 			static inline bool Download(
 				const std::string& to,
 				const std::string& from,
@@ -72,6 +73,7 @@ namespace liboai {
 
 				@returns Future bool indicating success or failure.
 			*/
+			[[nodiscard]]
 			static inline std::future<bool> DownloadAsync(
 				const std::string& to,
 				const std::string& from,

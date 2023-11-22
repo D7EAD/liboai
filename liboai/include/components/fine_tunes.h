@@ -18,13 +18,12 @@ namespace liboai {
 	class FineTunes final : private Network {
 		public:
 			FineTunes() = default;
+			NON_COPYABLE(FineTunes)
+			NON_MOVABLE(FineTunes)
 			~FineTunes() = default;
-			FineTunes(const FineTunes&) = delete;
-			FineTunes(FineTunes&&) = delete;
 			
-			FineTunes& operator=(const FineTunes&) = delete;
-			FineTunes& operator=(FineTunes&&) = delete;
-			
+			using StreamCallback = std::function<bool(std::string, intptr_t)>;
+
 			/*
 				@brief Creates a job that fine-tunes a specified model from a
 					given dataset.
@@ -183,7 +182,7 @@ namespace liboai {
 			*/
 			LIBOAI_EXPORT liboai::Response list_events(
 				const std::string& fine_tune_id,
-				std::optional<std::function<bool(std::string, intptr_t)>> stream = std::nullopt
+				std::optional<StreamCallback> stream = std::nullopt
 			) const & noexcept(false);
 
 			/*
@@ -200,7 +199,7 @@ namespace liboai {
 			*/
 			LIBOAI_EXPORT liboai::FutureResponse list_events_async(
 				const std::string& fine_tune_id,
-				std::optional<std::function<bool(std::string, intptr_t)>> stream = std::nullopt
+				std::optional<StreamCallback> stream = std::nullopt
 			) const & noexcept(false);
 
 			/*
