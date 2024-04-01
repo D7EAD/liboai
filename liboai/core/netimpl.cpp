@@ -39,6 +39,24 @@ liboai::netimpl::CurlHolder::CurlHolder() {
 	#if defined(LIBOAI_DEBUG)
 		curl_easy_setopt(this->curl_, CURLOPT_VERBOSE, 1L);
 	#endif
+
+	#if defined(LIBOAI_DISABLE_PEERVERIFY)
+		#if defined(LIBOAI_DEBUG)
+			_liboai_dbg(
+				"[dbg] [@%s] LIBOAI_DISABLE_PEERVERIFY set; peer verification disabled.\n",
+				__func__
+			);
+		#endif
+		curl_easy_setopt(this->curl_, CURLOPT_SSL_VERIFYPEER, 0L);
+	#else
+		#if defined(LIBOAI_DEBUG)
+			_liboai_dbg(
+				"[dbg] [@%s] LIBOAI_DISABLE_PEERVERIFY not set; peer verification enabled.\n",
+				__func__
+			);
+		#endif
+		curl_easy_setopt(this->curl_, CURLOPT_SSL_VERIFYPEER, 1L);
+	#endif
 }
 
 liboai::netimpl::CurlHolder::~CurlHolder() {
