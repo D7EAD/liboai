@@ -143,6 +143,12 @@ namespace liboai {
 				std::optional<float> temperature = std::nullopt
 			) const& noexcept(false);
 
+			LIBOAI_EXPORT liboai::Response speech(
+				const std::string& model,
+				const std::string& voice,
+				const std::string& input
+			) const& noexcept(false);
+
 		private:
 			Authorization& auth_ = Authorization::Authorizer();
 	};

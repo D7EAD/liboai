@@ -127,3 +127,24 @@ liboai::FutureResponse liboai::Audio::translate_async(const std::filesystem::pat
 		
 	return std::async(std::launch::async, _fn, std::move(form));
 }
+
+liboai::Response liboai::Audio::speech(const std::string& model, const std::string& voice, const std::string& input) const& noexcept(false) {
+	liboai::JsonConstructor jcon;
+	jcon.push_back("model", model);
+	jcon.push_back("voice", voice);
+	jcon.push_back("input", input);
+
+	Response res;
+	res = this->Request(
+		Method::HTTP_POST, this->openai_root_, "/audio/speech", "application/json",
+		this->auth_.GetAuthorizationHeaders(),
+		netimpl::components::Body {
+			jcon.dump()
+		},
+		this->auth_.GetProxies(),
+		this->auth_.GetProxyAuth(),
+		this->auth_.GetMaxTimeout()
+	);
+
+	return res;
+}
