@@ -127,3 +127,58 @@ liboai::FutureResponse liboai::Audio::translate_async(const std::filesystem::pat
 		
 	return std::async(std::launch::async, _fn, std::move(form));
 }
+
+liboai::Response liboai::Audio::speech(const std::string& model, const std::string& voice, const std::string& input, std::optional<std::string> response_format, std::optional<float> speed) const& noexcept(false) {
+	liboai::JsonConstructor jcon;
+	jcon.push_back("model", model);
+	jcon.push_back("voice", voice);
+	jcon.push_back("input", input);
+	if (response_format) {
+		jcon.push_back("response_format", std::move(response_format.value()));
+	}
+	if (speed) {
+		jcon.push_back("speed", speed.value());
+	}
+
+	Response res;
+	res = this->Request(
+		Method::HTTP_POST, this->openai_root_, "/audio/speech", "application/json",
+		this->auth_.GetAuthorizationHeaders(),
+		netimpl::components::Body {
+			jcon.dump()
+		},
+		this->auth_.GetProxies(),
+		this->auth_.GetProxyAuth(),
+		this->auth_.GetMaxTimeout()
+	);
+
+	return res;
+}
+
+liboai::FutureResponse liboai::Audio::speech_async(const std::string& model, const std::string& voice, const std::string& input, std::optional<std::string> response_format, std::optional<float> speed) const& noexcept(false) {
+	liboai::JsonConstructor jcon;
+	jcon.push_back("model", model);
+	jcon.push_back("voice", voice);
+	jcon.push_back("input", input);
+	if (response_format) {
+		jcon.push_back("response_format", std::move(response_format.value()));
+	}
+	if (speed) {
+		jcon.push_back("speed", speed.value());
+	}
+
+	auto _fn = [this](liboai::JsonConstructor&& jcon) -> liboai::Response {
+		return this->Request(
+			Method::HTTP_POST, this->openai_root_, "/audio/speech", "application/json",
+			this->auth_.GetAuthorizationHeaders(),
+			netimpl::components::Body {
+				jcon.dump()
+			},
+			this->auth_.GetProxies(),
+			this->auth_.GetProxyAuth(),
+			this->auth_.GetMaxTimeout()
+		);
+	};
+		
+	return std::async(std::launch::async, _fn, std::move(jcon));
+}

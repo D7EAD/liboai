@@ -143,6 +143,56 @@ namespace liboai {
 				std::optional<float> temperature = std::nullopt
 			) const& noexcept(false);
 
+			/*
+				@brief Turn text into lifelike spoken audio.
+
+				@param *model          The model to use for translation.
+									   Only 'tts-1' and 'tts-1-hd' are currently available.
+				@param *voice          The voice to use when generating the audio.
+									   Supported voices are alloy, echo, fable, onyx, nova, and shimmer.
+				@param *input          The text to generate audio for.
+									   The maximum length is 4096 characters.
+				@param response_format The format to audio in.
+									   Supported formats are mp3, opus, aac, flac, wav, and pcm.
+				@param speed           The speed of the generated audio.
+									   Select a value from 0.25 to 4.0. 1.0 is the default.
+
+				@returns A liboai::Response object containing the
+					data in JSON format.
+			*/
+			LIBOAI_EXPORT liboai::Response speech(
+				const std::string& model,
+				const std::string& voice,
+				const std::string& input,
+				std::optional<std::string> response_format = std::nullopt,
+				std::optional<float> speed = std::nullopt
+			) const& noexcept(false);
+
+/*
+				@brief Asynchronously turn text into lifelike spoken audio.
+
+				@param *model          The model to use for translation.
+									   Only 'tts-1' and 'tts-1-hd' are currently available.
+				@param *voice          The voice to use when generating the audio.
+									   Supported voices are alloy, echo, fable, onyx, nova, and shimmer.
+				@param *input          The text to generate audio for.
+									   The maximum length is 4096 characters.
+				@param response_format The format to audio in.
+									   Supported formats are mp3, opus, aac, flac, wav, and pcm.
+				@param speed           The speed of the generated audio.
+									   Select a value from 0.25 to 4.0. 1.0 is the default.
+
+				@returns A liboai::Response object containing the
+					data in JSON format.
+			*/
+			LIBOAI_EXPORT liboai::FutureResponse speech_async(
+				const std::string& model,
+				const std::string& voice,
+				const std::string& input,
+				std::optional<std::string> response_format = std::nullopt,
+				std::optional<float> speed = std::nullopt
+			) const& noexcept(false);
+
 		private:
 			Authorization& auth_ = Authorization::Authorizer();
 	};
