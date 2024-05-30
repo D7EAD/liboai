@@ -32,12 +32,6 @@
 		cURL for People (CPR).
 */
 
-#if defined(__linux__) || defined(__APPLE__)
-	#define LIBOAI_EXPORT
-#else
-	#define LIBOAI_EXPORT __declspec(dllexport)
-#endif
-
 #include <fstream>
 #include <optional>	
 #include <mutex>
@@ -61,12 +55,9 @@ namespace liboai {
 		class CurlHolder {
 			public:
 				CurlHolder();
+				NON_COPYABLE(CurlHolder)
+				NON_MOVABLE(CurlHolder)
 				virtual ~CurlHolder();
-				CurlHolder(const CurlHolder&) = delete;
-				CurlHolder(CurlHolder&&) = delete;
-
-				CurlHolder& operator=(const CurlHolder&) = delete;
-				CurlHolder& operator=(CurlHolder&&) = delete;
 
 				std::string urlEncode(const std::string& s);
 				std::string urlDecode(const std::string& s);
@@ -103,7 +94,6 @@ namespace liboai {
 					virtual ~StringHolder() = default;
 
 					StringHolder& operator=(StringHolder&& old) noexcept = default;
-
 					StringHolder& operator=(const StringHolder& other) = default;
 
 					explicit operator std::string() const {
@@ -576,8 +566,8 @@ namespace liboai {
 			class WriteCallback final {
 				public:
 					WriteCallback() = default;
-					WriteCallback(const WriteCallback& other) : userdata(other.userdata), callback(other.callback) {}
-					WriteCallback(WriteCallback&& old) noexcept : userdata(std::move(old.userdata)), callback(std::move(old.callback)) {}
+					WriteCallback(const WriteCallback& other) : callback(other.callback), userdata(other.userdata) {}
+					WriteCallback(WriteCallback&& old) noexcept : callback(std::move(old.callback)), userdata(std::move(old.userdata)) {}
 					WriteCallback(std::function<bool(std::string data, intptr_t userdata)> p_callback, intptr_t p_userdata = 0)
 						: userdata(p_userdata), callback(std::move(p_callback)) {}
 
