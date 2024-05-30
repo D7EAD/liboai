@@ -32,6 +32,12 @@
 		cURL for People (CPR).
 */
 
+#if defined(__linux__) || defined(__APPLE__)
+	#define LIBOAI_EXPORT
+#else
+	#define LIBOAI_EXPORT __declspec(dllexport)
+#endif
+
 #include <fstream>
 #include <optional>	
 #include <mutex>
@@ -55,9 +61,12 @@ namespace liboai {
 		class CurlHolder {
 			public:
 				CurlHolder();
-				NON_COPYABLE(CurlHolder)
-				NON_MOVABLE(CurlHolder)
 				virtual ~CurlHolder();
+				CurlHolder(const CurlHolder&) = delete;
+				CurlHolder(CurlHolder&&) = delete;
+
+				CurlHolder& operator=(const CurlHolder&) = delete;
+				CurlHolder& operator=(CurlHolder&&) = delete;
 
 				std::string urlEncode(const std::string& s);
 				std::string urlDecode(const std::string& s);
@@ -94,6 +103,7 @@ namespace liboai {
 					virtual ~StringHolder() = default;
 
 					StringHolder& operator=(StringHolder&& old) noexcept = default;
+
 					StringHolder& operator=(const StringHolder& other) = default;
 
 					explicit operator std::string() const {
