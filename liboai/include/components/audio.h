@@ -18,12 +18,9 @@ namespace liboai {
 	class Audio final : private Network {
 		public:
 			Audio() = default;
+			NON_COPYABLE(Audio)
+			NON_MOVABLE(Audio)
 			~Audio() = default;
-			Audio(const Audio&) = delete;
-			Audio(Audio&&) = delete;
-
-			Audio& operator=(const Audio&) = delete;
-			Audio& operator=(Audio&&) = delete;
 
 			/*
 				@brief Transcribes audio into the input language.

@@ -16,12 +16,12 @@ namespace liboai {
 	class Azure final : private Network {
 		public:
 			Azure() = default;
+			NON_COPYABLE(Azure)
+			NON_MOVABLE(Azure)
 			~Azure() = default;
-			Azure(const Azure&) = delete;
-			Azure(Azure&&) = delete;
 
-			Azure& operator=(const Azure&) = delete;
-			Azure& operator=(Azure&&) = delete;
+			using ChatStreamCallback = std::function<bool(std::string, intptr_t, Conversation&)>;
+			using StreamCallback = std::function<bool(std::string, intptr_t)>;
 
 			/*
 				@brief Given a prompt, the model will return one or more
@@ -46,7 +46,7 @@ namespace liboai {
 				std::optional<float> temperature = std::nullopt,
 				std::optional<float> top_p = std::nullopt,
 				std::optional<uint16_t> n = std::nullopt,
-				std::optional<std::function<bool(std::string, intptr_t)>> stream = std::nullopt,
+				std::optional<StreamCallback> stream = std::nullopt,
 				std::optional<uint8_t> logprobs = std::nullopt,
 				std::optional<bool> echo = std::nullopt,
 				std::optional<std::vector<std::string>> stop = std::nullopt,
@@ -80,7 +80,7 @@ namespace liboai {
 				std::optional<float> temperature = std::nullopt,
 				std::optional<float> top_p = std::nullopt,
 				std::optional<uint16_t> n = std::nullopt,
-				std::optional<std::function<bool(std::string, intptr_t)>> stream = std::nullopt,
+				std::optional<StreamCallback> stream = std::nullopt,
 				std::optional<uint8_t> logprobs = std::nullopt,
 				std::optional<bool> echo = std::nullopt,
 				std::optional<std::vector<std::string>> stop = std::nullopt,
@@ -149,10 +149,11 @@ namespace liboai {
 				const std::string& resource_name,
 				const std::string& deployment_id,
 				const std::string& api_version,
-				const Conversation& conversation,
+				Conversation& conversation,
+				std::optional<std::string> function_call = std::nullopt,
 				std::optional<float> temperature = std::nullopt,
 				std::optional<uint16_t> n = std::nullopt,
-				std::optional<std::function<bool(std::string, intptr_t)>> stream = std::nullopt,
+				std::optional<ChatStreamCallback> stream = std::nullopt,
 				std::optional<std::vector<std::string>> stop = std::nullopt,
 				std::optional<uint16_t> max_tokens = std::nullopt,
 				std::optional<float> presence_penalty = std::nullopt,
@@ -177,10 +178,11 @@ namespace liboai {
 				const std::string& resource_name,
 				const std::string& deployment_id,
 				const std::string& api_version,
-				const Conversation& conversation,
+				Conversation& conversation,
+				std::optional<std::string> function_call = std::nullopt,
 				std::optional<float> temperature = std::nullopt,
 				std::optional<uint16_t> n = std::nullopt,
-				std::optional<std::function<bool(std::string, intptr_t)>> stream = std::nullopt,
+				std::optional<ChatStreamCallback> stream = std::nullopt,
 				std::optional<std::vector<std::string>> stop = std::nullopt,
 				std::optional<uint16_t> max_tokens = std::nullopt,
 				std::optional<float> presence_penalty = std::nullopt,
@@ -297,5 +299,6 @@ namespace liboai {
 
 		private:
 			Authorization& auth_ = Authorization::Authorizer();
+			using StrippedStreamCallback = std::function<bool(std::string, intptr_t)>;
 	};
 }

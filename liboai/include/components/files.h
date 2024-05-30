@@ -18,12 +18,9 @@ namespace liboai {
 	class Files final : private Network {
 		public:
 			Files() = default;
+			NON_COPYABLE(Files)
+			NON_MOVABLE(Files)
 			~Files() = default;
-			Files(const Files&) = delete;
-			Files(Files&&) = delete;			
-			
-			Files& operator=(const Files&) = delete;
-			Files& operator=(Files&&) = delete;
 
 			/*
 				@brief Returns a list of files that belong to the user's organization.

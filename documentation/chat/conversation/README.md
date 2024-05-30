@@ -286,6 +286,7 @@ bool PopSystemData() & noexcept(false);
 
 ```cpp
 bool AddUserData(std::string_view data) & noexcept(false);
+bool AddUserData(std::string_view data, std::string_view name) & noexcept(false);
 ```
 
 <h3>Pop User Data</h3>
@@ -309,12 +310,70 @@ std::string GetLastResponse() const & noexcept;
 bool PopLastResponse() & noexcept(false);
 ```
 
+<h3>Check if Last Response is Function Call</h3>
+<p>Returns whether the most recent response, following a call to <code>Update</code> or a complete <code>AppendStreamData</code>, contains a function_call or not. Returns a boolean indicating if the last response is a function call.</p>
+
+```cpp
+bool LastResponseIsFunctionCall() const & noexcept;
+```
+
+<h3>Get the Name of the Last Response's Function Call</h3>
+<p>Returns the name of the function_call in the most recent response. This should only be called if <code>LastResponseIsFunctionCall()</code> returns true. Returns a <code>std::string</code> containing the name of the last response's function call, empty if non-existent.</p>
+
+```cpp
+std::string GetLastFunctionCallName() const & noexcept(false);
+```
+
+<h3>Get the Arguments of the Last Response's Function Call</h3>
+<p>Returns the arguments of the function_call in the most recent response in their raw JSON form. This should only be called if <code>LastResponseIsFunctionCall()</code> returns true. Returns a <code>std::string</code> containing the name of the last response's arguments in JSON form, empty if non-existent.</p>
+
+```cpp
+std::string GetLastFunctionCallArguments() const & noexcept(false);	
+```
+
 <h3>Update Conversation</h3>
-<p>Updates the conversation with a response from a chat model. The conversation can be updated with a response from the chat model either via the returned <code>liboai::Response</code> object or raw JSON from a call to <code>liboai::ChatCompletion::create</code> or similar method. Returns a <code>bool</code> indicating success.</p>
+<p>Updates the conversation given a Response object. This method updates the conversation given a Response object. This method should only be used if <code>AppendStreamData</code> was NOT used immediately before it.
+
+For instance, if we made a call to <code>create*()</code>, and provided a callback function to stream and, within this callback, we used <code>AppendStreamData</code> to update the conversation per message, we would NOT want to use this method. In this scenario, the <code>AppendStreamData</code> method would have already updated the conversation, so this method would be a bad idea to call afterwards. Returns a <code>bool</code> indicating success.</p>
 
 ```cpp
 bool Update(std::string_view history) & noexcept(false);
 bool Update(const Response& response) & noexcept(false);
+```
+
+<h3>Export Conversation</h3>
+<p>Exports the entire conversation to a JSON string. This method exports the conversation to a JSON string. The JSON string can be used to save the conversation to a file. The exported string contains both the conversation and included functions, if any. Returns the JSON string representing the conversation.</p>
+
+```cpp
+std::string Export() const & noexcept(false);	
+```
+
+<h3>Import Conversation</h3>
+<p>Imports a conversation from a JSON string. This method imports a conversation from a JSON string. The JSON string should be the JSON string returned from a call to <code>Export()</code>. Returns a boolean indicating success.</p>
+
+```cpp
+bool Import() const & noexcept(false);	
+```
+
+<h3>Append Stream Data</h3>
+<p>Appends stream data (SSEs) from streamed methods. This method updates the conversation given a token from a streamed method. This method should be used when using streamed methods such as <code>ChatCompletion::create</code> or <code>create_async</code> with a callback supplied. This function should be called from within the stream's callback function receiving the SSEs. Returns a boolean indicating data appending success.</p>
+
+```cpp
+bool AppendStreamData(std::string data) & noexcept(false);
+```
+
+<h3>Set Function(s)</h3>
+<p>Sets the functions to be used for the conversation. This method sets the functions to be used for the conversation. Returns a boolean indicating success.</p>
+
+```cpp
+bool SetFunctions(Functions functions) & noexcept(false);
+```
+
+<h3>Pop Function(s)</h3>
+<p>Pops any previously set functions.</p>
+
+```cpp
+void PopFunctions() & noexcept(false);
 ```
 
 <h3>Get Raw JSON Conversation</h3>
@@ -322,6 +381,20 @@ bool Update(const Response& response) & noexcept(false);
 
 ```cpp
 std::string GetRawConversation() const & noexcept;
+```
+
+<h3>Get Raw JSON Functions</h3>
+<p>Returns the raw JSON dump of the internal functions object in string format - if one exists.</p> 
+
+```cpp
+std::string GetRawFunctions() const & noexcept;
+```
+
+<h3>Get Functions JSON Object</h3>
+<p>Returns the JSON object of the set functions.</p> 
+
+```cpp
+const nlohmann::json& GetFunctionsJSON() const & noexcept;
 ```
 
 <h3>Get Internal JSON </h3>

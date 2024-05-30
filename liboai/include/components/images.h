@@ -18,12 +18,9 @@ namespace liboai {
 	class Images final : private Network {
 		public:
 			Images() = default;
+			NON_COPYABLE(Images)
+			NON_MOVABLE(Images)
 			~Images() = default;
-			Images(const Images&) = delete;
-			Images(Images&&) = delete;
-			
-			Images& operator=(const Images&) = delete;
-			Images& operator=(Images&&) = delete;
 			
 			/*
 				@brief Images component method to create an image from
