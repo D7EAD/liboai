@@ -62,6 +62,32 @@ liboai::FutureResponse translate_async(
 ) const& noexcept(false);
 ```
 
+<h3>Text to speech</h3>
+<p>Turn text into lifelike spoken audio. Returns a <code>liboai::Response</code> containing response data. The audio data is in the <code>content</code> field of the <code>liboai::Response</code></p>
+
+```cpp
+liboai::Response speech(
+  const std::string& model,
+  const std::string& voice,
+  const std::string& input,
+  std::optional<std::string> response_format = std::nullopt,
+  std::optional<float> speed = std::nullopt
+) const& noexcept(false);
+```
+
+<h3>Text to speech (async)</h3>
+<p>Asynchronously turn text into lifelike spoken audio. Returns a <code>liboai::FutureResponse</code> containing response data. The audio data is in the <code>content</code> field of the <code>liboai::Response</code></p>
+
+```cpp
+liboai::FutureResponse speech_async(
+  const std::string& model,
+  const std::string& voice,
+  const std::string& input,
+  std::optional<std::string> response_format = std::nullopt,
+  std::optional<float> speed = std::nullopt
+) const& noexcept(false);
+```
+
 <p>All function parameters marked <code>optional</code> are not required and are resolved on OpenAI's end if not supplied.</p>
 
 <br>
