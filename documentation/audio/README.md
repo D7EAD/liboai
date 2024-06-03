@@ -3,6 +3,7 @@
 
 This class and its associated <code>liboai::OpenAI</code> interface allow access to the <a href="https://beta.openai.com/docs/api-reference/audio">Audio</a> endpoint of the OpenAI API; this endpoint's functionality can be found below.</p>
 - Turn audio to text.
+- Turn text to audio.
 
 <br>
 <h2>Methods</h2>
@@ -59,6 +60,32 @@ liboai::FutureResponse translate_async(
   std::optional<std::string> prompt = std::nullopt,
   std::optional<std::string> response_format = std::nullopt,
   std::optional<float> temperature = std::nullopt
+) const& noexcept(false);
+```
+
+<h3>Text to Speech</h3>
+<p>Turn text into lifelike spoken audio. Returns a <code>liboai::Response</code> containing response data. The audio data is in the <code>content</code> field of the <code>liboai::Response</code></p>
+
+```cpp
+liboai::Response speech(
+  const std::string& model,
+  const std::string& voice,
+  const std::string& input,
+  std::optional<std::string> response_format = std::nullopt,
+  std::optional<float> speed = std::nullopt
+) const& noexcept(false);
+```
+
+<h3>Text to Speech (async)</h3>
+<p>Asynchronously turn text into lifelike spoken audio. Returns a <code>liboai::FutureResponse</code> containing response data. The audio data is in the <code>content</code> field of the <code>liboai::Response</code></p>
+
+```cpp
+liboai::FutureResponse speech_async(
+  const std::string& model,
+  const std::string& voice,
+  const std::string& input,
+  std::optional<std::string> response_format = std::nullopt,
+  std::optional<float> speed = std::nullopt
 ) const& noexcept(false);
 ```
 
