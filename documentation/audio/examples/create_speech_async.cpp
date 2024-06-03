@@ -7,7 +7,6 @@ int main() {
 
   if (oai.auth.SetKeyEnv("OPENAI_API_KEY")) {
     try {
-      std::ofstream ocout("demo.mp3", std::ios::binary);
       auto fut = oai.Audio->speech_async(
         "tts-1",
         "alloy",
@@ -20,7 +19,7 @@ int main() {
 
       // get the contained response
       auto res = fut.get();
-
+      std::ofstream ocout("demo.mp3", std::ios::binary);
       ocout << res.content;
       ocout.close();
       std::cout << res.content.size() << std::endl;
