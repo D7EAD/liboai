@@ -3,6 +3,7 @@
 
 This class and its associated <code>liboai::OpenAI</code> interface allow access to the <a href="https://beta.openai.com/docs/api-reference/audio">Audio</a> endpoint of the OpenAI API; this endpoint's functionality can be found below.</p>
 - Turn audio to text.
+- Turn text to audio.
 
 <br>
 <h2>Methods</h2>
