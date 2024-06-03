@@ -63,7 +63,7 @@ liboai::FutureResponse translate_async(
 ) const& noexcept(false);
 ```
 
-<h3>Text to speech</h3>
+<h3>Text to Speech</h3>
 <p>Turn text into lifelike spoken audio. Returns a <code>liboai::Response</code> containing response data. The audio data is in the <code>content</code> field of the <code>liboai::Response</code></p>
 
 ```cpp
@@ -76,7 +76,7 @@ liboai::Response speech(
 ) const& noexcept(false);
 ```
 
-<h3>Text to speech (async)</h3>
+<h3>Text to Speech (async)</h3>
 <p>Asynchronously turn text into lifelike spoken audio. Returns a <code>liboai::FutureResponse</code> containing response data. The audio data is in the <code>content</code> field of the <code>liboai::Response</code></p>
 
 ```cpp
