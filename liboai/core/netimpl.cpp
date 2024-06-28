@@ -835,7 +835,8 @@ void liboai::netimpl::Session::SetMultipart(const components::Multipart& multipa
 			else if (part.is_buffer) {
 				mimedata.push_back(curl_mime_addpart(this->mime));
 				e[1] = curl_mime_name(mimedata.back(), part.name.c_str());
-				e[2] = curl_mime_data(mimedata.back(), reinterpret_cast<const char*>(part.data), part.datalen);
+				e[2] = curl_mime_filename(mimedata.back(), part.value.c_str());
+				e[3] = curl_mime_data(mimedata.back(), reinterpret_cast<const char*>(part.data), part.datalen);
 			}
 			else {
 				mimedata.push_back(curl_mime_addpart(this->mime));
@@ -952,7 +953,8 @@ void liboai::netimpl::Session::SetMultipart(components::Multipart&& multipart) {
 			else if (part.is_buffer) {
 				mimedata.push_back(curl_mime_addpart(this->mime));
 				e[1] = curl_mime_name(mimedata.back(), part.name.c_str());
-				e[2] = curl_mime_data(mimedata.back(), reinterpret_cast<const char*>(part.data), part.datalen);
+				e[2] = curl_mime_filename(mimedata.back(), part.value.c_str());
+				e[3] = curl_mime_data(mimedata.back(), reinterpret_cast<const char*>(part.data), part.datalen);
 			}
 			else {
 				mimedata.push_back(curl_mime_addpart(this->mime));
