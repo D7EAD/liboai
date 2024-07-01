@@ -225,12 +225,13 @@ bool liboai::Conversation::Update(std::string_view response) & noexcept(false) {
 							// conversation is not updated as there is no assistant
 							// response to be added. However, we do add the function
 							// information
-
+							
+							this->_conversation["function_call"] = nlohmann::json::object();
 							if (choice.value()["message"]["function_call"].contains("name")) {
-								this->_conversation["function_call"] = { { "name", choice.value()["message"]["function_call"]["name"] } };
+								this->_conversation["function_call"]["name"] = choice.value()["message"]["function_call"]["name"];
 							}
 							if (choice.value()["message"]["function_call"].contains("arguments")) {
-								this->_conversation["function_call"] = { { "arguments", choice.value()["message"]["function_call"]["arguments"] } };
+								this->_conversation["function_call"]["arguments"] = choice.value()["message"]["function_call"]["arguments"];
 							}
 							
 							this->_last_resp_is_fc = true;
@@ -271,12 +272,13 @@ bool liboai::Conversation::Update(std::string_view response) & noexcept(false) {
 					// conversation is not updated as there is no assistant
 					// response to be added. However, we do add the function
 					// information
-
+					
+					this->_conversation["function_call"] = nlohmann::json::object();
 					if (j["message"]["function_call"].contains("name")) {
-						this->_conversation["function_call"] = { { "name", j["message"]["function_call"]["name"] } };
+						this->_conversation["function_call"]["name"] = j["message"]["function_call"]["name"];
 					}
 					if (j["message"]["function_call"].contains("arguments")) {
-						this->_conversation["function_call"] = { { "arguments", j["message"]["function_call"]["arguments"] } };
+						this->_conversation["function_call"]["arguments"] = j["message"]["function_call"]["arguments"];
 					}
 
 					this->_last_resp_is_fc = true;
@@ -311,12 +313,12 @@ bool liboai::Conversation::Update(std::string_view response) & noexcept(false) {
 				// conversation is not updated as there is no assistant
 				// response to be added. However, we do add the function
 				// information
-
+				this->_conversation["function_call"] = nlohmann::json::object();
 				if (j["message"]["function_call"].contains("name")) {
-					this->_conversation["function_call"] = { { "name", j["message"]["function_call"]["name"] } };
+					this->_conversation["function_call"]["name"] = j["message"]["function_call"]["name"];
 				}
 				if (j["message"]["function_call"].contains("arguments")) {
-					this->_conversation["function_call"] = { { "arguments", j["message"]["function_call"]["arguments"] } };
+					this->_conversation["function_call"]["arguments"] = j["message"]["function_call"]["arguments"];
 				}
 
 				this->_last_resp_is_fc = true;
