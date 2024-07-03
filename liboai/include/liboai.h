@@ -41,7 +41,7 @@
 #include "components/moderations.h"
 
 namespace liboai {
-	class OpenAI final {
+	class OpenAI {
 		public:
 			OpenAI() = default;
 			OpenAI(OpenAI const&) = delete;
