@@ -118,7 +118,7 @@ liboai::netimpl::Session::~Session() {
 void liboai::netimpl::Session::Prepare() {
 	// holds error codes - all init to OK to prevent errors
 	// when checking unset values
-	CURLcode e[10]; memset(e, CURLcode::CURLE_OK, sizeof(e));
+	CURLcode e[11]; memset(e, CURLcode::CURLE_OK, sizeof(e));
 
 	// add parameters to base url
 	if (!this->parameter_string_.empty()) {
@@ -136,36 +136,47 @@ void liboai::netimpl::Session::Prepare() {
 		
 	e[0] = curl_easy_setopt(this->curl_, CURLOPT_URL, this->url_.c_str());
 	
-	// set proxy if available
-	const std::string protocol = url_.substr(0, url_.find(':'));
-	if (proxies_.has(protocol)) {
-		e[1] = curl_easy_setopt(this->curl_, CURLOPT_PROXY, proxies_[protocol].c_str());
-		
-		#if defined(LIBOAI_DEBUG)
-			_liboai_dbg(
-				"[dbg] [@%s] Set CURLOPT_PROXY for Session (0x%p) to %s.\n",
-				__func__, this, proxies_[protocol].c_str()
-			);
-		#endif
+	const std::string protocol_socket5_hostname = "socket5_hostname";
+	if (proxies_.has(protocol_socket5_hostname)) {
+		e[1] = curl_easy_setopt(this->curl_, CURLOPT_PROXY, proxies_[protocol_socket5_hostname].c_str());
+		e[2] = curl_easy_setopt(this->curl_, CURLOPT_PROXYTYPE, CURLPROXY_SOCKS5_HOSTNAME);
 
-		if (proxyAuth_.has(protocol)) {
-			e[2] = curl_easy_setopt(this->curl_, CURLOPT_PROXYUSERNAME, proxyAuth_.GetUsername(protocol));
-			e[3] = curl_easy_setopt(this->curl_, CURLOPT_PROXYPASSWORD, proxyAuth_.GetPassword(protocol));
-
+		if (proxyAuth_.has(protocol_socket5_hostname)) {
+			e[3] = curl_easy_setopt(this->curl_, CURLOPT_PROXYUSERNAME, proxyAuth_.GetUsername(protocol_socket5_hostname));
+			e[4] = curl_easy_setopt(this->curl_, CURLOPT_PROXYPASSWORD, proxyAuth_.GetPassword(protocol_socket5_hostname));
+		}
+  } else {
+		// set proxy if available
+		const std::string protocol = url_.substr(0, url_.find(':'));
+		if (proxies_.has(protocol)) {
+			e[1] = curl_easy_setopt(this->curl_, CURLOPT_PROXY, proxies_[protocol].c_str());
+			
 			#if defined(LIBOAI_DEBUG)
 				_liboai_dbg(
-					"[dbg] [@%s] Set CURLOPT_PROXYUSERNAME and CURLOPT_PROXYPASSWORD for Session (0x%p) to %s and %s.\n",
-					__func__, this, proxyAuth_.GetUsername(protocol), proxyAuth_.GetPassword(protocol)
+					"[dbg] [@%s] Set CURLOPT_PROXY for Session (0x%p) to %s.\n",
+					__func__, this, proxies_[protocol].c_str()
 				);
 			#endif
+
+			if (proxyAuth_.has(protocol)) {
+				e[2] = curl_easy_setopt(this->curl_, CURLOPT_PROXYUSERNAME, proxyAuth_.GetUsername(protocol));
+				e[3] = curl_easy_setopt(this->curl_, CURLOPT_PROXYPASSWORD, proxyAuth_.GetPassword(protocol));
+
+				#if defined(LIBOAI_DEBUG)
+					_liboai_dbg(
+						"[dbg] [@%s] Set CURLOPT_PROXYUSERNAME and CURLOPT_PROXYPASSWORD for Session (0x%p) to %s and %s.\n",
+						__func__, this, proxyAuth_.GetUsername(protocol), proxyAuth_.GetPassword(protocol)
+					);
+				#endif
+			}
 		}
 	}
 
 	// accept all encoding types
-	e[4] = curl_easy_setopt(this->curl_, CURLOPT_ACCEPT_ENCODING, "");
+	e[5] = curl_easy_setopt(this->curl_, CURLOPT_ACCEPT_ENCODING, "");
 
 	#if LIBCURL_VERSION_MAJOR > 7 || (LIBCURL_VERSION_MAJOR == 7 && LIBCURL_VERSION_MINOR >= 71)
-		e[5] = curl_easy_setopt(this->curl_, CURLOPT_SSL_OPTIONS, CURLSSLOPT_NATIVE_CA);
+		e[6] = curl_easy_setopt(this->curl_, CURLOPT_SSL_OPTIONS, CURLSSLOPT_NATIVE_CA);
 		
 		#if defined(LIBOAI_DEBUG)
 			_liboai_dbg(
@@ -177,8 +188,8 @@ void liboai::netimpl::Session::Prepare() {
 
 	// set string the response will be sent to
 	if (!this->write_.callback) {
-		e[6] = curl_easy_setopt(this->curl_, CURLOPT_WRITEFUNCTION, liboai::netimpl::components::writeFunction);
-		e[7] = curl_easy_setopt(this->curl_, CURLOPT_WRITEDATA, &this->response_string_);
+		e[7] = curl_easy_setopt(this->curl_, CURLOPT_WRITEFUNCTION, liboai::netimpl::components::writeFunction);
+		e[8] = curl_easy_setopt(this->curl_, CURLOPT_WRITEDATA, &this->response_string_);
 		
 		#if defined(LIBOAI_DEBUG)
 			_liboai_dbg(
@@ -189,8 +200,8 @@ void liboai::netimpl::Session::Prepare() {
 	}
 
 	// set string the raw headers will be sent to
-	e[8] = curl_easy_setopt(this->curl_, CURLOPT_HEADERFUNCTION, liboai::netimpl::components::writeFunction);
-	e[9] = curl_easy_setopt(this->curl_, CURLOPT_HEADERDATA, &this->header_string_);
+	e[9] = curl_easy_setopt(this->curl_, CURLOPT_HEADERFUNCTION, liboai::netimpl::components::writeFunction);
+	e[10] = curl_easy_setopt(this->curl_, CURLOPT_HEADERDATA, &this->header_string_);
 
 	#if defined(LIBOAI_DEBUG)
 		_liboai_dbg(
@@ -199,13 +210,13 @@ void liboai::netimpl::Session::Prepare() {
 		);
 	#endif
 
-	ErrorCheck(e, 10, "liboai::netimpl::Session::Prepare()");
+	ErrorCheck(e, 11, "liboai::netimpl::Session::Prepare()");
 }
 
 void liboai::netimpl::Session::PrepareDownloadInternal() {
 	// holds error codes - all init to OK to prevent errors
 	// when checking unset values
-	CURLcode e[6]; memset(e, CURLcode::CURLE_OK, sizeof(e));
+	CURLcode e[7]; memset(e, CURLcode::CURLE_OK, sizeof(e));
 
 	if (!this->parameter_string_.empty()) {
 		this->url_ += "?";
@@ -222,32 +233,42 @@ void liboai::netimpl::Session::PrepareDownloadInternal() {
 	
 	e[0] = curl_easy_setopt(this->curl_, CURLOPT_URL, this->url_.c_str());
 
-	const std::string protocol = url_.substr(0, url_.find(':'));
-	if (proxies_.has(protocol)) {
-		e[1] = curl_easy_setopt(this->curl_, CURLOPT_PROXY, proxies_[protocol].c_str());
-
-		#if defined(LIBOAI_DEBUG)
-			_liboai_dbg(
-				"[dbg] [@%s] Set CURLOPT_PROXY for Session (0x%p) to %s.\n",
-				__func__, this, proxies_[protocol].c_str()
-			);
-		#endif
-		
-		if (proxyAuth_.has(protocol)) {
-			e[2] = curl_easy_setopt(this->curl_, CURLOPT_PROXYUSERNAME, proxyAuth_.GetUsername(protocol));
-			e[3] = curl_easy_setopt(this->curl_, CURLOPT_PROXYPASSWORD, proxyAuth_.GetPassword(protocol));
+	const std::string protocol_socket5_hostname = "socket5_hostname";
+	if (proxies_.has(protocol_socket5_hostname)) {
+		e[1] = curl_easy_setopt(this->curl_, CURLOPT_PROXY, proxies_[protocol_socket5_hostname].c_str());
+		e[2] = curl_easy_setopt(this->curl_, CURLOPT_PROXYTYPE, CURLPROXY_SOCKS5_HOSTNAME);
+		if (proxyAuth_.has(protocol_socket5_hostname)) {
+			e[3] = curl_easy_setopt(this->curl_, CURLOPT_PROXYUSERNAME, proxyAuth_.GetUsername(protocol_socket5_hostname));
+			e[4] = curl_easy_setopt(this->curl_, CURLOPT_PROXYPASSWORD, proxyAuth_.GetPassword(protocol_socket5_hostname));
+		}
+  } else {
+		const std::string protocol = url_.substr(0, url_.find(':'));
+		if (proxies_.has(protocol)) {
+			e[1] = curl_easy_setopt(this->curl_, CURLOPT_PROXY, proxies_[protocol].c_str());
 
 			#if defined(LIBOAI_DEBUG)
 				_liboai_dbg(
-					"[dbg] [@%s] Set CURLOPT_PROXYUSERNAME and CURLOPT_PROXYPASSWORD for Session (0x%p) to %s and %s.\n",
-					__func__, this, proxyAuth_.GetUsername(protocol), proxyAuth_.GetPassword(protocol)
+					"[dbg] [@%s] Set CURLOPT_PROXY for Session (0x%p) to %s.\n",
+					__func__, this, proxies_[protocol].c_str()
 				);
 			#endif
+			
+			if (proxyAuth_.has(protocol)) {
+				e[2] = curl_easy_setopt(this->curl_, CURLOPT_PROXYUSERNAME, proxyAuth_.GetUsername(protocol));
+				e[3] = curl_easy_setopt(this->curl_, CURLOPT_PROXYPASSWORD, proxyAuth_.GetPassword(protocol));
+
+				#if defined(LIBOAI_DEBUG)
+					_liboai_dbg(
+						"[dbg] [@%s] Set CURLOPT_PROXYUSERNAME and CURLOPT_PROXYPASSWORD for Session (0x%p) to %s and %s.\n",
+						__func__, this, proxyAuth_.GetUsername(protocol), proxyAuth_.GetPassword(protocol)
+					);
+				#endif
+			}
 		}
 	}
 
-	e[4] = curl_easy_setopt(this->curl_, CURLOPT_HEADERFUNCTION, liboai::netimpl::components::writeFunction);
-	e[5] = curl_easy_setopt(this->curl_, CURLOPT_HEADERDATA, &this->header_string_);
+	e[5] = curl_easy_setopt(this->curl_, CURLOPT_HEADERFUNCTION, liboai::netimpl::components::writeFunction);
+	e[6] = curl_easy_setopt(this->curl_, CURLOPT_HEADERDATA, &this->header_string_);
 
 	#if defined(LIBOAI_DEBUG)
 		_liboai_dbg(
@@ -256,7 +277,7 @@ void liboai::netimpl::Session::PrepareDownloadInternal() {
 		);
 	#endif
 		
-	ErrorCheck(e, 6, "liboai::netimpl::Session::PrepareDownloadInternal()");
+	ErrorCheck(e, 7, "liboai::netimpl::Session::PrepareDownloadInternal()");
 }
 
 CURLcode liboai::netimpl::Session::Perform() {
