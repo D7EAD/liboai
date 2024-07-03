@@ -138,16 +138,12 @@ void liboai::netimpl::Session::Prepare() {
 	
 	const std::string protocol_socket5_hostname = "socket5_hostname";
 	if (proxies_.has(protocol_socket5_hostname)) {
-		e[1] = curl_easy_setopt(this->curl_, CURLOPT_PROXY,
-														proxies_[protocol_socket5_hostname].c_str());
-		e[2] = curl_easy_setopt(this->curl_, CURLOPT_PROXYTYPE,
-														CURLPROXY_SOCKS5_HOSTNAME);
+		e[1] = curl_easy_setopt(this->curl_, CURLOPT_PROXY, proxies_[protocol_socket5_hostname].c_str());
+		e[2] = curl_easy_setopt(this->curl_, CURLOPT_PROXYTYPE, CURLPROXY_SOCKS5_HOSTNAME);
 
 		if (proxyAuth_.has(protocol_socket5_hostname)) {
-			e[3] = curl_easy_setopt(this->curl_, CURLOPT_PROXYUSERNAME,
-														proxyAuth_.GetUsername(protocol_socket5_hostname));
-			e[4] = curl_easy_setopt(this->curl_, CURLOPT_PROXYPASSWORD,
-														proxyAuth_.GetPassword(protocol_socket5_hostname));
+			e[3] = curl_easy_setopt(this->curl_, CURLOPT_PROXYUSERNAME, proxyAuth_.GetUsername(protocol_socket5_hostname));
+			e[4] = curl_easy_setopt(this->curl_, CURLOPT_PROXYPASSWORD, proxyAuth_.GetPassword(protocol_socket5_hostname));
 		}
   } else {
 		// set proxy if available
@@ -239,16 +235,11 @@ void liboai::netimpl::Session::PrepareDownloadInternal() {
 
 	const std::string protocol_socket5_hostname = "socket5_hostname";
 	if (proxies_.has(protocol_socket5_hostname)) {
-		e[1] = curl_easy_setopt(this->curl_, CURLOPT_PROXY,
-														proxies_[protocol_socket5_hostname].c_str());
-		e[2] = curl_easy_setopt(this->curl_, CURLOPT_PROXYTYPE,
-														CURLPROXY_SOCKS5_HOSTNAME);
-
+		e[1] = curl_easy_setopt(this->curl_, CURLOPT_PROXY, proxies_[protocol_socket5_hostname].c_str());
+		e[2] = curl_easy_setopt(this->curl_, CURLOPT_PROXYTYPE, CURLPROXY_SOCKS5_HOSTNAME);
 		if (proxyAuth_.has(protocol_socket5_hostname)) {
-			e[3] = curl_easy_setopt(this->curl_, CURLOPT_PROXYUSERNAME,
-															proxyAuth_.GetUsername(protocol_socket5_hostname));
-			e[4] = curl_easy_setopt(this->curl_, CURLOPT_PROXYPASSWORD,
-															proxyAuth_.GetPassword(protocol_socket5_hostname));
+			e[3] = curl_easy_setopt(this->curl_, CURLOPT_PROXYUSERNAME, proxyAuth_.GetUsername(protocol_socket5_hostname));
+			e[4] = curl_easy_setopt(this->curl_, CURLOPT_PROXYPASSWORD, proxyAuth_.GetPassword(protocol_socket5_hostname));
 		}
   } else {
 		const std::string protocol = url_.substr(0, url_.find(':'));
