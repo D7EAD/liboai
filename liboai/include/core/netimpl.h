@@ -614,6 +614,13 @@ namespace liboai {
 				liboai::Response Post();
 				liboai::Response Delete();
 				liboai::Response Download(std::ofstream& file);
+				void ClearContext();
+				/// @brief Enable or disable sharing session globally. use global session for all requests.
+				/// @param enable : true to enable, false to disable
+				/// @note This function is not thread-safe.
+				static void EnableShareSession(bool enable);
+				static Session* GetSharedSession();
+
 				
 			private:
 				template <class... _Options>
@@ -691,34 +698,60 @@ namespace liboai {
 				components::Proxies proxies_;
 				components::ProxyAuthentication proxyAuth_;
 				components::WriteCallback write_;
+
+				static std::unique_ptr<Session> shared_session_;
 		};
 
 		template <class... _Options>
 		liboai::Response Get(_Options&&... options) {
 			Session session;
-			set_options(session, std::forward<_Options>(options)...);
-			return session.Get();
+			if (auto shared_session = Session::GetSharedSession(); shared_session != nullptr) {
+				shared_session->ClearContext();
+				set_options(*shared_session, std::forward<_Options>(options)...);
+				return shared_session->Get();
+			}else{
+				set_options(session, std::forward<_Options>(options)...);
+				return session.Get();
+			}
 		}
 
 		template <class... _Options>
 		liboai::Response Post(_Options&&... options) {
 			Session session;
-			set_options(session, std::forward<_Options>(options)...);
-			return session.Post();
+			if (auto shared_session = Session::GetSharedSession(); shared_session != nullptr) {
+				shared_session->ClearContext();
+				set_options(*shared_session, std::forward<_Options>(options)...);
+				return shared_session->Post();
+			}else{
+				set_options(session, std::forward<_Options>(options)...);
+				return session.Post();
+			}
 		}
 		
 		template <class... _Options>
 		liboai::Response Delete(_Options&&... options) {
 			Session session;
-			set_options(session, std::forward<_Options>(options)...);
-			return session.Delete();
+			if (auto shared_session = Session::GetSharedSession(); shared_session !=nullptr) {
+				shared_session->ClearContext();
+				set_options(*shared_session, std::forward<_Options>(options)...);
+				return shared_session->Delete();
+			}else{
+				set_options(session, std::forward<_Options>(options)...);
+				return session.Delete();
+			}
 		}
 
 		template <class... _Options>
 		liboai::Response Download(std::ofstream& file, _Options&&... options) {
 			Session session;
-			set_options(session, std::forward<_Options>(options)...);
-			return session.Download(file);
+			if (auto shared_session = Session::GetSharedSession(); shared_session !=nullptr) {
+				shared_session->ClearContext();
+				set_options(*shared_session, std::forward<_Options>(options)...);
+				return shared_session->Download(file);
+			}else{
+				set_options(session, std::forward<_Options>(options)...);
+				return session.Download(file);
+			}
 		}
 
 		template <class... _Options>

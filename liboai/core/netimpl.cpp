@@ -652,6 +652,73 @@ liboai::Response liboai::netimpl::Session::Download(std::ofstream& file) {
 	return CompleteDownload();
 }
 
+void liboai::netimpl::Session::ClearContext() {
+  if (curl_) {
+    curl_easy_reset(curl_);
+  }
+  status_code = 0;
+  elapsed = 0.0;
+  status_line.clear();
+  content.clear();
+  url_str.clear();
+  reason.clear();
+
+  if (this->headers) {
+    curl_slist_free_all(this->headers);
+    this->headers = nullptr;
+
+#if defined(LIBOAI_DEBUG)
+    _liboai_dbg("[dbg] [@%s] curl_slist_free_all() called.\n", __func__);
+#endif
+  }
+
+#if LIBCURL_VERSION_MAJOR < 7 || \
+    (LIBCURL_VERSION_MAJOR == 7 && LIBCURL_VERSION_MINOR < 56)
+  if (this->form) {
+    curl_formfree(this->form);
+    this->form = nullptr;
+
+#if defined(LIBOAI_DEBUG)
+    _liboai_dbg("[dbg] [@%s] curl_formfree() called.\n", __func__);
+#endif
+  }
+#endif
+
+#if LIBCURL_VERSION_MAJOR > 7 || \
+    (LIBCURL_VERSION_MAJOR == 7 && LIBCURL_VERSION_MINOR >= 56)
+  if (this->mime) {
+    curl_mime_free(this->mime);
+    this->mime = nullptr;
+
+#if defined(LIBOAI_DEBUG)
+    _liboai_dbg("[dbg] [@%s] curl_mime_free() called.\n", __func__);
+#endif
+  }
+#endif
+
+  hasBody = false;
+  parameter_string_.clear();
+  url_.clear();
+  response_string_.clear();
+  header_string_.clear();
+}
+
+std::unique_ptr<liboai::netimpl::Session> liboai::netimpl::Session::shared_session_ = nullptr;
+void liboai::netimpl::Session::EnableShareSession(bool enable) {
+	if (enable) {
+		if (shared_session_ == nullptr){
+			shared_session_ = std::make_unique<liboai::netimpl::Session>();
+		}
+	} else {
+		shared_session_.reset();
+	}
+}
+
+liboai::netimpl::Session* liboai::netimpl::Session::GetSharedSession(){
+	return shared_session_.get();
+}
+
+
 void liboai::netimpl::Session::ParseResponseHeader(const std::string& headers, std::string* status_line, std::string* reason) {
     std::vector<std::string> lines;
     std::istringstream stream(headers);
