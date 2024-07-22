@@ -727,6 +727,23 @@ namespace liboai {
 			[[nodiscard]]
 			LIBOAI_EXPORT bool AppendStreamData(std::string data) & noexcept(false);
 
+
+			/*
+				@brief Appends stream data (SSEs) from streamed methods.
+					This method updates the conversation given a token from a
+					streamed method. This method should be used when using
+					streamed methods such as ChatCompletion::create or 
+					create_async with a callback supplied. This function should
+					be called from within the stream's callback function
+					receiving the SSEs.
+
+					@param *token    Streamed token (data) to update the conversation with.
+					@param *delta    output parameter. The delta to append to the conversation.
+					@param *completed output parameter. Whether the stream is completed.
+			*/
+			[[nodiscard]]
+			LIBOAI_EXPORT bool AppendStreamData(std::string data, std::string& delta, bool& completed) & noexcept(false);
+
 			/*
 				@brief Sets the functions to be used for the conversation.
 					This method sets the functions to be used for the conversation.
@@ -767,11 +784,21 @@ namespace liboai {
 			*/
 			LIBOAI_EXPORT const nlohmann::json& GetFunctionsJSON() const & noexcept;
 			
+			/*
+				@brief Returns whether the conversation has functions or not. this function call from ChatComplete
+			*/
+			[[nodiscard]] constexpr bool HasFunctions() const & noexcept { return this->_functions ? true : false; }
+
 		private:
 			friend class ChatCompletion; friend class Azure;
-			[[nodiscard]] constexpr bool HasFunctions() const & noexcept { return this->_functions ? true : false; }
 			[[nodiscard]] std::vector<std::string> SplitStreamedData(std::string data) const noexcept(false);
 			void RemoveStrings(std::string& s, std::string_view p) const noexcept(false);
+			/*
+				@brief split full stream data that read from remote server.
+				@returns vector of string that contains the split data that will contains the last termination string(data: "DONE").
+			*/
+			[[nodiscard]] std::vector<std::string> SplitFullStreamedData(std::string data) const noexcept(false);
+			bool ParseStreamData(std::string data, std::string& delta, bool& completed);
 
 			nlohmann::json _conversation;
 			std::optional<nlohmann::json> _functions = std::nullopt;

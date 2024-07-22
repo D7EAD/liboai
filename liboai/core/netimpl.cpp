@@ -703,22 +703,6 @@ void liboai::netimpl::Session::ClearContext() {
   header_string_.clear();
 }
 
-std::unique_ptr<liboai::netimpl::Session> liboai::netimpl::Session::shared_session_ = nullptr;
-void liboai::netimpl::Session::EnableShareSession(bool enable) {
-	if (enable) {
-		if (shared_session_ == nullptr){
-			shared_session_ = std::make_unique<liboai::netimpl::Session>();
-		}
-	} else {
-		shared_session_.reset();
-	}
-}
-
-liboai::netimpl::Session* liboai::netimpl::Session::GetSharedSession(){
-	return shared_session_.get();
-}
-
-
 void liboai::netimpl::Session::ParseResponseHeader(const std::string& headers, std::string* status_line, std::string* reason) {
     std::vector<std::string> lines;
     std::istringstream stream(headers);
