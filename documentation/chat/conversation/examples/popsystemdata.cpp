@@ -17,5 +17,5 @@ int main() {
   // add a different system message
   convo.SetSystemData("You are a helpful bot that enjoys business.");
 
-  ...
+  // ...
 }

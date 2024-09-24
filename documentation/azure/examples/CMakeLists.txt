@@ -1,0 +1,16 @@
+cmake_minimum_required(VERSION 3.13)
+
+project(azure)
+
+add_example(create_chat_completion_azure "create_chat_completion.cpp")
+add_example(create_chat_completion_async_azure "create_chat_completion_async.cpp")
+add_basic_example(create_completion)
+add_basic_example(create_completion_async)
+add_example(create_embedding_azure "create_embedding.cpp")
+add_example(create_embedding_async_azure "create_embedding_async.cpp")
+add_basic_example(delete_generated_image)
+add_basic_example(delete_generated_image_async)
+add_basic_example(get_generated_image)
+add_basic_example(get_generated_image_async)
+add_basic_example(request_image_generation)
+add_basic_example(request_image_generation_async)
