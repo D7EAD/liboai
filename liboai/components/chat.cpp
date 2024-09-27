@@ -648,65 +648,7 @@ liboai::Response liboai::ChatCompletion::create(const std::string& model, Conver
 }
 
 liboai::FutureResponse liboai::ChatCompletion::create_async(const std::string& model, Conversation& conversation, std::optional<std::string> function_call, std::optional<float> temperature, std::optional<float> top_p, std::optional<uint16_t> n, std::optional<ChatStreamCallback> stream, std::optional<std::vector<std::string>> stop, std::optional<uint16_t> max_tokens, std::optional<float> presence_penalty, std::optional<float> frequency_penalty, std::optional<std::unordered_map<std::string, int8_t>> logit_bias, std::optional<std::string> user) const& noexcept(false) {
-	liboai::JsonConstructor jcon;
-	jcon.push_back("model", model);
-	jcon.push_back("temperature", std::move(temperature));
-	jcon.push_back("top_p", std::move(top_p));
-	jcon.push_back("n", std::move(n));
-	jcon.push_back("stop", std::move(stop));
-	jcon.push_back("max_tokens", std::move(max_tokens));
-	jcon.push_back("presence_penalty", std::move(presence_penalty));
-	jcon.push_back("frequency_penalty", std::move(frequency_penalty));
-	jcon.push_back("logit_bias", std::move(logit_bias));
-	jcon.push_back("user", std::move(user));
-
-	if (function_call) {
-		if (function_call.value() == "none" || function_call.value() == "auto") {
-			nlohmann::json j; j["function_call"] = function_call.value();
-			jcon.push_back("function_call", j["function_call"]);
-		}
-		else {
-			nlohmann::json j; j["function_call"] = { {"name", function_call.value()} };
-			jcon.push_back("function_call", j["function_call"]);
-		}
-	}
-
-	StrippedStreamCallback _sscb = nullptr;
-	if (stream) {
-		_sscb = [stream, &conversation](std::string data, intptr_t userdata) -> bool {
-			ChatStreamCallback _stream = stream.value();
-			return _stream(data, userdata, conversation);
-		};
-
-		jcon.push_back("stream", _sscb);
-	}
-
-	if (conversation.GetJSON().contains("messages")) {
-		jcon.push_back("messages", conversation.GetJSON()["messages"]);
-	}
-
-	if (conversation.HasFunctions()) {
-		jcon.push_back("functions", conversation.GetFunctionsJSON()["functions"]);
-	}
-
-	auto _fn = [this](
-		liboai::JsonConstructor&& jcon,
-		StrippedStreamCallback&& sscb
-	) -> liboai::Response {
-		return this->Request(
-			Method::HTTP_POST, this->openai_root_, "/chat/completions", "application/json",
-			this->auth_.GetAuthorizationHeaders(),
-			netimpl::components::Body {
-				jcon.dump()
-			},
-			sscb ? netimpl::components::WriteCallback{ std::move(sscb) } : netimpl::components::WriteCallback{},
-			this->auth_.GetProxies(),
-			this->auth_.GetProxyAuth(),
-			this->auth_.GetMaxTimeout()
-		);
-	};
-		
-	return std::async(std::launch::async, _fn, std::move(jcon), std::move(_sscb));
+	return std::async(std::launch::async, &liboai::ChatCompletion::create, this, model, std::ref(conversation), function_call, temperature, top_p, n, stream, stop, max_tokens, presence_penalty, frequency_penalty, logit_bias, user);
 }
 
 std::ostream& liboai::operator<<(std::ostream& os, const Conversation& conv) {
