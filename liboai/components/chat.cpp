@@ -225,12 +225,13 @@ bool liboai::Conversation::Update(std::string_view response) & noexcept(false) {
 							// conversation is not updated as there is no assistant
 							// response to be added. However, we do add the function
 							// information
-
+							
+							this->_conversation["function_call"] = nlohmann::json::object();
 							if (choice.value()["message"]["function_call"].contains("name")) {
-								this->_conversation["function_call"] = { { "name", choice.value()["message"]["function_call"]["name"] } };
+								this->_conversation["function_call"]["name"] = choice.value()["message"]["function_call"]["name"];
 							}
 							if (choice.value()["message"]["function_call"].contains("arguments")) {
-								this->_conversation["function_call"] = { { "arguments", choice.value()["message"]["function_call"]["arguments"] } };
+								this->_conversation["function_call"]["arguments"] = choice.value()["message"]["function_call"]["arguments"];
 							}
 							
 							this->_last_resp_is_fc = true;
@@ -271,12 +272,13 @@ bool liboai::Conversation::Update(std::string_view response) & noexcept(false) {
 					// conversation is not updated as there is no assistant
 					// response to be added. However, we do add the function
 					// information
-
+					
+					this->_conversation["function_call"] = nlohmann::json::object();
 					if (j["message"]["function_call"].contains("name")) {
-						this->_conversation["function_call"] = { { "name", j["message"]["function_call"]["name"] } };
+						this->_conversation["function_call"]["name"] = j["message"]["function_call"]["name"];
 					}
 					if (j["message"]["function_call"].contains("arguments")) {
-						this->_conversation["function_call"] = { { "arguments", j["message"]["function_call"]["arguments"] } };
+						this->_conversation["function_call"]["arguments"] = j["message"]["function_call"]["arguments"];
 					}
 
 					this->_last_resp_is_fc = true;
@@ -311,12 +313,12 @@ bool liboai::Conversation::Update(std::string_view response) & noexcept(false) {
 				// conversation is not updated as there is no assistant
 				// response to be added. However, we do add the function
 				// information
-
+				this->_conversation["function_call"] = nlohmann::json::object();
 				if (j["message"]["function_call"].contains("name")) {
-					this->_conversation["function_call"] = { { "name", j["message"]["function_call"]["name"] } };
+					this->_conversation["function_call"]["name"] = j["message"]["function_call"]["name"];
 				}
 				if (j["message"]["function_call"].contains("arguments")) {
-					this->_conversation["function_call"] = { { "arguments", j["message"]["function_call"]["arguments"] } };
+					this->_conversation["function_call"]["arguments"] = j["message"]["function_call"]["arguments"];
 				}
 
 				this->_last_resp_is_fc = true;
@@ -374,100 +376,22 @@ bool liboai::Conversation::Import(std::string_view json) & noexcept(false) {
 
 bool liboai::Conversation::AppendStreamData(std::string data) & noexcept(false) {
 	if (!data.empty()) {
-		if (data.find("data: [DONE]") == std::string::npos) {
-			/*
-				j should have content in the form of:
-					{"id":"chatcmpl-7SKOck29emvbBbDS6cHg5xwnRrsLO","object":"chat.completion.chunk","created":1686985942,"model":"gpt-3.5-turbo-0613","choices":[{"index":0,"delta":{"content":"."},"finish_reason":null}]}
-				where "delta" may be empty
-			*/
-			std::vector<std::string> objects = this->SplitStreamedData(data);
-
-			if (!objects.empty()) {
-				// create an empty message at the end of the conversation,
-				// marked as "pending" to indicate that the response is
-				// still being processed. This flag will be removed once
-				// the response is processed. If the marking already
-				// exists, keep appending to the same message.
-				if (this->_conversation["messages"].empty() || !this->_conversation["messages"].back().contains("pending")) {
-					this->_conversation["messages"].push_back(
-						{
-							{ "role",    "" },
-							{ "content", "" },
-							{ "pending", true }
-						}
-					);
-				}
-
-				for (auto& json_object : objects) {
-					nlohmann::json j = nlohmann::json::parse(json_object);
-
-					if (j.contains("choices")) {
-						if (j["choices"][0].contains("delta")) {
-							if (!j["choices"][0]["delta"].empty() && !j["choices"][0]["delta"].is_null()) {
-								if (j["choices"][0]["delta"].contains("role")) {
-									this->_conversation["messages"].back()["role"] = j["choices"][0]["delta"]["role"];
-								}
-
-								if (j["choices"][0]["delta"].contains("content")) {
-									if (!j["choices"][0]["delta"]["content"].empty() && !j["choices"][0]["delta"]["content"].is_null()) {
-										this->_conversation["messages"].back()["content"] = (this->_conversation["messages"].back()["content"].get<std::string>() + j["choices"][0]["delta"]["content"].get<std::string>());
-									}
-
-									// function calls do not have a content field,
-									// set _last_resp_is_fc to false and remove any
-									// previously set function_call field in the
-									// conversation
-									if (this->_last_resp_is_fc) {
-										if (this->_conversation.contains("function_call")) {
-											this->_conversation.erase("function_call");
-										}
-										this->_last_resp_is_fc = false;
-									}
-								}
-
-								if (j["choices"][0]["delta"].contains("function_call")) {
-									if (!j["choices"][0]["delta"]["function_call"].empty() && !j["choices"][0]["delta"]["function_call"].is_null()) {
-										if (j["choices"][0]["delta"]["function_call"].contains("name")) {
-											if (!j["choices"][0]["delta"]["function_call"]["name"].empty() && !j["choices"][0]["delta"]["function_call"]["name"].is_null()) {
-												if (!this->_conversation["messages"].back().contains("function_call")) {
-													this->_conversation["function_call"] = { { "name", j["choices"][0]["delta"]["function_call"]["name"] } };
-													this->_last_resp_is_fc = true;
-												}
-											}
-										}
-										else if (j["choices"][0]["delta"]["function_call"].contains("arguments")) {
-											if (!j["choices"][0]["delta"]["function_call"]["arguments"].empty() && !j["choices"][0]["delta"]["function_call"]["arguments"].is_null()) {
-												if (!this->_conversation["function_call"].contains("arguments")) {
-													this->_conversation["function_call"].push_back({ "arguments", j["choices"][0]["delta"]["function_call"]["arguments"] });
-												}
-												else {
-													this->_conversation["function_call"]["arguments"] = this->_conversation["function_call"]["arguments"].get<std::string>() + j["choices"][0]["delta"]["function_call"]["arguments"].get<std::string>();
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-					else {
-						return false; // no "choices" found - invalid
-					}
-				}
-
-				return true; // response processed successfully
-			}
-		}
-		else {
-			// the response is complete, erase the "pending" flag
-			this->_conversation["messages"].back().erase("pending");
-
-			return true; // last message received
-		}
+		std::string delta;
+		bool completed = false;
+		return this->ParseStreamData(data, delta, completed);
 	}
 	
 	return false; // data is empty
 }
+
+bool liboai::Conversation::AppendStreamData(std::string data, std::string& delta, bool& completed) & noexcept(false){
+	if (!data.empty()) {
+		return this->ParseStreamData(data, delta, completed);
+	}
+	
+	return false;
+}
+
 
 bool liboai::Conversation::SetFunctions(Functions functions) & noexcept(false) {
 	nlohmann::json j = functions.GetJSON();
@@ -542,6 +466,128 @@ void liboai::Conversation::RemoveStrings(std::string& s, std::string_view p) con
 		i = s.find(p, i);
 	}
 }
+
+std::vector<std::string> liboai::Conversation::SplitFullStreamedData(std::string data) const noexcept(false) {
+	if (data.empty()) {
+		return {};
+	}
+	
+	std::vector<std::string> split_data;
+	std::string temp;
+	std::istringstream iss(data);
+	while (std::getline(iss, temp)) {
+		if (temp.empty()) {
+			split_data.push_back(temp);
+		}
+		else {
+			split_data.push_back(temp);
+		}
+	}
+
+	// remove empty strings from the vector
+	split_data.erase(std::remove_if(split_data.begin(), split_data.end(), [](const std::string& s) { return s.empty(); }), split_data.end());
+
+	return split_data;
+}
+
+bool liboai::Conversation::ParseStreamData(std::string data, std::string& delta_content, bool& completed){
+	std::vector<std::string> data_lines = SplitFullStreamedData(data);
+
+	if (data_lines.empty()){
+		return false;
+	}
+	
+	// create an empty message at the end of the conversation,
+	// marked as "pending" to indicate that the response is
+	// still being processed. This flag will be removed once
+	// the response is processed. If the marking already
+	// exists, keep appending to the same message.
+	if (this->_conversation["messages"].empty() || !this->_conversation["messages"].back().contains("pending")) {
+		this->_conversation["messages"].push_back(
+			{
+				{ "role",    "" },
+				{ "content", "" },
+				{ "pending", true }
+			}
+		);
+	}
+
+	for (auto& line : data_lines){
+		if (line.find("data: [DONE]") == std::string::npos) {
+			/*
+				j should have content in the form of:
+					{"id":"chatcmpl-7SKOck29emvbBbDS6cHg5xwnRrsLO","object":"chat.completion.chunk","created":1686985942,"model":"gpt-3.5-turbo-0613","choices":[{"index":0,"delta":{"content":"."},"finish_reason":null}]}
+				where "delta" may be empty
+			*/
+			this->RemoveStrings(line, "data: ");
+
+				// for (auto& json_object : objects) {
+			nlohmann::json j = nlohmann::json::parse(line);
+
+			if (j.contains("choices")) {
+				if (j["choices"][0].contains("delta")) {
+					if (!j["choices"][0]["delta"].empty() && !j["choices"][0]["delta"].is_null()) {
+						if (j["choices"][0]["delta"].contains("role")) {
+							this->_conversation["messages"].back()["role"] = j["choices"][0]["delta"]["role"];
+						}
+
+						if (j["choices"][0]["delta"].contains("content")) {
+							if (!j["choices"][0]["delta"]["content"].empty() && !j["choices"][0]["delta"]["content"].is_null()) {
+								std::string stream_content =  j["choices"][0]["delta"]["content"].get<std::string>();
+								this->_conversation["messages"].back()["content"] = this->_conversation["messages"].back()["content"].get<std::string>() + stream_content;
+								delta_content += stream_content;
+							}
+
+							// function calls do not have a content field,
+							// set _last_resp_is_fc to false and remove any
+							// previously set function_call field in the
+							// conversation
+							if (this->_last_resp_is_fc) {
+								if (this->_conversation.contains("function_call")) {
+									this->_conversation.erase("function_call");
+								}
+								this->_last_resp_is_fc = false;
+							}
+						}
+
+						if (j["choices"][0]["delta"].contains("function_call")) {
+							if (!j["choices"][0]["delta"]["function_call"].empty() && !j["choices"][0]["delta"]["function_call"].is_null()) {
+								if (j["choices"][0]["delta"]["function_call"].contains("name")) {
+									if (!j["choices"][0]["delta"]["function_call"]["name"].empty() && !j["choices"][0]["delta"]["function_call"]["name"].is_null()) {
+										if (!this->_conversation["messages"].back().contains("function_call")) {
+											this->_conversation["function_call"] = { { "name", j["choices"][0]["delta"]["function_call"]["name"] } };
+											this->_last_resp_is_fc = true;
+										}
+									}
+								}
+								else if (j["choices"][0]["delta"]["function_call"].contains("arguments")) {
+									if (!j["choices"][0]["delta"]["function_call"]["arguments"].empty() && !j["choices"][0]["delta"]["function_call"]["arguments"].is_null()) {
+										if (!this->_conversation["function_call"].contains("arguments")) {
+											this->_conversation["function_call"].push_back({ "arguments", j["choices"][0]["delta"]["function_call"]["arguments"] });
+										}
+										else {
+											this->_conversation["function_call"]["arguments"] = this->_conversation["function_call"]["arguments"].get<std::string>() + j["choices"][0]["delta"]["function_call"]["arguments"].get<std::string>();
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			} else {
+				return false; // no "choices" found - invalid
+			}
+		} else {
+			// the response is complete, erase the "pending" flag
+			this->_conversation["messages"].back().erase("pending");
+			completed = true;
+		}
+	}
+
+	return true; // last message received
+}
+
+
 
 liboai::Response liboai::ChatCompletion::create(const std::string& model, Conversation& conversation, std::optional<std::string> function_call, std::optional<float> temperature, std::optional<float> top_p, std::optional<uint16_t> n, std::optional<ChatStreamCallback> stream, std::optional<std::vector<std::string>> stop, std::optional<uint16_t> max_tokens, std::optional<float> presence_penalty, std::optional<float> frequency_penalty, std::optional<std::unordered_map<std::string, int8_t>> logit_bias, std::optional<std::string> user) const& noexcept(false) {
 	liboai::JsonConstructor jcon;

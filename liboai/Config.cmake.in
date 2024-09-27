@@ -1,0 +1,6 @@
+@PACKAGE_INIT@
+
+include("${CMAKE_CURRENT_LIST_DIR}/oaiTargets.cmake")
+
+find_package(nlohmann_json CONFIG REQUIRED)
+find_package(CURL REQUIRED)

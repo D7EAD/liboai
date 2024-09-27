@@ -1,0 +1,27 @@
+cmake_minimum_required(VERSION 3.13)
+
+project(documentation)
+
+macro(add_example target_name source_name)
+  add_executable(${target_name} "${source_name}")
+  target_link_libraries(${target_name} oai)
+  set_target_properties(${target_name} PROPERTIES FOLDER "examples/${PROJECT_NAME}")
+endmacro()
+
+macro(add_basic_example source_base_name)
+  add_example(${source_base_name} "${source_base_name}.cpp")
+endmacro()
+
+add_subdirectory(audio/examples)
+add_subdirectory(authorization/examples)
+add_subdirectory(azure/examples)
+add_subdirectory(chat/examples)
+add_subdirectory(chat/conversation/examples)
+add_subdirectory(completions/examples)
+add_subdirectory(edits/examples)
+add_subdirectory(embeddings/examples)  
+add_subdirectory(files/examples)
+add_subdirectory(fine-tunes/examples)
+add_subdirectory(images/examples)
+add_subdirectory(models/examples)
+add_subdirectory(moderations/examples)

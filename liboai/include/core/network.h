@@ -57,6 +57,25 @@ namespace liboai {
 				return res.status_code == 200;
 			}
 
+			[[nodiscard]]
+			static inline bool DownloadWithSession(
+				const std::string& to,
+				const std::string& from,
+				netimpl::components::Header authorization,
+				netimpl::Session& session
+			) noexcept(false) {
+				std::ofstream file(to, std::ios::binary);
+				Response res;
+				res = netimpl::DownloadWithSession(
+					session,
+					file,
+					netimpl::components::Url{ from },
+					std::move(authorization)
+				);
+
+				return res.status_code == 200;
+			}
+
 			/*
 				@brief Function to asynchronously download a
 					file at 'from' to file path 'to.' Useful
@@ -84,6 +103,29 @@ namespace liboai {
 						std::ofstream file(to, std::ios::binary);
 						Response res;
 						res = netimpl::Download(
+							file,
+							netimpl::components::Url{ from },
+							std::move(authorization)
+						);
+
+						return res.status_code == 200;
+					}
+				);
+			}
+
+			[[nodiscard]]
+			static inline std::future<bool> DownloadAsyncWithSession(
+				const std::string& to,
+				const std::string& from,
+				netimpl::components::Header authorization,
+				netimpl::Session& session
+			) noexcept(false) {
+				return std::async(
+					std::launch::async, [&]() -> bool {
+						std::ofstream file(to, std::ios::binary);
+						Response res;
+						res = netimpl::DownloadWithSession(
+							session,
 							file,
 							netimpl::components::Url{ from },
 							std::move(authorization)
@@ -138,6 +180,47 @@ namespace liboai {
 				return res;
 			}
 
+
+			template <class... _Params,
+				std::enable_if_t<std::conjunction_v<std::negation<std::is_lvalue_reference<_Params>>...>, int> = 0>
+			inline Response RequestWithSession(
+				const Method& http_method,
+				const std::string& root,
+				const std::string& endpoint,
+				const std::string& content_type,
+				netimpl::Session& session,
+				std::optional<netimpl::components::Header> headers = std::nullopt,
+				_Params&&... parameters
+			) const {
+				netimpl::components::Header _headers = { { "Content-Type", content_type } };
+				if (headers) {
+					if (headers.value().size() != 0) {
+						for (auto& i : headers.value()) {
+							_headers.insert(std::move(i));
+						}
+					}
+				}
+				
+				Response res;
+				if constexpr (sizeof...(parameters) > 0) {
+					res = Network::MethodSchemaWithSession<netimpl::components::Header&&, _Params&&...>::_method[static_cast<uint8_t>(http_method)](
+						session,
+						netimpl::components::Url { root + endpoint },
+						std::move(_headers),
+						std::forward<_Params>(parameters)...
+					);
+				}
+				else {
+					res = Network::MethodSchemaWithSession<netimpl::components::Header&&>::_method[static_cast<uint8_t>(http_method)](
+						session,
+						netimpl::components::Url { root + endpoint },
+						std::move(_headers)
+					);
+				}			
+
+				return res;
+			}
+
 			/*
 				@brief Function to validate the existence and validity of
 					a file located at a provided file path. This is used
@@ -161,6 +244,14 @@ namespace liboai {
 					netimpl::Get    <netimpl::components::Url&&, T...>,
 					netimpl::Post   <netimpl::components::Url&&, T...>,
 					netimpl::Delete <netimpl::components::Url&&, T...>
+				};
+			};
+
+			template <class... T> struct MethodSchemaWithSession {
+				inline static std::function<Response(netimpl::Session&, netimpl::components::Url&&, T...)> _method[3] = {
+					netimpl::GetWithSession    <netimpl::components::Url&&, T...>,
+					netimpl::PostWithSession   <netimpl::components::Url&&, T...>,
+					netimpl::DeleteWithSession <netimpl::components::Url&&, T...>
 				};
 			};
 	};

@@ -1,0 +1,15 @@
+cmake_minimum_required(VERSION 3.13)
+
+project(authorization)
+
+add_basic_example(set_azure_key)
+add_basic_example(set_azure_key_env)
+add_basic_example(set_azure_key_file)
+add_basic_example(set_key)
+add_basic_example(set_key_env_var)
+add_basic_example(set_key_file)
+add_basic_example(set_organization)
+add_basic_example(set_organization_env_var)
+add_basic_example(set_organization_file)
+add_basic_example(set_proxies)
+add_basic_example(set_proxy_auth)

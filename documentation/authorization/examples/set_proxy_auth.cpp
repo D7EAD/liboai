@@ -26,6 +26,6 @@ int main() {
   });
 
   if (oai.auth.SetKeyEnv("OPENAI_API_KEY")) {
-    ...
+    // ...
   }
 }

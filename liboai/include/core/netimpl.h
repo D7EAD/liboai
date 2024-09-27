@@ -592,7 +592,7 @@ namespace liboai {
 			size_t writeUserFunction(char* ptr, size_t size, size_t nmemb, const WriteCallback* write);
 			size_t writeFunction(char* ptr, size_t size, size_t nmemb, std::string* data);
 			size_t writeFileFunction(char* ptr, size_t size, size_t nmemb, std::ofstream* file);
-		}
+		};
 
 		/*
 			Class for sessions; each session is a single request.
@@ -614,6 +614,8 @@ namespace liboai {
 				liboai::Response Post();
 				liboai::Response Delete();
 				liboai::Response Download(std::ofstream& file);
+				void ClearContext();
+
 				
 			private:
 				template <class... _Options>
@@ -701,12 +703,26 @@ namespace liboai {
 		}
 
 		template <class... _Options>
+		liboai::Response GetWithSession(Session& session, _Options&&... options) {
+			session.ClearContext();
+			set_options(session, std::forward<_Options>(options)...);
+			return session.Get();
+		}
+
+		template <class... _Options>
 		liboai::Response Post(_Options&&... options) {
 			Session session;
 			set_options(session, std::forward<_Options>(options)...);
 			return session.Post();
 		}
-		
+
+		template <class... _Options>
+		liboai::Response PostWithSession(Session& session, _Options&&... options) {
+			session.ClearContext();
+			set_options(session, std::forward<_Options>(options)...);
+			return session.Post();
+		}
+
 		template <class... _Options>
 		liboai::Response Delete(_Options&&... options) {
 			Session session;
@@ -715,8 +731,22 @@ namespace liboai {
 		}
 
 		template <class... _Options>
+		liboai::Response DeleteWithSession(Session& session, _Options&&... options) {
+			session.ClearContext();
+			set_options(session, std::forward<_Options>(options)...);
+			return session.Delete();
+		}
+
+		template <class... _Options>
 		liboai::Response Download(std::ofstream& file, _Options&&... options) {
 			Session session;
+			set_options(session, std::forward<_Options>(options)...);
+			return session.Download(file);
+		}
+
+		template <class... _Options>
+		liboai::Response DownloadWithSession(Session& session, std::ofstream& file, _Options&&... options) {
+			session.ClearContext();
 			set_options(session, std::forward<_Options>(options)...);
 			return session.Download(file);
 		}

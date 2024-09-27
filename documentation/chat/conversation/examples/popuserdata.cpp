@@ -17,5 +17,5 @@ int main() {
   // add different user data
   convo.AddUserData("What is the size of the universe?");
 
-  ...
+  // ...
 }
