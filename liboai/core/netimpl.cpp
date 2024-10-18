@@ -701,6 +701,7 @@ void liboai::netimpl::Session::ClearContext() {
   url_.clear();
   response_string_.clear();
   header_string_.clear();
+  write_ = netimpl::components::WriteCallback{};
 }
 
 void liboai::netimpl::Session::ParseResponseHeader(const std::string& headers, std::string* status_line, std::string* reason) {
