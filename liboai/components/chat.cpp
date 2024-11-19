@@ -491,6 +491,11 @@ std::vector<std::string> liboai::Conversation::SplitFullStreamedData(std::string
 }
 
 bool liboai::Conversation::ParseStreamData(std::string data, std::string& delta_content, bool& completed){
+	if (!_last_incomplete_buffer.empty()) {
+		data = _last_incomplete_buffer + data;
+		_last_incomplete_buffer.clear();
+	}
+
 	std::vector<std::string> data_lines = SplitFullStreamedData(data);
 
 	if (data_lines.empty()){
@@ -521,8 +526,13 @@ bool liboai::Conversation::ParseStreamData(std::string data, std::string& delta_
 			*/
 			this->RemoveStrings(line, "data: ");
 
-				// for (auto& json_object : objects) {
-			nlohmann::json j = nlohmann::json::parse(line);
+			nlohmann::json j;
+			try {
+				j = nlohmann::json::parse(line);
+			} catch (const std::exception& e) {
+				_last_incomplete_buffer = line;
+				continue;
+			}
 
 			if (j.contains("choices")) {
 				if (j["choices"][0].contains("delta")) {

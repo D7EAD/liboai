@@ -803,6 +803,7 @@ namespace liboai {
 			nlohmann::json _conversation;
 			std::optional<nlohmann::json> _functions = std::nullopt;
 			bool _last_resp_is_fc = false;
+			std::string _last_incomplete_buffer;
 	};
 
 	class ChatCompletion final : private Network {
