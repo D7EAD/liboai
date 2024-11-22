@@ -97,5 +97,3 @@ int main() {
 <p>Artificial intelligence is an exciting and quickly-changing field. 
 
 If you'd like to partake in further placing the power of AI in the hands of everyday people, please consider contributing by submitting new code and features via a **Pull Request**. If you have any issues using the library, or just want to suggest new features, feel free to contact me directly using the info on my <a href="https://github.com/D7EAD">profile</a> or open an **Issue**.
-
-Please note that all Pull Requests should target the [dev](https://github.com/D7EAD/liboai/tree/dev) branch where additions will be tested and pushed to `main` once finalized.
