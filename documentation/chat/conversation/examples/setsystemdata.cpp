@@ -11,5 +11,5 @@ int main() {
   // set system message to guide the chat model
   convo.SetSystemData("You are helpful bot.");
 
-  ...
+  // ...
 }

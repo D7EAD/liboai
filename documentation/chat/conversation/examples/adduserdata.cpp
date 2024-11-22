@@ -11,5 +11,5 @@ int main() {
   // add user data - such as a question
   convo.AddUserData("What is the meaning of life?");
 
-  ...
+  // ...
 }
