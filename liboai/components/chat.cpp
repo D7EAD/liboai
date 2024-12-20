@@ -661,10 +661,14 @@ liboai::FutureResponse liboai::ChatCompletion::create_async(const std::string& m
 	return std::async(std::launch::async, &liboai::ChatCompletion::create, this, model, std::ref(conversation), function_call, temperature, top_p, n, stream, stop, max_tokens, presence_penalty, frequency_penalty, logit_bias, user);
 }
 
-std::ostream& liboai::operator<<(std::ostream& os, const Conversation& conv) {
+namespace liboai {
+
+std::ostream& operator<<(std::ostream& os, const Conversation& conv) {
 	os << conv.GetRawConversation() << std::endl << (conv.HasFunctions() ? conv.GetRawFunctions() : "");
 
 	return os;
+}
+
 }
 
 liboai::Functions::Functions() {

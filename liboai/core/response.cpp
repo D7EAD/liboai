@@ -61,9 +61,13 @@ liboai::Response& liboai::Response::operator=(liboai::Response&& other) noexcept
 	return *this;
 }
 
-std::ostream& liboai::operator<<(std::ostream& os, const Response& r) {
+namespace liboai {
+
+std::ostream& operator<<(std::ostream& os, const Response& r) {
 	!r.raw_json.empty() ? os << r.raw_json.dump(4) : os << "null";
 	return os;
+}
+
 }
 
 void liboai::Response::CheckResponse() const noexcept(false) {
