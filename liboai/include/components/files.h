@@ -17,7 +17,7 @@
 namespace liboai {
 	class Files final : private Network {
 		public:
-			Files() = default;
+			Files(const std::string &root): Network(root) {}
 			NON_COPYABLE(Files)
 			NON_MOVABLE(Files)
 			~Files() = default;

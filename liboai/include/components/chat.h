@@ -808,7 +808,7 @@ namespace liboai {
 
 	class ChatCompletion final : private Network {
 		public:
-			ChatCompletion() = default;
+			ChatCompletion(const std::string &root): Network(root) {}
 			NON_COPYABLE(ChatCompletion)
 			NON_MOVABLE(ChatCompletion)
 			~ChatCompletion() = default;

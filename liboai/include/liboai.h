@@ -43,7 +43,19 @@
 namespace liboai {
 	class OpenAI {
 		public:
-			OpenAI() = default;
+			OpenAI(const std::string &root = "https://api.openai.com/v1"):
+				Audio(std::make_unique<liboai::Audio>(root)),
+				Azure(std::make_unique<liboai::Azure>(root)),
+				ChatCompletion(std::make_unique<liboai::ChatCompletion>(root)),
+				Completion(std::make_unique<liboai::Completions>(root)),
+				Edit(std::make_unique<liboai::Edits>(root)),
+				Embedding(std::make_unique<liboai::Embeddings>(root)),
+				File(std::make_unique<liboai::Files>(root)),
+				FineTune(std::make_unique<liboai::FineTunes>(root)),
+				Image(std::make_unique<liboai::Images>(root)),
+				Model(std::make_unique<liboai::Models>(root)),
+				Moderation(std::make_unique<liboai::Moderations>(root))
+			{}
 			OpenAI(OpenAI const&) = delete;
 			OpenAI(OpenAI&&) = delete;
 			void operator=(OpenAI const&) = delete;
@@ -54,67 +66,67 @@ namespace liboai {
 				@brief A pointer to the Audio component class that
 					provides access to its OpenAI API endpoints.
 			*/
-			std::unique_ptr<liboai::Audio> Audio = std::make_unique<liboai::Audio>();
+			std::unique_ptr<liboai::Audio> Audio;
 
 			/*
 				@brief A pointer to the Azure component class that
 					provides access to its API endpoints.
 			*/
-			std::unique_ptr<liboai::Azure> Azure = std::make_unique<liboai::Azure>();
+			std::unique_ptr<liboai::Azure> Azure;
 			
 			/*
 				@brief A pointer to the Chat component class that
 					provides access to its OpenAI API endpoints.
 			*/
-			std::unique_ptr<liboai::ChatCompletion> ChatCompletion = std::make_unique<liboai::ChatCompletion>();
+			std::unique_ptr<liboai::ChatCompletion> ChatCompletion;
 
 			/*
 				@brief A pointer to the Completions component class that
 					provides access to its OpenAI API endpoints.
 			*/
-			std::unique_ptr<liboai::Completions> Completion = std::make_unique<liboai::Completions>();
+			std::unique_ptr<liboai::Completions> Completion;
 
 			/*
 				@brief A pointer to the Edits component class that
 					provides access to its OpenAI API endpoints.
 			*/
-			std::unique_ptr<liboai::Edits> Edit = std::make_unique<liboai::Edits>();
+			std::unique_ptr<liboai::Edits> Edit;
 
 			/*
 				@brief A pointer to the Embeddings component class that
 					provides access to its OpenAI API endpoints.
 			*/
-			std::unique_ptr<liboai::Embeddings> Embedding = std::make_unique<liboai::Embeddings>();
+			std::unique_ptr<liboai::Embeddings> Embedding;
 
 			/*
 				@brief A pointer to the Files component class that
 					provides access to its OpenAI API endpoints.
 			*/
-			std::unique_ptr<liboai::Files> File = std::make_unique<liboai::Files>();
+			std::unique_ptr<liboai::Files> File;
 			
 			/*
 				@brief A pointer to the FineTunes component class that
 					provides access to its OpenAI API endpoints.
 			*/
-			std::unique_ptr<liboai::FineTunes> FineTune = std::make_unique<liboai::FineTunes>();
+			std::unique_ptr<liboai::FineTunes> FineTune;
 
 			/*
 				@brief A pointer to the Images component class that
 					provides access to its OpenAI API endpoints.
 			*/
-			std::unique_ptr<liboai::Images> Image = std::make_unique<liboai::Images>();
+			std::unique_ptr<liboai::Images> Image;
 
 			/*
 				@brief A pointer to the Models component class that
 					provides access to its OpenAI API endpoints.
 			*/
-			std::unique_ptr<liboai::Models> Model = std::make_unique<liboai::Models>();
+			std::unique_ptr<liboai::Models> Model;
 
 			/*
 				@brief A pointer to the Moderations component class that
 					provides access to its OpenAI API endpoints.
 			*/
-			std::unique_ptr<liboai::Moderations> Moderation = std::make_unique<liboai::Moderations>();
+			std::unique_ptr<liboai::Moderations> Moderation;
 		
 		public:			
 			/*

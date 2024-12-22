@@ -20,7 +20,13 @@
 namespace liboai {
 	class Network {
 		public:
-			Network() noexcept = default;
+			/*
+				@brief Initialise the Network instance to use
+					the provided API url.
+
+				@param root     The URL to direct API calls to.
+			*/
+			Network(const std::string &root) noexcept: openai_root_(root) {}
 			NON_COPYABLE(Network)
 			NON_MOVABLE(Network)
 		
@@ -235,7 +241,7 @@ namespace liboai {
 				return false;
 			}
 			
-			const std::string openai_root_ = "https://api.openai.com/v1";
+			const std::string openai_root_;
 			const std::string azure_root_ = ".openai.azure.com/openai";
 
 		private:

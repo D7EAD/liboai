@@ -17,7 +17,7 @@
 namespace liboai {
 	class Models final : private Network {
 		public:
-			Models() = default;
+			Models(const std::string &root): Network(root) {}
 			NON_COPYABLE(Models)
 			NON_MOVABLE(Models)
 			~Models() = default;
