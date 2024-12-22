@@ -17,7 +17,7 @@
 namespace liboai {
 	class Embeddings final : private Network {
 		public:
-			Embeddings() = default;
+			Embeddings(const std::string &root): Network(root) {}
 			NON_COPYABLE(Embeddings)
 			NON_MOVABLE(Embeddings)
 			~Embeddings() = default;

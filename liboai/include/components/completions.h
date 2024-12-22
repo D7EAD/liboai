@@ -17,7 +17,7 @@
 namespace liboai {
 	class Completions final : private Network {
 		public:
-			Completions() = default;
+			Completions(const std::string &root): Network(root) {}
 			NON_COPYABLE(Completions)
 			NON_MOVABLE(Completions)
 			~Completions() = default;
@@ -61,7 +61,7 @@ namespace liboai {
 											model's likelihood to repeat the same line verbatim.
 				@param best_of            Generates best_of completions server-side and returns the "best" 
 											one. When used with n, best_of controls the number of candidate
-											completions and n specifies how many to return – best_of must be
+											completions and n specifies how many to return ï¿½ best_of must be
 											greater than n
 
 											Because this parameter generates many completions, it can quickly
@@ -132,7 +132,7 @@ namespace liboai {
 											model's likelihood to repeat the same line verbatim.
 				@param best_of            Generates best_of completions server-side and returns the "best" 
 											one. When used with n, best_of controls the number of candidate
-											completions and n specifies how many to return – best_of must be
+											completions and n specifies how many to return ï¿½ best_of must be
 											greater than n
 
 											Because this parameter generates many completions, it can quickly

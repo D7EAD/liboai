@@ -17,7 +17,7 @@
 namespace liboai {
 	class FineTunes final : private Network {
 		public:
-			FineTunes() = default;
+			FineTunes(const std::string &root): Network(root) {}
 			NON_COPYABLE(FineTunes)
 			NON_MOVABLE(FineTunes)
 			~FineTunes() = default;
