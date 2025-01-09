@@ -514,6 +514,24 @@ namespace liboai {
 
 			friend std::ostream& operator<<(std::ostream& os, const Conversation& conv);
 
+
+			/*
+					@brief Changes the content of the first system message
+						in the conversation. This method updates the content
+						of the first system message in the conversation, if
+						it exists and is of type "system". If the first message
+						is not a system message or the conversation is empty,
+						the method will return false.
+
+					@param new_data A string_view containing the new content
+					                for the system message. Must be non-empty.
+
+					@returns True/False denoting whether the first system
+					         message was changed successfully.
+			*/
+			[[nodiscard]]
+			LIBOAI_EXPORT bool ChangeFirstSystemMessage(std::string_view new_data) & noexcept(false);
+
 			/*
 				@brief Sets the system data for the conversation.
 					This method sets the system data for the conversation.
