@@ -73,6 +73,17 @@ liboai::Conversation& liboai::Conversation::operator=(Conversation&& old) noexce
 	return *this;
 }
 
+bool liboai::Conversation::ChangeFirstSystemMessage(std::string_view new_data) & noexcept(false) {
+	if (!new_data.empty() && !this->_conversation["messages"].empty()) {
+		if (this->_conversation["messages"][0]["role"].get<std::string>() == "system") {
+			this->_conversation["messages"][0]["content"] = new_data;
+			return true; // System message changed successfuly
+		}
+		return false; // First message is not a system message
+	}
+	return false; // New data is empty or conversation is empty
+}
+
 bool liboai::Conversation::SetSystemData(std::string_view data) & noexcept(false) {
 	// if data provided is non-empty
 	if (!data.empty()) {
