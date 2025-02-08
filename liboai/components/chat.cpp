@@ -113,9 +113,22 @@ bool liboai::Conversation::PopSystemData() & noexcept(false) {
 	return false; // conversation is empty
 }
 
+void liboai::Conversation::EraseExtra() {
+	if (_conversation["messages"].size() > _max_history_size) {
+		// Ensure the system message is preserved
+		auto first_msg = _conversation["messages"].begin();
+		if (first_msg != _conversation["messages"].end() && (*first_msg)["role"].get<std::string>() == "system") {
+			_conversation["messages"].erase(first_msg + 1);
+		} else {
+			_conversation["messages"].erase(first_msg);
+		}
+	}
+}
+
 bool liboai::Conversation::AddUserData(std::string_view data) & noexcept(false) {
 	// if data provided is non-empty
 	if (!data.empty()) {
+		EraseExtra();
 		this->_conversation["messages"].push_back({ { "role", "user" }, {"content", data} });
 		return true; // user data added successfully
 	}
@@ -125,6 +138,7 @@ bool liboai::Conversation::AddUserData(std::string_view data) & noexcept(false) 
 bool liboai::Conversation::AddUserData(std::string_view data, std::string_view name) & noexcept(false) {
 	// if data provided is non-empty
 	if (!data.empty()) {
+		EraseExtra();
 		this->_conversation["messages"].push_back(
 			{
 				{"role", "user"},
@@ -215,6 +229,7 @@ bool liboai::Conversation::Update(std::string_view response) & noexcept(false) {
 				if (choice.value().contains("message")) {
 					if (choice.value()["message"].contains("role") && choice.value()["message"].contains("content")) {
 						if (!choice.value()["message"]["content"].is_null()) {
+							EraseExtra();
 							this->_conversation["messages"].push_back(
 								{
 									{ "role",    choice.value()["message"]["role"]    },
@@ -223,6 +238,7 @@ bool liboai::Conversation::Update(std::string_view response) & noexcept(false) {
 							);
 						}
 						else {
+							EraseExtra();
 							this->_conversation["messages"].push_back(
 								{
 									{ "role",    choice.value()["message"]["role"]    },
@@ -262,6 +278,7 @@ bool liboai::Conversation::Update(std::string_view response) & noexcept(false) {
 		else if (j.contains("message")) { // mid level, single message
 			if (j["message"].contains("role") && j["message"].contains("content")) {
 				if (j["message"]["content"].is_null()) {
+					EraseExtra();
 					this->_conversation["messages"].push_back(
 						{
 							{ "role",    j["message"]["role"]    },
@@ -270,6 +287,7 @@ bool liboai::Conversation::Update(std::string_view response) & noexcept(false) {
 					);
 				}
 				else {
+					EraseExtra();
 					this->_conversation["messages"].push_back(
 						{
 							{ "role",    j["message"]["role"] },
@@ -303,6 +321,7 @@ bool liboai::Conversation::Update(std::string_view response) & noexcept(false) {
 		}
 		else if (j.contains("role") && j.contains("content")) { // low level, single message
 			if (j["message"]["content"].is_null()) {
+				EraseExtra();
 				this->_conversation["messages"].push_back(
 					{
 						{ "role",    j["message"]["role"]    },
@@ -311,6 +330,7 @@ bool liboai::Conversation::Update(std::string_view response) & noexcept(false) {
 				);
 			}
 			else {
+				EraseExtra();
 				this->_conversation["messages"].push_back(
 					{
 						{ "role",    j["message"]["role"] },

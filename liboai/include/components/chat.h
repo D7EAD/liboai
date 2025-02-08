@@ -14,6 +14,8 @@
 #include "../core/authorization.h"
 #include "../core/response.h"
 
+#include <limits>
+
 namespace liboai {
 	/*
 		@brief Class containing methods for building Function objects to supply
@@ -807,10 +809,19 @@ namespace liboai {
 			*/
 			[[nodiscard]] constexpr bool HasFunctions() const & noexcept { return this->_functions ? true : false; }
 
+			/**
+			 * @brief Sets the maximum history size for the conversation.
+			 * 
+			 * @param size The maximum number of messages allowed in the conversation history.
+			 *             Older messages will be removed when the limit is exceeded.
+			 */
+			void SetMaxHistorySize(size_t size) noexcept { _max_history_size = size; }
+
 		private:
 			friend class ChatCompletion; friend class Azure;
 			[[nodiscard]] std::vector<std::string> SplitStreamedData(std::string data) const noexcept(false);
 			void RemoveStrings(std::string& s, std::string_view p) const noexcept(false);
+			void EraseExtra();
 			/*
 				@brief split full stream data that read from remote server.
 				@returns vector of string that contains the split data that will contains the last termination string(data: "DONE").
@@ -822,6 +833,7 @@ namespace liboai {
 			std::optional<nlohmann::json> _functions = std::nullopt;
 			bool _last_resp_is_fc = false;
 			std::string _last_incomplete_buffer;
+			size_t _max_history_size = std::numeric_limits<size_t>::max();
 	};
 
 	class ChatCompletion final : private Network {
