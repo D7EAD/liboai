@@ -604,6 +604,26 @@ namespace liboai {
 			) & noexcept(false);
 
 			/*
+				@brief Adds JSON object user input to the conversation.
+					This method adds JSON user input to the conversation.
+					The user input is the user's input - such as a question
+					or a command, with evantually file attachments.
+
+					If using a system prompt, the user input should be
+					provided after the system prompt is set - i.e. after
+					SetSystemData() is called.
+
+				@param *data        The user input to add.
+
+				@returns True/False denoting whether the user input was
+					added successfully.
+			*/
+			[[nodiscard]]
+			LIBOAI_EXPORT bool AddUserData(
+				nlohmann::json data
+			) & noexcept(false);
+
+			/*
 				@brief Removes the last added user data.
 
 				@returns True/False denoting whether the user data was removed.

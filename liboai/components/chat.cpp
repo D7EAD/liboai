@@ -50,8 +50,8 @@ liboai::Conversation::Conversation(std::initializer_list<std::string_view> user_
 liboai::Conversation::Conversation(const std::vector<std::string>& user_data) {
 	this->_conversation["messages"] = nlohmann::json::array();
 	
-	for (auto& data : user_data) {
-		auto result = this->AddUserData(data);
+	for (const std::string& data : user_data) {
+		auto result = this->AddUserData(static_cast<std::string_view>(data));
 	}
 }
 
@@ -146,6 +146,16 @@ bool liboai::Conversation::AddUserData(std::string_view data, std::string_view n
 				{"name", name}
 			}
 		);
+		return true; // user data added successfully
+	}
+	return false; // data is empty
+}
+
+bool liboai::Conversation::AddUserData(nlohmann::json data) & noexcept(false) {
+	// if data provided is non-empty
+	if (!data.empty()) {
+		EraseExtra();
+		this->_conversation["messages"].push_back(data);
 		return true; // user data added successfully
 	}
 	return false; // data is empty
